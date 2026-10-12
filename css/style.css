@@ -707,3 +707,8 @@ a.svc-arrow:hover,a.svc-arrow:focus-visible{background:var(--violet);border-colo
   .mq-set[aria-hidden]{display:none}
   .marquee{mask-image:none;-webkit-mask-image:none}
 }
+
+/* Hero com a ilustração (Lupi) no lugar da foto */
+.hero-photo--lupi{aspect-ratio:600/632;height:78%;max-width:46%}
+.hero-photo--lupi img{-webkit-mask-image:linear-gradient(to bottom,#000 82%,transparent 100%);mask-image:linear-gradient(to bottom,#000 82%,transparent 100%);filter:drop-shadow(0 20px 50px rgba(115,87,240,.25))}
+@media (max-width:899px){.hero-photo--lupi{height:auto;width:min(70%,300px);max-width:none;margin-right:auto;margin-bottom:12px}}
