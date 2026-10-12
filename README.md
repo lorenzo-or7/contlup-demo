@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  Demo de site para um escritório de contabilidade real de Pedreira/SP, com tema escuro e claro, painel de números ilustrativo e uma mascote que responde às dúvidas mais comuns.
+  Demo de site para um escritório de contabilidade real de Pedreira/SP, com tema escuro e claro, áreas de atuação, painel de números ilustrativo, dúvidas frequentes e pedido de proposta.
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
 ## 🖥️ Preview
 
 <p align="center">
-  <a href="https://lorenzo-or7.github.io/contlup-demo/"><img src="preview.webp" alt="Página inicial do site ContLup Studio Contábil" width="90%" /></a>
+  <a href="https://lorenzo-or7.github.io/contlup-demo/"><img src="preview.webp" alt="Página inicial de ContLup Studio Contábil" width="90%" /></a>
 </p>
 
 ---
@@ -39,13 +39,13 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 
 - 🧭 Barra lateral que expande ao passar o mouse
 - 🌗 Tema escuro e claro
-- 🗂️ Áreas de atuação com ilustrações de cada serviço
+- 🗂️ Áreas de atuação: contábil, fiscal, trabalhista e societário
+- 🏢 "Para quem é": do MEI à empresa em crescimento
 - 📈 Painel "Visão do mês" com números ilustrativos
 - 👩‍💼 Apresentação da contadora responsável
-- 💬 "A Lupi explica": perguntas frequentes com a mascote
-- 📋 Contatos com botão de copiar
-- 📲 WhatsApp e Instagram
-- 📱 Layout responsivo com menu mobile
+- 💬 "A Lupi explica" e perguntas frequentes
+- 📝 Formulário de pedido de proposta
+- 📲 Contatos com botão de copiar e WhatsApp
 
 ---
 

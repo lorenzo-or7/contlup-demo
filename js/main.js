@@ -100,6 +100,30 @@
     if(matchMedia('(hover: hover)').matches) b.addEventListener('mouseenter',()=>openQ(b));
   });
 
+  /* ---- proposal form -> WhatsApp with ready message ---- */
+  const form=$('#proposta');
+  if(form){
+    const f=id=>$('#'+id,form);
+    const show=(inp,errId,bad)=>{inp.setAttribute('aria-invalid',bad?'true':'false'); $('#'+errId,form).hidden=!bad; if(bad) inp.setAttribute('aria-describedby',errId); else inp.removeAttribute('aria-describedby')};
+    ['f-nome','f-tel'].forEach(id=>f(id).addEventListener('input',()=>{const e=id==='f-nome'?'e-nome':'e-tel'; if(f(id).getAttribute('aria-invalid')==='true') show(f(id),e,false)}));
+    form.addEventListener('submit',e=>{
+      e.preventDefault();
+      const nome=f('f-nome').value.trim(), tel=f('f-tel').value.trim(), emp=f('f-empresa').value.trim(), ass=f('f-assunto').value, msg=f('f-msg').value.trim();
+      const badN=nome.length<2, badT=tel.replace(/\D/g,'').length<10;
+      show(f('f-nome'),'e-nome',badN); show(f('f-tel'),'e-tel',badT);
+      if(badN){f('f-nome').focus();return} if(badT){f('f-tel').focus();return}
+      let t=`Olá, Priscila! Vim pelo site da ContLup e gostaria de solicitar uma proposta.\n\n*Nome:* ${nome}`;
+      if(emp) t+=`\n*Empresa:* ${emp}`;
+      t+=`\n*Telefone:* ${tel}\n*Assunto:* ${ass}`;
+      if(msg) t+=`\n\n${msg}`;
+      const url='https://wa.me/5519997447919?text='+encodeURIComponent(t);
+      const link=$('#form-link',form); link.href=url; $('#form-ok',form).hidden=false;
+      let w=null; try{w=window.open(url,'_blank','noopener')}catch(err){}
+    });
+  }
+  /* ---- privacy link opens the policy ---- */
+  $$('.js-priv').forEach(a=>a.addEventListener('click',()=>{const d=$('#privacidade'); if(d) d.open=true}));
+
   /* ---- copy buttons ---- */
   $$('.copy').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.copy; const done=()=>{b.textContent='Copiado'; setTimeout(()=>b.textContent='Copiar',1600)};
     try{navigator.clipboard.writeText(v).then(done,()=>sel(b))}catch(e){sel(b)}}));
