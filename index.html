@@ -428,6 +428,7 @@
           <li><b>Como saber se meu preço está correto?</b><span>O ponto de partida é conhecer seus custos, despesas e a margem de que você precisa.</span></li>
           <li><b>Quando preciso emitir nota?</b><span>Depende da atividade e do tipo de empresa. Vale conversar antes de vender.</span></li>
         </ul>
+        <button class="btn btn-primary lupi-ask js-lc-open" type="button" aria-controls="lupi-chat">Pergunte à Lupi <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
         <a class="ig-link" href="https://www.instagram.com/contlupstudiocontabil/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg>Mais da Lupi no Instagram <span>@contlupstudiocontabil</span></a>
       </div>
       <figure class="lupi-fig">
@@ -444,8 +445,11 @@
     <div class="faq-head rv">
       <p class="eyebrow">Dúvidas frequentes</p>
       <h2 class="display" id="faq-h">Perguntas que todo empresário faz.</h2>
-      <p class="lead">Não encontrou a sua? Pergunte direto pelo WhatsApp.</p>
-      <a class="btn btn-primary" href="https://wa.me/5519997447919?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20tenho%20uma%20d%C3%BAvida." target="_blank" rel="noopener">Tirar uma dúvida <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      <p class="lead">Não encontrou a sua? Pergunte para a Lupi ou direto pelo WhatsApp.</p>
+      <div class="faq-ctas">
+        <button class="btn btn-primary js-lc-open" type="button" aria-controls="lupi-chat"><img class="btn-av" src="img/lupi/avatar.webp" alt="" width="32" height="32">Perguntar à Lupi</button>
+        <a class="btn btn-ghost" href="https://wa.me/5519997447919?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20tenho%20uma%20d%C3%BAvida." target="_blank" rel="noopener">Tirar uma dúvida <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      </div>
     </div>
     <div class="faq rv">
       <details open><summary>Quanto custa a contabilidade da minha empresa?<i aria-hidden="true"></i></summary><p>O valor depende do porte da empresa, do regime tributário, do número de funcionários e do volume de movimento. Depois de uma conversa inicial, enviamos uma proposta com escopo e valor definidos.</p></details>
@@ -530,6 +534,36 @@
   </div>
 </footer>
 
+<!-- ================= CHAT DA LUPI ================= -->
+<button class="lc-launch js-lc-open" type="button" aria-controls="lupi-chat" aria-expanded="false" aria-label="Abrir o chat de dúvidas com a Lupi">
+  <span class="lc-launch-av" aria-hidden="true"><img src="img/lupi/avatar.webp" alt="" width="96" height="96"></span>
+  <span class="lc-launch-txt" aria-hidden="true"><small>Dúvidas?</small><b>Pergunte à Lupi</b></span>
+</button>
+<div class="lc-teaser js-lc-teaser" hidden>
+  <button class="lc-teaser-go js-lc-teaser-go" type="button">Oi! Eu sou a <b>Lupi</b>. Quer tirar uma dúvida rápida sobre contabilidade?</button>
+  <button class="lc-teaser-x js-lc-teaser-x" type="button" aria-label="Dispensar mensagem"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+</div>
+<section class="lc" id="lupi-chat" role="dialog" aria-modal="false" aria-labelledby="lc-title" hidden>
+  <header class="lc-head">
+    <div class="lc-head-txt">
+      <p class="lc-k">Assistente virtual</p>
+      <h2 class="display" id="lc-title">Lupi</h2>
+      <p class="lc-sub">Dúvidas frequentes da ContLup</p>
+    </div>
+    <img class="lc-pose js-lc-pose" src="img/lupi/apresenta.webp" alt="" width="447" height="508">
+    <button class="lc-x js-lc-close" type="button" aria-label="Fechar o chat"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+  </header>
+  <div class="lc-log js-lc-log" role="log" aria-live="polite" aria-label="Conversa com a Lupi"></div>
+  <div class="lc-chips js-lc-chips" role="group" aria-label="Sugestões de perguntas"></div>
+  <form class="lc-form js-lc-form" autocomplete="off">
+    <label class="sr" for="lc-in">Escreva sua pergunta</label>
+    <input id="lc-in" name="q" type="text" maxlength="200" placeholder="Escreva sua dúvida…" enterkeyhint="send">
+    <button type="submit" aria-label="Enviar pergunta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+  </form>
+  <p class="lc-note">Respostas automáticas e gerais. Para o seu caso, <a href="https://wa.me/5519997447919?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener">fale com a Priscila</a>.</p>
+</section>
+
 <script src="js/main.js" defer></script>
+<script src="js/chat.js" defer></script>
 </body>
 </html>

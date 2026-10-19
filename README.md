@@ -44,6 +44,7 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 - 📈 Painel "Visão do mês" com números ilustrativos
 - 👩‍💼 Apresentação da contadora responsável
 - 💬 "A Lupi explica" e perguntas frequentes
+- 🤖 Chat de dúvidas com a Lupi: respostas automáticas por palavras-chave, sugestões de perguntas e encaminhamento para o WhatsApp
 - 📝 Formulário de pedido de proposta
 - 📲 Contatos com botão de copiar e WhatsApp
 
@@ -56,7 +57,7 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 - **JavaScript** puro para as interações
 - **GitHub Pages** para hospedagem
 
-Estrutura separada em `css/style.css` e `js/main.js`.
+Estrutura separada em `css/style.css`, `js/main.js` e `js/chat.js` (chat da Lupi, com as perguntas e respostas no próprio arquivo). As poses da Lupi ficam em `img/lupi/`.
 
 ---
 
