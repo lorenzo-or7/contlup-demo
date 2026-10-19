@@ -44,7 +44,7 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 - 📈 Painel "Visão do mês" com números ilustrativos
 - 👩‍💼 Apresentação da contadora responsável
 - 💬 "A Lupi explica" e perguntas frequentes
-- 🤖 **Lupi 2.0**, assistente virtual híbrida: fluxos guiados sem IA, respostas aprovadas pela ContLup, IA (Gemini ou OpenAI) para perguntas abertas via backend seguro, histórico da sessão, expressões da personagem e resumo revisável para o WhatsApp
+- 🤖 **Lupi 2.0**, assistente virtual: fluxos guiados, respostas aprovadas pela ContLup, histórico da sessão, expressões da personagem e resumo revisável para o WhatsApp (backend com IA preparado em `worker/`, desligado por enquanto)
 - 📝 Formulário de pedido de proposta
 - 📲 Contatos com botão de copiar e WhatsApp
 
@@ -73,7 +73,7 @@ npm run serve        # http://localhost:8080
 ```
 
 O chat da Lupi usa módulos JavaScript, que precisam de um servidor (não abra o `index.html` direto do disco).
-Sem backend configurado, a Lupi funciona no **modo básico** (fluxos e respostas aprovadas, sem IA).
+A Lupi funciona sem IA (fluxos e respostas aprovadas). O backend com IA está pronto em `worker/`, mas desligado.
 
 ## 🤖 Lupi 2.0
 

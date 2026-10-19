@@ -2,8 +2,8 @@
 
 Este guia explica como a Lupi 2.0 funciona, como rodar no seu computador, como publicar o backend com segurança e como ligar a IA no site do GitHub Pages.
 
-> **Situação atual:** o site já funciona no **modo básico** (fluxos guiados e respostas aprovadas, sem IA).
-> A IA **só passa a responder** depois que o backend (Cloudflare Worker) for publicado com uma chave de API e o endereço for colocado no `index.html` (seção 4).
+> **Decisão atual: a Lupi roda sem IA.** O site usa só os fluxos guiados e as respostas aprovadas, e a interface não menciona IA.
+> O backend com IA (`worker/`) fica guardado no repositório, desligado, para uso futuro. Para ligá-lo, siga as seções 3 e 4 e o checklist da seção 8.
 
 ---
 
@@ -193,3 +193,13 @@ npm run eval          # avaliação comparativa (precisa de chaves)
 ```
 
 O relatório da última execução está em [`docs/RELATORIO-TESTES.md`](RELATORIO-TESTES.md). As informações que dependem da Priscila estão em [`docs/PENDENCIAS-PRISCILA.md`](PENDENCIAS-PRISCILA.md).
+
+---
+
+## 8. Checklist para ligar a IA no futuro
+
+1. Publicar o backend (seção 3) e conectar o site (seção 4).
+2. A interface muda sozinha: com o endereço da API preenchido, o cabeçalho passa a dizer "Assistente virtual com IA", o selo mostra o estado da IA e o aviso inicial menciona o provedor de IA.
+3. **Atualizar a política de privacidade** no rodapé do `index.html`, acrescentando que as perguntas abertas são enviadas (com dados pessoais removidos) a um provedor de IA e que o servidor da Lupi não grava o conteúdo das conversas. Recomenda-se revisão jurídica/LGPD.
+4. Revisar os textos `inst-lupi` e `inst-privacidade` em `data/lupi-knowledge.json` para mencionar a IA.
+5. Rodar `npm run test:live` e `npm run eval` com as chaves no `.env` antes de liberar ao público.
