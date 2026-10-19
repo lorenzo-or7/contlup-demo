@@ -17,6 +17,18 @@
   setTheme(saved==='light'?'light':'dark');
   $$('.js-theme').forEach(b=>b.addEventListener('click',()=>setTheme(root.getAttribute('data-cl')==='light'?'dark':'light')));
 
+  /* ---- fixar a barra lateral aberta (só desktop) ---- */
+  const pinBtn=$('.js-pin');
+  function setPin(on,save){
+    root.classList.toggle('sb-pin',on);
+    pinBtn.setAttribute('aria-pressed',String(on)); pinBtn.setAttribute('aria-label',on?'Recolher menu':'Fixar menu aberto'); pinBtn.title=on?'Recolher menu':'Fixar menu aberto';
+    $('.js-pin-lbl').textContent=on?'Menu fixado':'Fixar menu';
+    if(save){ try{localStorage.setItem('cl-pin',on?'1':'0')}catch(e){} setTimeout(()=>dispatchEvent(new Event('resize')),reduce?0:450) }
+  }
+  let pinned=null; try{pinned=localStorage.getItem('cl-pin')}catch(e){}
+  setPin(pinned==='1',false);
+  pinBtn.addEventListener('click',()=>setPin(!root.classList.contains('sb-pin'),true));
+
   /* ---- pixel patterns (from the logo's L trail) ---- */
   const PAT={
     logo:["......x","....lx.","..x.x..",".dxx...","x.l....","xd.....","x......"],

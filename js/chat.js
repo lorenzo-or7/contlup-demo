@@ -68,7 +68,7 @@
       a:'A Priscila Petean é a contadora responsável pela ContLup, com mais de 20 anos de experiência. Ela acompanha cada empresa de perto e transforma números em informação que o empresário consegue usar no dia a dia.<br><br>'+wa('Olá, Priscila! Vim pelo site da ContLup e gostaria de conversar com você.','Conversar com a Priscila')+'.',
       next:['contato','servicos','preco']},
     {id:'contato',q:'Falar com a Priscila',pose:'celular',k:['contato','whatsapp','zap','telefone','ligar','celular','numero','email','e mail','falar com','falar com alguem','falar com a priscila','atendente','humano','pessoa'],
-      a:'Claro! Você fala com a ContLup por aqui:<ul><li>WhatsApp: '+wa(WA_HI,'(19) 99744-7919')+'</li><li>E-mail: contato@contlup.com.br</li><li>Instagram: <a href="https://www.instagram.com/contlupstudiocontabil/" target="_blank" rel="noopener">@contlupstudiocontabil</a></li></ul>',
+      a:'Claro! Você fala com a ContLup por aqui:<ul><li>WhatsApp: '+wa(WA_HI,'(19) 99744-7919')+'</li><li>E-mail: <a href="mailto:contato@contlup.com.br">contato@contlup.com.br</a></li><li>Instagram: <a href="https://www.instagram.com/contlupstudiocontabil/" target="_blank" rel="noopener">@contlupstudiocontabil</a></li></ul>',
       next:['horario','endereco','preco']},
     {id:'endereco',q:'Onde fica?',pose:'aponta',k:['endereco','onde fica','onde voces ficam','localizacao','pedreira','cidade','outras cidades','atendem fora','atende minha cidade','regiao'],
       a:'O escritório fica em Pedreira/SP. Para saber se a ContLup atende a sua cidade e como fica o atendimento no seu caso, '+wa('Olá! Vim pelo site da ContLup e gostaria de saber se vocês atendem a minha cidade.','pergunte pelo WhatsApp')+'.',
@@ -114,11 +114,11 @@
     ids.forEach(id=>{ const e=byId[id]; const b=document.createElement('button'); b.type='button'; b.className='lc-chip'; b.textContent=e.q; b.addEventListener('click',()=>ask(e.q,e)); chips.appendChild(b) });
     chips.hidden=!ids.length;
   }
-  let busy=false;
+  let busy=false, pending=0;
   function reply(e,html,next){
     busy=true; setPose('pensando'); chips.hidden=true;
     const dots=add('bot','<span class="lc-dots" aria-label="Lupi está digitando"><i></i><i></i><i></i></span>');
-    setTimeout(()=>{ dots.remove(); add('bot',html); setPose(e?e.pose:'confiante'); setChips(next); busy=false }, reduce?150:650+Math.random()*350);
+    pending=setTimeout(()=>{ dots.remove(); add('bot',html); setPose(e?e.pose:'confiante'); setChips(next); busy=false }, reduce?150:650+Math.random()*350);
   }
   function ask(text,entry){
     if(busy) return;
@@ -129,6 +129,14 @@
     else reply(null,'Hmm, essa eu ainda não sei responder por aqui. 🤔 Mas a Priscila pode te ajudar: '+wa('Olá! Vim pelo site da ContLup e tenho uma dúvida: '+text,'enviar essa pergunta pelo WhatsApp')+'.<br><br>Ou escolha um dos assuntos abaixo.',START);
   }
 
+  function greet(){
+    setPose('apresenta'); add('bot','Oi! Eu sou a <b>Lupi</b>, assistente virtual da ContLup. 💜 Respondo as dúvidas mais comuns sobre contabilidade e sobre o escritório.');
+    add('bot','Escolha um assunto abaixo ou escreva sua pergunta.'); setChips(START);
+  }
+  // limpa a conversa e recomeça do zero (cancela uma resposta que ainda está "digitando")
+  function clear(){
+    clearTimeout(pending); busy=false; log.innerHTML=''; input.value=''; greet(); input.focus({preventScroll:true});
+  }
   const mobile=()=>matchMedia('(max-width: 899px)').matches;
   let started=false, opener=null;
   function open(from){
@@ -137,8 +145,7 @@
     launch.setAttribute('aria-expanded','true');
     if(mobile()) document.body.style.overflow='hidden';
     if(!started){ started=true; POSES.forEach(p=>{ const i=new Image(); i.src='img/lupi/'+p+'.webp' });
-      setPose('apresenta'); add('bot','Oi! Eu sou a <b>Lupi</b>, assistente virtual da ContLup. 💜 Respondo as dúvidas mais comuns sobre contabilidade e sobre o escritório.');
-      add('bot','Escolha um assunto abaixo ou escreva sua pergunta.'); setChips(START); }
+      greet(); }
     requestAnimationFrame(()=>chat.classList.add('is-open'));
     (mobile()?$('.lc-x',chat):input).focus({preventScroll:true});
   }
@@ -150,6 +157,7 @@
 
   $$('.js-lc-open').forEach(b=>b.addEventListener('click',()=>chat.hidden?open(b):close()));
   $('.js-lc-close',chat).addEventListener('click',close);
+  $('.js-lc-clear',chat).addEventListener('click',clear);
   chat.addEventListener('keydown',e=>{ if(e.key==='Escape') close() });
   form.addEventListener('submit',e=>{ e.preventDefault(); const v=input.value; if(busy||!v.trim()) return; input.value=''; ask(v) });
   // links internos (#proposta, #svc-...) fecham o chat no celular para mostrar a seção
