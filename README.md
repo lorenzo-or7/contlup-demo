@@ -44,7 +44,7 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 - 📈 Painel "Visão do mês" com números ilustrativos
 - 👩‍💼 Apresentação da contadora responsável
 - 💬 "A Lupi explica" e perguntas frequentes
-- 🤖 Chat de dúvidas com a Lupi: respostas automáticas por palavras-chave, sugestões de perguntas e encaminhamento para o WhatsApp, com botão para limpar a conversa
+- 🤖 **Lupi 2.0**, assistente virtual híbrida: fluxos guiados sem IA, respostas aprovadas pela ContLup, IA (Gemini ou OpenAI) para perguntas abertas via backend seguro, histórico da sessão, expressões da personagem e resumo revisável para o WhatsApp
 - 📝 Formulário de pedido de proposta
 - 📲 Contatos com botão de copiar e WhatsApp
 
@@ -57,16 +57,32 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 - **JavaScript** puro para as interações
 - **GitHub Pages** para hospedagem
 
-Estrutura separada em `css/style.css`, `js/main.js` e `js/chat.js` (chat da Lupi, com as perguntas e respostas no próprio arquivo). As poses da Lupi ficam em `img/lupi/`.
+- **Cloudflare Workers** para o backend da IA (as chaves nunca vão para o site)
+- **Node.js test runner** e **Playwright** para os testes
+
+Estrutura: `css/style.css` e `js/main.js` (site), `css/lupi.css` e `js/lupi/` (assistente), `data/` (base de conhecimento e fluxos editáveis), `worker/` (backend), `eval/` (comparação Gemini x OpenAI) e `tests/`.
 
 ---
 
 ## ⚙️ Como rodar
 
-Não precisa instalar nada: baixe o repositório e abra o arquivo `index.html` no navegador.
-
 ```bash
 git clone https://github.com/lorenzo-or7/contlup-demo.git
+cd contlup-demo
+npm run serve        # http://localhost:8080
+```
+
+O chat da Lupi usa módulos JavaScript, que precisam de um servidor (não abra o `index.html` direto do disco).
+Sem backend configurado, a Lupi funciona no **modo básico** (fluxos e respostas aprovadas, sem IA).
+
+## 🤖 Lupi 2.0
+
+- Guia completo (arquitetura, publicação do backend, chaves, conexão com o GitHub Pages, comparação de provedores): [`docs/LUPI-2.md`](docs/LUPI-2.md)
+- Relatório de testes: [`docs/RELATORIO-TESTES.md`](docs/RELATORIO-TESTES.md)
+- Pendências para revisão da Priscila: [`docs/PENDENCIAS-PRISCILA.md`](docs/PENDENCIAS-PRISCILA.md)
+
+```bash
+npm install && npm test && npm run test:ui
 ```
 
 > Este é um projeto demonstrativo: os números exibidos no painel são ilustrativos e não representam dados de clientes.

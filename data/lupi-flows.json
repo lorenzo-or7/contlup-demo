@@ -1,0 +1,307 @@
+{
+  "version": 2,
+  "_leia-me": "Fluxos guiados da Lupi. Funcionam sem IA. Cada fluxo tem: id, title, triggers (frases que iniciam o fluxo), intro, start (primeiro passo) e steps. Tipos de passo: choice (pergunta com opções; allowText permite resposta livre), info (mostra um conteúdo da base pelo kbRef e segue para next) e end (conclusão, com resumo para o WhatsApp). Opções podem ter next (próximo passo), startFlow (abre outro fluxo) ou action (handoff = falar com a Priscila). O texto de kbRef só aparece se a entrada estiver com status approved na base de conhecimento; caso contrário a Lupi mostra fallbackText. summary lista frases do resumo; uma frase só entra se todos os campos {assim} tiverem resposta; campos {?assim} são opcionais e somem quando vazios.",
+  "flows": [
+    {
+      "id": "abrir_empresa",
+      "title": "Abrir uma empresa",
+      "triggers": ["abrir empresa", "abrir minha empresa", "abrir uma empresa", "quero abrir", "abertura de empresa", "abrir cnpj", "tirar cnpj", "formalizar meu negocio", "formalizar o negocio", "montar uma empresa"],
+      "introRef": "emp-abrir",
+      "intro": "Vamos lá! Vou te fazer algumas perguntas rápidas para entender o seu momento. Você pode voltar, pular para outro assunto ou escrever a qualquer momento.",
+      "start": "atividade",
+      "steps": {
+        "atividade": {
+          "type": "choice",
+          "field": "atividade",
+          "prompt": "Que tipo de atividade você pretende ter?",
+          "options": [
+            { "label": "Prestação de serviços", "value": "na área de serviços", "next": "funcionando" },
+            { "label": "Comércio", "value": "no comércio", "next": "funcionando" },
+            { "label": "Indústria", "value": "na indústria", "next": "funcionando" },
+            { "label": "Ainda estou decidindo", "value": "", "next": "funcionando" }
+          ],
+          "allowText": true,
+          "textPrefix": "com a atividade: ",
+          "textNext": "funcionando",
+          "textHint": "Se preferir, descreva a atividade em poucas palavras."
+        },
+        "funcionando": {
+          "type": "choice",
+          "field": "funcionando",
+          "prompt": "O negócio já está funcionando, mesmo que de maneira informal?",
+          "options": [
+            { "label": "Sim, já funciona", "value": "O negócio já funciona informalmente", "next": "formalizacao" },
+            { "label": "Ainda não, estou planejando", "value": "Ainda estou planejando o negócio", "next": "formalizacao" }
+          ]
+        },
+        "formalizacao": {
+          "type": "choice",
+          "field": "formalizacao",
+          "prompt": "Você já tem alguma formalização, como um MEI ou outra empresa?",
+          "options": [
+            { "label": "Não tenho", "value": "", "next": "necessidade" },
+            { "label": "Tenho MEI", "value": "Hoje tenho um MEI", "next": "necessidade" },
+            { "label": "Tenho outra empresa", "value": "Já tenho outra empresa", "next": "necessidade" },
+            { "label": "Não sei dizer", "value": "", "next": "necessidade" }
+          ]
+        },
+        "necessidade": {
+          "type": "choice",
+          "field": "necessidade",
+          "prompt": "Qual é a sua principal dúvida agora?",
+          "options": [
+            { "label": "Qual tipo de empresa abrir", "value": "qual tipo de empresa abrir", "next": "fim" },
+            { "label": "Impostos e regime", "value": "impostos e regime tributário", "next": "fim" },
+            { "label": "Passo a passo da abertura", "value": "o passo a passo da abertura", "next": "fim" },
+            { "label": "Custos para começar", "value": "os custos para começar", "next": "fim" }
+          ],
+          "allowText": true,
+          "textNext": "fim",
+          "textHint": "Ou escreva a sua dúvida."
+        },
+        "fim": {
+          "type": "end",
+          "expression": "success",
+          "message": "Obrigada por contar! 💜 De forma geral, os próximos passos são:\n- **Conversa inicial** com a Priscila para entender a atividade e os planos\n- **Análise** do tipo de empresa e do regime tributário mais adequados ao seu caso\n- **Abertura e registros**, que a ContLup cuida para você\n\nO tipo de empresa e o regime dependem de uma análise individual, então não dá para cravar por aqui. Se quiser, eu preparo um resumo para você mandar para a Priscila.",
+          "summary": [
+            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Gostaria de orientação sobre a abertura de uma empresa {?atividade}.",
+            "{funcionando}.",
+            "{formalizacao}.",
+            "Minha principal dúvida é sobre {necessidade}.",
+            "Podemos conversar?"
+          ]
+        }
+      }
+    },
+    {
+      "id": "troca_contador",
+      "title": "Trocar de contador",
+      "triggers": ["trocar de contador", "troca de contador", "mudar de contador", "trocar contador", "mudar de contabilidade", "trocar de contabilidade", "trocar de escritorio"],
+      "introRef": "emp-troca",
+      "intro": "É mais simples do que parece. Três perguntinhas rápidas para entender o que você procura:",
+      "start": "ativa",
+      "steps": {
+        "ativa": {
+          "type": "choice",
+          "field": "ativa",
+          "prompt": "A sua empresa já está ativa?",
+          "options": [
+            { "label": "Sim, está ativa", "value": "Tenho uma empresa ativa", "next": "motivo" },
+            { "label": "Está parada", "value": "Minha empresa está parada no momento", "next": "motivo" },
+            { "label": "Ainda em abertura", "value": "Minha empresa ainda está em abertura", "next": "motivo" }
+          ]
+        },
+        "motivo": {
+          "type": "choice",
+          "field": "motivo",
+          "prompt": "O que mais pesa na sua decisão de trocar?",
+          "options": [
+            { "label": "Atendimento mais próximo", "value": "busco um atendimento mais próximo", "next": "suporte" },
+            { "label": "Entender meus números", "value": "quero entender melhor os números da empresa", "next": "suporte" },
+            { "label": "Organizar pendências", "value": "preciso organizar algumas pendências", "next": "suporte" }
+          ],
+          "allowText": true,
+          "textNext": "suporte",
+          "textHint": "Ou conte o motivo em uma frase (sem dados da empresa)."
+        },
+        "suporte": {
+          "type": "choice",
+          "field": "suporte",
+          "prompt": "Que tipo de suporte você espera?",
+          "options": [
+            { "label": "Contabilidade completa", "value": "a rotina contábil completa", "next": "fim" },
+            { "label": "Fiscal e impostos", "value": "a parte fiscal e de impostos", "next": "fim" },
+            { "label": "Folha e funcionários", "value": "a folha e os funcionários", "next": "fim" },
+            { "label": "Ainda não sei", "value": "", "next": "fim" }
+          ]
+        },
+        "fim": {
+          "type": "end",
+          "expression": "success",
+          "message": "Perfeito! Na prática, depois que você decide, a ContLup organiza a transição com o escritório anterior, recebe os documentos e confere o que está em andamento, para nada ficar para trás.\n\nPor aqui você **não precisa enviar documentos nem dados da empresa**: isso é combinado diretamente com a Priscila. Quer que eu prepare um resumo para você mandar a ela?",
+          "summary": [
+            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Estou pensando em trocar de contador.",
+            "{ativa}.",
+            "O principal motivo é que {motivo}.",
+            "Gostaria de suporte com {suporte}.",
+            "Podemos conversar?"
+          ]
+        }
+      }
+    },
+    {
+      "id": "mei",
+      "title": "Sou MEI",
+      "triggers": ["sou mei", "tenho mei", "meu mei", "atende mei", "atendem mei", "duvida de mei", "duvida sobre mei", "microempreendedor"],
+      "introRef": "mei-atende",
+      "intro": "Me conta um pouquinho para eu te ajudar melhor:",
+      "start": "possui",
+      "steps": {
+        "possui": {
+          "type": "choice",
+          "field": "possui",
+          "prompt": "Você já tem MEI?",
+          "options": [
+            { "label": "Sim, já sou MEI", "value": "Sou MEI", "next": "tema" },
+            { "label": "Ainda não, quero abrir", "value": "Ainda não sou MEI e penso em me formalizar", "next": "tema" },
+            { "label": "Já fui MEI", "value": "Já fui MEI", "next": "tema" }
+          ]
+        },
+        "tema": {
+          "type": "choice",
+          "field": "tema",
+          "prompt": "A sua dúvida é mais sobre qual assunto?",
+          "options": [
+            { "label": "Faturamento e limite", "value": "faturamento e limite do MEI", "next": "info_faturamento" },
+            { "label": "Notas fiscais", "value": "emissão de notas fiscais", "next": "info_notas" },
+            { "label": "Obrigações do MEI", "value": "as obrigações do MEI", "next": "info_obrigacoes" },
+            { "label": "Crescer / mudar de porte", "value": "crescer e mudar de porte", "next": "info_crescimento" }
+          ],
+          "allowText": true,
+          "textNext": "fim",
+          "textHint": "Ou escreva a sua dúvida."
+        },
+        "info_faturamento": {
+          "type": "info",
+          "kbRef": "mei-faturamento",
+          "fallbackText": "Questões de faturamento e limite do MEI dependem dos valores e das regras em vigor e da sua situação. Para não te passar nada desatualizado, o ideal é conferir com a Priscila antes de tomar qualquer decisão.",
+          "next": "fim"
+        },
+        "info_notas": {
+          "type": "info",
+          "kbRef": "mei-nota",
+          "fallbackText": "A emissão de notas depende da atividade e de para quem você vende. Vale conversar antes, para emitir do jeito certo.",
+          "next": "fim"
+        },
+        "info_obrigacoes": {
+          "type": "info",
+          "kbRef": "mei-obrigacoes",
+          "fallbackText": "As obrigações do MEI incluem pagamentos e declarações periódicas, e os detalhes dependem da atividade e das regras em vigor. A Priscila pode te orientar na rotina certinha.",
+          "next": "fim"
+        },
+        "info_crescimento": {
+          "type": "info",
+          "kbRef": "mei-crescimento",
+          "fallbackText": "Mudar de porte envolve escolher o novo tipo de empresa e o regime tributário. Essa decisão precisa de uma análise do seu caso, e a ContLup apoia na formalização e no desenquadramento do MEI.",
+          "next": "fim"
+        },
+        "fim": {
+          "type": "end",
+          "expression": "success",
+          "message": "Essas questões do MEI costumam depender do faturamento, da atividade e da situação atual do negócio, então uma conclusão definitiva precisa de análise profissional. Posso preparar um resumo para você conversar com a Priscila? 💜",
+          "summary": [
+            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "{possui}.",
+            "Gostaria de orientação sobre {tema}.",
+            "Podemos conversar?"
+          ]
+        }
+      }
+    },
+    {
+      "id": "servicos",
+      "title": "Conhecer os serviços",
+      "triggers": ["conhecer os servicos", "quais os servicos", "quais servicos", "o que voces fazem", "o que a contlup faz", "areas de atuacao", "servicos da contlup"],
+      "introRef": "serv-areas",
+      "intro": "",
+      "start": "area",
+      "steps": {
+        "area": {
+          "type": "choice",
+          "field": "area",
+          "prompt": "Sobre qual área você quer saber mais?",
+          "options": [
+            { "label": "Contábil", "value": "a área contábil", "next": "info_contabil" },
+            { "label": "Fiscal e Tributário", "value": "a área fiscal e tributária", "next": "info_fiscal" },
+            { "label": "Trabalhista", "value": "a área trabalhista", "next": "info_trabalhista" },
+            { "label": "Societário", "value": "a área societária", "next": "info_societario" }
+          ],
+          "allowText": true,
+          "textPrefix": "",
+          "textNext": "fim",
+          "textHint": "Ou descreva o que você precisa."
+        },
+        "info_contabil": { "type": "info", "kbRef": "serv-contabil", "fallbackText": "", "next": "fim" },
+        "info_fiscal": { "type": "info", "kbRef": "serv-fiscal", "fallbackText": "", "next": "fim" },
+        "info_trabalhista": { "type": "info", "kbRef": "serv-trabalhista", "fallbackText": "", "next": "fim" },
+        "info_societario": { "type": "info", "kbRef": "serv-societario", "fallbackText": "", "next": "fim" },
+        "fim": {
+          "type": "end",
+          "expression": "success",
+          "message": "Quer seguir por onde?",
+          "endOptions": [
+            { "label": "Ver outra área", "restart": true },
+            { "label": "Solicitar proposta", "startFlow": "proposta" },
+            { "label": "Falar com a Priscila", "action": "handoff" }
+          ],
+          "summary": [
+            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Gostaria de saber mais sobre {area}.",
+            "Podemos conversar?"
+          ]
+        }
+      }
+    },
+    {
+      "id": "proposta",
+      "title": "Solicitar proposta",
+      "triggers": ["solicitar proposta", "pedir proposta", "quero uma proposta", "fazer orcamento", "quero um orcamento", "pedir orcamento", "solicitar orcamento"],
+      "introRef": "com-preco",
+      "intro": "Eu não informo valores, mas posso deixar o seu pedido de proposta bem organizado para a Priscila:",
+      "start": "tipo",
+      "steps": {
+        "tipo": {
+          "type": "choice",
+          "field": "tipo",
+          "prompt": "A proposta seria para quê?",
+          "options": [
+            { "label": "Contabilidade da empresa", "value": "a contabilidade da minha empresa", "next": "porte" },
+            { "label": "Abrir uma empresa", "value": "abrir uma empresa", "next": "porte" },
+            { "label": "Trocar de contador", "value": "trocar de contador", "next": "porte" },
+            { "label": "Sou MEI", "value": "a rotina do meu MEI", "next": "porte" }
+          ],
+          "allowText": true,
+          "textNext": "porte",
+          "textHint": "Ou escreva em poucas palavras."
+        },
+        "porte": {
+          "type": "choice",
+          "field": "porte",
+          "prompt": "Qual é o porte do negócio hoje?",
+          "options": [
+            { "label": "MEI", "value": "Hoje sou MEI", "next": "detalhe" },
+            { "label": "Pequena empresa (ME/EPP)", "value": "É uma pequena empresa (ME/EPP)", "next": "detalhe" },
+            { "label": "Empresa em crescimento", "value": "É uma empresa em crescimento", "next": "detalhe" },
+            { "label": "Ainda não tenho empresa", "value": "Ainda não tenho empresa", "next": "detalhe" }
+          ]
+        },
+        "detalhe": {
+          "type": "choice",
+          "field": "detalhe",
+          "prompt": "Quer acrescentar algum detalhe em uma frase? (Sem dados pessoais.)",
+          "options": [
+            { "label": "Não, pode seguir", "value": "", "next": "fim" }
+          ],
+          "allowText": true,
+          "textNext": "fim",
+          "textHint": "Escreva o detalhe ou toque em seguir."
+        },
+        "fim": {
+          "type": "end",
+          "expression": "success",
+          "message": "Prontinho! A proposta é montada depois da conversa inicial, com escopo e valor definidos para o seu caso, por isso eu não falo de preços ou prazos por aqui. Revise o resumo abaixo e, se estiver tudo certo, abra o WhatsApp para enviar.",
+          "autoHandoff": true,
+          "summary": [
+            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Gostaria de solicitar uma proposta para {tipo}.",
+            "{porte}.",
+            "Detalhe: {detalhe}.",
+            "Podemos conversar?"
+          ]
+        }
+      }
+    }
+  ]
+}

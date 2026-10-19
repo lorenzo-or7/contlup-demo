@@ -1,0 +1,17 @@
+# dependências
+node_modules/
+
+# segredos e variáveis locais (NUNCA versionar)
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# Wrangler / Cloudflare
+.wrangler/
+
+# resultados locais de avaliação e testes
+eval/results/
+test-results/
