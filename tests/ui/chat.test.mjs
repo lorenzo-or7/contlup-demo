@@ -109,10 +109,12 @@ test('[whatsapp] CPF digitado no resumo pede confirmação extra', async () => {
 test('[fallback] modo básico (sem API): status honesto e fluxos funcionando', async () => {
   const { page, ctx } = await openPage(env);
   await openChat(page);
-  assert.equal(await page.textContent('.lc-status span'), 'Modo básico');
+  assert.equal(await page.textContent('.lc-status span'), 'Respostas automáticas');
+  assert.equal(await page.textContent('.lc-k'), 'Assistente virtual');
+  assert.doesNotMatch(await page.textContent('#lupi-chat'), /inteligência artificial|provedor de IA/, 'sem IA configurada, a interface não fala de IA');
   await page.fill('#lc-in', 'qual a diferença entre lucro presumido e real para clínicas?');
   await page.press('#lc-in', 'Enter');
-  await page.waitForFunction(() => /modo básico/.test([...document.querySelectorAll('.lc-bot .lc-b')].at(-1).textContent));
+  await page.waitForFunction(() => /ainda não sei responder por aqui/.test([...document.querySelectorAll('.lc-bot .lc-b')].at(-1).textContent));
   assert.equal(await page.locator('.lc-tag').count(), 0, 'nenhuma mensagem marcada como IA');
   await page.click('.lc-chip >> text=Abrir uma empresa');
   await page.waitForFunction(() => /tipo de atividade/.test(document.querySelector('.lc-log').textContent));

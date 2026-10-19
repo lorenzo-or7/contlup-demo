@@ -15,7 +15,8 @@ import { buildHandoffSummary, buildWhatsAppLink, reviewSummary, sanitizeSummary 
 
 export const TEXT = {
   greeting: 'Oi! 💜 Eu sou a Lupi, assistente virtual da ContLup. Posso te ajudar a entender melhor nossos serviços ou tirar algumas dúvidas sobre contabilidade. Por onde começamos?',
-  disclaimer: 'Sou uma assistente automática e posso errar. Perguntas abertas podem ser processadas por um provedor de inteligência artificial, então não compartilhe CPF, senhas ou documentos por aqui.',
+  disclaimer: 'Sou uma assistente automática e posso errar. Não compartilhe CPF, senhas ou documentos por aqui.',
+  disclaimerAI: 'Sou uma assistente automática e posso errar. Perguntas abertas podem ser processadas por um provedor de inteligência artificial, então não compartilhe CPF, senhas ou documentos por aqui.',
   greetingAgain: 'Oi de novo! 💜 Em que posso te ajudar?',
   thanks: 'Imagina! Fico feliz em ajudar. 💜 Se surgir outra dúvida, é só chamar.',
   bye: 'Até mais! Quando quiser, é só abrir o chat de novo. 💜',
@@ -25,7 +26,7 @@ export const TEXT = {
   resume: (title) => `Voltando para **${title}**:`,
   ambiguous: 'Só para eu não te responder errado: você quer saber sobre qual destes assuntos?',
   weakGuess: (title) => `Acho que você quer saber sobre **${title}**. É isso?`,
-  basicMode: 'No momento estou no modo básico: consigo te ajudar com os nossos serviços, com as perguntas mais comuns e com os atendimentos guiados, mas ainda não respondo perguntas abertas. Se quiser, preparo uma mensagem para você falar com a Priscila. 💜',
+  basicMode: 'Essa eu ainda não sei responder por aqui. 🤔 Mas posso te ajudar com os assuntos abaixo ou preparar uma mensagem para você tirar essa dúvida com a Priscila. 💜',
   temporary: 'Estou com uma dificuldade temporária para responder perguntas abertas, mas ainda posso te ajudar com nossos serviços ou te encaminhar para a equipe da ContLup. 💜',
   rateLimited: 'Recebi muitas mensagens em pouco tempo. Me dá alguns instantes e tente de novo? Enquanto isso, os assuntos abaixo continuam funcionando.',
   invalid: 'Não consegui entender essa mensagem. Pode escrever de outro jeito, com até 500 caracteres?',
@@ -117,7 +118,7 @@ export class Conversation {
 
   #greet() {
     this.#bot(TEXT.greeting, 'welcome');
-    this.#push({ role: 'notice', text: TEXT.disclaimer });
+    this.#push({ role: 'notice', text: this.ai?.configured ? TEXT.disclaimerAI : TEXT.disclaimer });
     this.#setChips(MENU);
     this.#commit();
   }

@@ -54,6 +54,6 @@ Enquanto estiverem pendentes, os fluxos usam um texto neutro ("depende da sua si
 
 - [ ] Saudação, aviso de privacidade e mensagens de fallback (`js/lupi/conversation.js`, objeto `TEXT`)
 - [ ] Perguntas e conclusões dos 5 fluxos (`data/lupi-flows.json`), em especial a conclusão do fluxo **Abrir empresa** e a do **MEI**
-- [ ] Personalidade e regras da IA (`worker/src/prompt.js`)
-- [ ] Novo trecho da **política de privacidade** no rodapé do site (menciona o envio de perguntas abertas a um provedor de IA). Recomenda-se revisão jurídica/LGPD, incluindo qual provedor será contratado
+- [ ] Personalidade e regras da IA (`worker/src/prompt.js`), só quando a IA for ligada
+- [ ] Trecho da **política de privacidade** sobre o chat (histórico guardado só na aba do navegador). Se a IA for ligada no futuro, a política precisará mencionar o provedor de IA (veja `docs/LUPI-2.md`, seção 8)
 - [ ] Modelo de mensagem para o WhatsApp ("Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi...")

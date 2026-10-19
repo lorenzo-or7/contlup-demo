@@ -18,7 +18,7 @@ export function createUI({ root, conversation, ai, launch }) {
     log: $('.js-lc-log'), chips: $('.js-lc-chips'), form: $('.js-lc-form'), input: $('#lc-in'), send: $('.js-lc-send'),
     pose: $('.js-lc-pose'), stage: $('.js-lc-stage'), status: $('.js-lc-status'), close: $('.js-lc-close'),
     restart: $('.js-lc-restart'), expand: $('.js-lc-expand'), human: $('.js-lc-human'), sr: $('.js-lc-sr'),
-    count: $('.js-lc-count'), title: $('#lc-title'),
+    count: $('.js-lc-count'), title: $('#lc-title'), kicker: $('.lc-k'),
   };
   let opener = null;
   let currentExpr = '';
@@ -233,7 +233,8 @@ export function createUI({ root, conversation, ai, launch }) {
 
   // ---------- status / ocupado ----------
   function updateStatus() {
-    let state = 'basic', text = 'Modo básico', title = 'Respostas prontas e atendimentos guiados, sem IA';
+    el.kicker.textContent = ai.configured ? 'Assistente virtual com IA' : 'Assistente virtual';
+    let state = 'basic', text = 'Respostas automáticas', title = 'Respostas prontas e atendimentos guiados';
     if (ai.configured && ai.available) { state = 'ai'; text = 'IA ativa · pode errar'; title = 'Perguntas abertas são respondidas por inteligência artificial'; }
     else if (ai.configured && !ai.available) { state = 'off'; text = 'IA indisponível agora'; title = 'Fluxos guiados e respostas prontas continuam funcionando'; }
     el.status.dataset.state = state;
