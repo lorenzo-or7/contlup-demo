@@ -10,6 +10,8 @@
 <meta property="og:description" content="Contabilidade próxima e estratégica. Números claros, decisões melhores.">
 <meta property="og:locale" content="pt_BR">
 <meta name="theme-color" content="#070C1C">
+<!-- Endereço do backend da Lupi (Cloudflare Worker). Vazio = modo básico, sem IA. Nunca coloque chaves aqui. -->
+<meta name="lupi-api" content="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -18,6 +20,7 @@
 </script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Quanto custa a contabilidade da minha empresa?", "acceptedAnswer": {"@type": "Answer", "text": "O valor depende do porte da empresa, do regime tributário, do número de funcionários e do volume de movimento. Depois de uma conversa inicial, enviamos uma proposta com escopo e valor definidos."}}, {"@type": "Question", "name": "Como funciona a troca de contador?", "acceptedAnswer": {"@type": "Answer", "text": "Depois que você decide, a ContLup organiza a transição com o escritório anterior, recebe os documentos e confere o que está em andamento, para que nenhuma obrigação fique para trás."}}, {"@type": "Question", "name": "A ContLup atende MEI?", "acceptedAnswer": {"@type": "Answer", "text": "Sim. Ajudamos o MEI com a rotina e as dúvidas do dia a dia e orientamos quando chega a hora de mudar de porte."}}, {"@type": "Question", "name": "Posso abrir minha empresa com a ContLup?", "acceptedAnswer": {"@type": "Answer", "text": "Sim. Orientamos na escolha do tipo de empresa e do regime tributário e cuidamos da abertura e dos registros necessários."}}, {"@type": "Question", "name": "O que preciso para a primeira conversa?", "acceptedAnswer": {"@type": "Answer", "text": "Nada além de contar como está o seu negócio. Se você já tem empresa, ter em mãos o CNPJ e uma ideia do faturamento mensal ajuda a montar a proposta."}}, {"@type": "Question", "name": "Como é o atendimento no dia a dia?", "acceptedAnswer": {"@type": "Answer", "text": "Atendimento próximo e personalizado, pelo WhatsApp e por e-mail, com explicações em linguagem simples."}}]}</script>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/lupi.css">
 <link rel="icon" href="img/monograma.webp">
 </head>
 <body>
@@ -531,7 +534,7 @@
     </div>
     <details class="privacy" id="privacidade">
       <summary>Política de privacidade</summary>
-      <p>Este site não usa cookies de rastreamento e não armazena dados pessoais. As informações que você preenche no formulário de proposta são usadas apenas para montar a mensagem enviada pelo WhatsApp e não ficam gravadas aqui. Os dados recebidos pela ContLup são tratados conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), somente para responder ao seu contato e prestar os serviços contratados. Para pedir acesso, correção ou exclusão dos seus dados, escreva para <a href="mailto:contato@contlup.com.br">contato@contlup.com.br</a>.</p>
+      <p>Este site não usa cookies de rastreamento e não armazena dados pessoais. As informações que você preenche no formulário de proposta são usadas apenas para montar a mensagem enviada pelo WhatsApp e não ficam gravadas aqui. O chat da Lupi guarda a conversa apenas nesta aba do seu navegador (ela some ao fechar a aba ou ao reiniciar o chat). Quando a inteligência artificial está ativa, as perguntas abertas são enviadas, com dados como CPF, telefone e e-mail removidos automaticamente, a um provedor de IA contratado pela ContLup para gerar a resposta; o servidor da Lupi não grava o conteúdo das conversas. Os dados recebidos pela ContLup são tratados conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), somente para responder ao seu contato e prestar os serviços contratados. Para pedir acesso, correção ou exclusão dos seus dados, escreva para <a href="mailto:contato@contlup.com.br">contato@contlup.com.br</a>.</p>
     </details>
     <div class="legal"><span>© 2026 ContLup Studio Contábil · Todos os direitos reservados</span><span><a href="#privacidade" class="js-priv">Política de privacidade</a></span></div>
     <div class="sig" aria-label="Idealizado e desenvolvido por Lorenzo Orsetti, Or7">
@@ -542,37 +545,48 @@
   </div>
 </footer>
 
-<!-- ================= CHAT DA LUPI ================= -->
-<button class="lc-launch js-lc-open" type="button" aria-controls="lupi-chat" aria-expanded="false" aria-label="Abrir o chat de dúvidas com a Lupi">
+<!-- ================= LUPI 2.0 (assistente virtual) ================= -->
+<button class="lc-launch js-lc-open" type="button" aria-controls="lupi-chat" aria-expanded="false" aria-label="Abrir a Lupi, assistente virtual da ContLup">
   <span class="lc-launch-av" aria-hidden="true"><img src="img/lupi/avatar.webp" alt="" width="96" height="96"></span>
-  <span class="lc-launch-txt" aria-hidden="true"><small>Dúvidas?</small><b>Pergunte à Lupi</b></span>
+  <span class="lc-launch-txt" aria-hidden="true"><small>Assistente virtual</small><b>Pergunte à Lupi</b></span>
 </button>
-<div class="lc-teaser js-lc-teaser" hidden>
-  <button class="lc-teaser-go js-lc-teaser-go" type="button">Oi! Eu sou a <b>Lupi</b>. Quer tirar uma dúvida rápida sobre contabilidade?</button>
-  <button class="lc-teaser-x js-lc-teaser-x" type="button" aria-label="Dispensar mensagem"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+<div class="lc-teaser js-lc-teaser" role="status" hidden>
+  <button class="lc-teaser-go js-lc-teaser-go" type="button">Oi! 💜 Posso te ajudar a entender nossos serviços.</button>
+  <button class="lc-teaser-x js-lc-teaser-x" type="button" aria-label="Dispensar convite da Lupi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
 </div>
-<section class="lc" id="lupi-chat" role="dialog" aria-modal="false" aria-labelledby="lc-title" hidden>
+<section class="lc" id="lupi-chat" role="dialog" aria-modal="false" aria-labelledby="lc-title" aria-describedby="lc-desc" data-expr="welcome" hidden>
   <header class="lc-head">
     <div class="lc-head-txt">
-      <p class="lc-k">Assistente virtual</p>
-      <h2 class="display" id="lc-title">Lupi</h2>
-      <p class="lc-sub">Dúvidas frequentes da ContLup</p>
+      <p class="lc-k">Assistente virtual com IA</p>
+      <h2 class="display" id="lc-title" tabindex="-1">Lupi</h2>
+      <p class="lc-status js-lc-status" id="lc-desc" data-state="basic"><i aria-hidden="true"></i><span>Modo básico</span></p>
     </div>
-    <img class="lc-pose js-lc-pose" src="img/lupi/apresenta.webp" alt="" width="447" height="508">
-    <button class="lc-x lc-clear js-lc-clear" type="button" aria-label="Limpar a conversa" title="Limpar a conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg></button>
-    <button class="lc-x js-lc-close" type="button" aria-label="Fechar o chat"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+    <div class="lc-stage js-lc-stage" aria-hidden="true">
+      <img class="lc-pose js-lc-pose" src="img/lupi/apresenta.webp" alt="" width="447" height="508" decoding="async">
+      <span class="lc-spark" aria-hidden="true"><i></i><i></i><i></i></span>
+    </div>
+    <div class="lc-tools">
+      <button class="lc-tool js-lc-close" type="button" aria-label="Fechar o chat" title="Fechar o chat"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="lc-tool lc-tool-expand js-lc-expand" type="button" aria-pressed="false" aria-label="Expandir a janela do chat" title="Expandir a janela do chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="i-grow" d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/><path class="i-shrink" d="M20 10h-6V4M4 14h6v6M14 10l7-7M10 14l-7 7"/></svg></button>
+      <button class="lc-tool js-lc-restart" type="button" aria-label="Reiniciar a conversa e apagar o histórico" title="Reiniciar a conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+    </div>
   </header>
-  <div class="lc-log js-lc-log" role="log" aria-live="polite" aria-label="Conversa com a Lupi"></div>
-  <div class="lc-chips js-lc-chips" role="group" aria-label="Sugestões de perguntas"></div>
+  <div class="lc-log js-lc-log" role="log" aria-live="off" aria-label="Conversa com a Lupi" tabindex="0"></div>
+  <p class="sr js-lc-sr" aria-live="polite" aria-atomic="true"></p>
+  <div class="lc-chips js-lc-chips" role="group" aria-label="Sugestões"></div>
   <form class="lc-form js-lc-form" autocomplete="off">
-    <label class="sr" for="lc-in">Escreva sua pergunta</label>
-    <input id="lc-in" name="q" type="text" maxlength="200" placeholder="Escreva sua dúvida…" enterkeyhint="send">
-    <button type="submit" aria-label="Enviar pergunta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+    <label class="sr" for="lc-in">Escreva sua pergunta para a Lupi</label>
+    <input id="lc-in" name="q" type="text" maxlength="500" placeholder="Escreva sua dúvida…" enterkeyhint="send" autocomplete="off">
+    <span class="lc-count js-lc-count" aria-live="polite" hidden></span>
+    <button class="js-lc-send" type="submit" aria-label="Enviar pergunta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
   </form>
-  <p class="lc-note">Respostas automáticas e gerais. Para o seu caso, <a href="https://wa.me/5519997447919?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener">fale com a Priscila</a> ou escreva para <a href="mailto:contato@contlup.com.br">contato@contlup.com.br</a>.</p>
+  <div class="lc-foot">
+    <button class="lc-human js-lc-human" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5l1.1-3.6A8 8 0 1 1 8.4 18.7z"/><path d="M9.2 8.6c.3 2.4 2.2 4.6 4.6 5.4l1-1.1 1.8.7-.3 1.6c-3.6.4-7.6-3.4-7.4-7.2l1.6-.4.8 1.7z"/></svg>Falar com a Priscila</button>
+    <p class="lc-note">A Lupi pode errar. Não compartilhe dados pessoais. <a href="#privacidade">Privacidade</a></p>
+  </div>
 </section>
 
 <script src="js/main.js" defer></script>
-<script src="js/chat.js" defer></script>
+<script type="module" src="js/lupi/boot.js"></script>
 </body>
 </html>

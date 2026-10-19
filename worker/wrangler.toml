@@ -1,0 +1,41 @@
+# Cloudflare Worker da Lupi 2.0
+# Guia passo a passo: docs/LUPI-2.md (seção "Publicar o backend")
+name = "contlup-lupi"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+[observability]
+enabled = true
+
+[[durable_objects.bindings]]
+name = "LIMITER"
+class_name = "LupiLimiter"
+
+# SQLite-backed Durable Objects funcionam no plano gratuito da Cloudflare.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["LupiLimiter"]
+
+[vars]
+# Liga/desliga a IA sem precisar republicar o site (false = modo básico).
+AI_ENABLED = "false"
+# "gemini" ou "openai". O visitante nunca escolhe isso.
+AI_PROVIDER = "gemini"
+# Modelos: preencha com um modelo atual da documentação de cada provedor (não deixamos padrão de propósito).
+GEMINI_MODEL = ""
+OPENAI_MODEL = ""
+# Sites que podem chamar esta API (separados por vírgula, sem barra no final).
+ALLOWED_ORIGINS = "https://lorenzo-or7.github.io"
+# Limites (ajuste conforme o orçamento).
+RATE_LIMIT_PER_MINUTE = "6"
+RATE_LIMIT_PER_DAY = "60"
+GLOBAL_REQUESTS_PER_DAY = "500"
+DAILY_TOKEN_BUDGET = "400000"
+DAILY_COST_BUDGET_USD = "0"
+MAX_OUTPUT_TOKENS = "700"
+PROVIDER_TIMEOUT_MS = "15000"
+
+# Secrets (NUNCA aqui): configure com
+#   npx wrangler secret put GEMINI_API_KEY
+#   npx wrangler secret put OPENAI_API_KEY
+#   npx wrangler secret put IP_HASH_SALT
