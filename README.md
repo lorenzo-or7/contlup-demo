@@ -37,14 +37,14 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 
 ## ✨ Funcionalidades
 
-- 🧭 Barra lateral que expande ao passar o mouse
+- 🧭 Barra lateral que expande ao passar o mouse, com opção de fixar aberta (desktop)
 - 🌗 Tema escuro e claro
 - 🗂️ Áreas de atuação: contábil, fiscal, trabalhista e societário
 - 🏢 "Para quem é": do MEI à empresa em crescimento
 - 📈 Painel "Visão do mês" com números ilustrativos
 - 👩‍💼 Apresentação da contadora responsável
 - 💬 "A Lupi explica" e perguntas frequentes
-- 🤖 Chat de dúvidas com a Lupi: respostas automáticas por palavras-chave, sugestões de perguntas e encaminhamento para o WhatsApp
+- 🤖 Chat de dúvidas com a Lupi: respostas automáticas por palavras-chave, sugestões de perguntas e encaminhamento para o WhatsApp, com botão para limpar a conversa
 - 📝 Formulário de pedido de proposta
 - 📲 Contatos com botão de copiar e WhatsApp
 
