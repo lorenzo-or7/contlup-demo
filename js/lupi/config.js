@@ -7,7 +7,7 @@ export function readConfig(doc = globalThis.document) {
   const apiUrl = (meta?.content || '').trim().replace(/\/+$/, '');
   return {
     apiUrl: /^https:\/\/|^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?/.test(apiUrl) ? apiUrl : '',
-    whatsapp: '5519997447919',
+    whatsapp: '5519971310182', // WhatsApp comercial
     requestTimeoutMs: 25000,
     maxInputChars: 500,
     aiHistoryTurns: 8,

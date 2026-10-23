@@ -4,7 +4,7 @@
 
 import { renderRich, toPlainText } from './rich-text.js';
 import { expressionFor, EXPRESSIONS } from './expressions.js';
-import { MAX_SUMMARY } from './whatsapp.js';
+import { MAX_SUMMARY, buildWhatsAppLink } from './whatsapp.js';
 import { SENSITIVE_LABELS } from './shared/privacy.js';
 
 const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -106,7 +106,7 @@ export function createUI({ root, conversation, ai, launch }) {
 
   function renderHandoff(m) {
     const wrap = doc.createElement('div'); wrap.className = 'lc-handoff';
-    const h = doc.createElement('p'); h.className = 'lc-handoff-h'; h.textContent = 'Resumo para a Priscila';
+    const h = doc.createElement('p'); h.className = 'lc-handoff-h'; h.textContent = 'Mensagem para o WhatsApp comercial';
     wrap.appendChild(h);
     if (m.state === 'cancelled') {
       const p = doc.createElement('p'); p.className = 'lc-handoff-done'; p.textContent = 'Resumo descartado. Nada foi enviado.';
@@ -145,7 +145,7 @@ export function createUI({ root, conversation, ai, launch }) {
       const ok = doc.createElement('p'); ok.className = 'lc-handoff-done';
       ok.append('WhatsApp aberto em outra aba. ');
       const again = doc.createElement('a'); again.textContent = 'Abrir de novo'; again.target = '_blank'; again.rel = 'noopener noreferrer';
-      again.href = `https://wa.me/5519997447919?text=${encodeURIComponent(m.text)}`;
+      again.href = buildWhatsAppLink(m.text, conversation.whatsapp);
       ok.appendChild(again);
       wrap.append(label, ta, ok);
       return wrap;
@@ -182,7 +182,7 @@ export function createUI({ root, conversation, ai, launch }) {
 
   // anúncios para leitores de tela: só o texto final da Lupi, agrupado
   function queueAnnounce(m) {
-    if (m.kind === 'handoff') { pendingAnnounce.push('Resumo para a Priscila pronto para revisão.'); }
+    if (m.kind === 'handoff') { pendingAnnounce.push('Mensagem para o WhatsApp comercial pronta para revisão.'); }
     else pendingAnnounce.push(toPlainText(m.text).slice(0, 400));
     clearTimeout(announceTimer);
     announceTimer = setTimeout(() => { announce('Lupi: ' + pendingAnnounce.join(' ')); pendingAnnounce = []; }, 120);

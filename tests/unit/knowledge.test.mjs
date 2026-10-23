@@ -5,7 +5,7 @@ import { knowledge } from '../support/helpers.mjs';
 import { buildSystemPrompt } from '../../worker/src/prompt.js';
 
 const STATUSES = new Set(['draft', 'pending_review', 'approved', 'outdated']);
-const CATEGORIES = new Set(['institucional', 'servicos', 'empreendedorismo', 'mei', 'gestao', 'atendimento']);
+const CATEGORIES = new Set(['institucional', 'servicos', 'empreendedorismo', 'mei', 'gestao', 'atendimento', 'planos']);
 
 test('[institucional] toda entrada tem os campos obrigatórios e status válido', () => {
   const ids = new Set();
@@ -48,6 +48,6 @@ test('[conteúdo pendente] prompt da IA só leva entradas aprovadas', () => {
 });
 
 test('[institucional] contato oficial confere com o site', () => {
-  assert.equal(knowledge.contact.whatsapp, '5519997447919');
+  assert.equal(knowledge.contact.whatsapp, '5519971310182', 'WhatsApp comercial');
   assert.equal(knowledge.contact.email, 'contato@contlup.com.br');
 });

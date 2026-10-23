@@ -128,7 +128,7 @@
       if(emp) t+=`\n*Empresa:* ${emp}`;
       t+=`\n*Telefone:* ${tel}\n*Assunto:* ${ass}`;
       if(msg) t+=`\n\n${msg}`;
-      const url='https://wa.me/5519997447919?text='+encodeURIComponent(t);
+      const url='https://wa.me/5519971310182?text='+encodeURIComponent(t);
       const link=$('#form-link',form); link.href=url; $('#form-ok',form).hidden=false;
       let w=null; try{w=window.open(url,'_blank','noopener')}catch(err){}
     });

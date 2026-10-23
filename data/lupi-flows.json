@@ -216,7 +216,8 @@
             { "label": "Contábil", "value": "a área contábil", "next": "info_contabil" },
             { "label": "Fiscal e Tributário", "value": "a área fiscal e tributária", "next": "info_fiscal" },
             { "label": "Trabalhista", "value": "a área trabalhista", "next": "info_trabalhista" },
-            { "label": "Societário", "value": "a área societária", "next": "info_societario" }
+            { "label": "Societário", "value": "a área societária", "next": "info_societario" },
+            { "label": "BPO Financeiro", "value": "o BPO Financeiro", "next": "info_bpo" }
           ],
           "allowText": true,
           "textPrefix": "",
@@ -227,6 +228,7 @@
         "info_fiscal": { "type": "info", "kbRef": "serv-fiscal", "fallbackText": "", "next": "fim" },
         "info_trabalhista": { "type": "info", "kbRef": "serv-trabalhista", "fallbackText": "", "next": "fim" },
         "info_societario": { "type": "info", "kbRef": "serv-societario", "fallbackText": "", "next": "fim" },
+        "info_bpo": { "type": "info", "kbRef": "serv-bpo", "fallbackText": "O BPO Financeiro é um serviço novo de apoio à organização e ao acompanhamento das rotinas financeiras da empresa.", "next": "fim" },
         "fim": {
           "type": "end",
           "expression": "success",
@@ -240,6 +242,56 @@
             "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
             "Gostaria de saber mais sobre {area}.",
             "Podemos conversar?"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planos",
+      "title": "Conhecer os planos",
+      "triggers": ["conhecer os planos", "ver os planos", "quais os planos", "quais planos", "planos da contlup", "qual plano escolher", "me ajuda a escolher um plano", "escolher um plano", "contratar um plano"],
+      "intro": "",
+      "start": "escolha",
+      "steps": {
+        "escolha": {
+          "type": "choice",
+          "field": "plano",
+          "prompt": "Qual plano você quer conhecer?",
+          "options": [
+            { "label": "Lup MEI", "value": "Lup MEI", "next": "info_mei" },
+            { "label": "Lup Start", "value": "Lup Start", "next": "info_start" },
+            { "label": "Lup Plus", "value": "Lup Plus", "next": "info_plus" },
+            { "label": "Lup Prime", "value": "Lup Prime", "next": "info_prime" },
+            { "label": "Me ajude a escolher", "value": "", "next": "ajuda" }
+          ]
+        },
+        "ajuda": { "type": "info", "kbRef": "planos-diferencas", "fallbackText": "", "next": "escolha_depois" },
+        "escolha_depois": {
+          "type": "choice",
+          "field": "plano",
+          "prompt": "Qual deles você quer ver em detalhe?",
+          "options": [
+            { "label": "Lup MEI", "value": "Lup MEI", "next": "info_mei" },
+            { "label": "Lup Start", "value": "Lup Start", "next": "info_start" },
+            { "label": "Lup Plus", "value": "Lup Plus", "next": "info_plus" },
+            { "label": "Lup Prime", "value": "Lup Prime", "next": "info_prime" }
+          ]
+        },
+        "info_mei": { "type": "info", "kbRef": "plano-lup-mei", "fallbackText": "", "next": "fim" },
+        "info_start": { "type": "info", "kbRef": "plano-lup-start", "fallbackText": "", "next": "fim" },
+        "info_plus": { "type": "info", "kbRef": "plano-lup-plus", "fallbackText": "", "next": "fim" },
+        "info_prime": { "type": "info", "kbRef": "plano-lup-prime", "fallbackText": "", "next": "fim" },
+        "fim": {
+          "type": "end",
+          "expression": "success",
+          "message": "Quer falar com a ContLup sobre esse plano? Eu preparo a mensagem para o WhatsApp comercial e você só envia se quiser.",
+          "endOptions": [
+            { "label": "Tenho interesse", "action": "handoff" },
+            { "label": "Ver outro plano", "restart": true },
+            { "label": "Fazer outra pergunta", "action": "menu" }
+          ],
+          "summary": [
+            "Olá! Tenho interesse no plano {plano} da ContLup e gostaria de saber mais informações."
           ]
         }
       }

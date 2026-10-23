@@ -86,7 +86,7 @@ test('[fluxos] fluxo completo na interface até o WhatsApp, só com confirmaçã
   await page.click('text=Confirmar e abrir o WhatsApp');
   const opened = await page.evaluate(() => window.__opened);
   assert.equal(opened.length, 1);
-  assert.match(opened[0], /^https:\/\/wa\.me\/5519997447919\?text=/);
+  assert.match(opened[0], /^https:\/\/wa\.me\/5519971310182\?text=/);
   assert.match(decodeURIComponent(opened[0]), /Prefiro contato à tarde\.$/);
   await page.waitForSelector('text=WhatsApp aberto em outra aba');
   assert.deepEqual(errors, []);

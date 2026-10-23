@@ -48,7 +48,7 @@ test('[fluxos] C — MEI: conteúdo regulatório pendente usa o texto neutro (fa
 test('[fluxos] D — serviços: mostra só áreas confirmadas e oferece proposta', () => {
   const e = engine();
   const start = e.start('servicos');
-  assert.deepEqual(start.chips.filter(c => !c.secondary).map(c => c.label), ['Contábil', 'Fiscal e Tributário', 'Trabalhista', 'Societário']);
+  assert.deepEqual(start.chips.filter(c => !c.secondary).map(c => c.label), ['Contábil', 'Fiscal e Tributário', 'Trabalhista', 'Societário', 'BPO Financeiro']);
   const out = e.choose(2);
   assert.match(out.messages[0].text, /Folha de pagamento/);
   assert.ok(out.chips.some(c => c.action.kind === 'startFlow' && c.action.id === 'proposta'));
