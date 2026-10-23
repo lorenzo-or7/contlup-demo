@@ -56,7 +56,7 @@ export function checkOutput(reply) {
 }
 
 const ALLOWED_URL = [
-  /^https:\/\/wa\.me\/5519997447919/,
+  /^https:\/\/wa\.me\/(5519971310182|5519997447919)/,
   /^https:\/\/(www\.)?instagram\.com\/contlupstudiocontabil/,
   /^https:\/\/([a-z0-9-]+\.)*gov\.br(\/|$)/i,
   /^mailto:contato@contlup\.com\.br$/i,
@@ -69,7 +69,7 @@ export function sanitizeReply(reply) {
   r = r.replace(/\bhttps?:\/\/[^\s)]+/g, (url) => (ALLOWED_URL.some(re => re.test(url)) ? url : '[link removido]'));
   // contatos oficiais da ContLup podem aparecer; qualquer outro dado pessoal é removido
   const keep = [];
-  r = r.replace(/contato@contlup\.com\.br|\(19\)\s?99744-7919|5519997447919/gi, (m) => { keep.push(m); return `\u0000${keep.length - 1}\u0000`; });
+  r = r.replace(/contato@contlup\.com\.br|\(19\)\s?97131-0182|5519971310182|\(19\)\s?99744-7919|5519997447919/gi, (m) => { keep.push(m); return `\u0000${keep.length - 1}\u0000`; });
   r = redact(r).replace(/\u0000(\d+)\u0000/g, (_, i) => keep[Number(i)]);
   return r.length > 1500 ? r.slice(0, 1499).replace(/\s+\S*$/, '') + '…' : r;
 }

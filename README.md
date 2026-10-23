@@ -41,6 +41,8 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 - 🌗 Tema escuro e claro
 - 🗂️ Áreas de atuação: contábil, fiscal, trabalhista e societário
 - 🏢 "Para quem é": do MEI à empresa em crescimento
+- 💳 Planos ContLup (Lup MEI, Start, Plus e Prime) com contato direto pelo WhatsApp comercial
+- 💼 BPO Financeiro na seção de serviços (descrição provisória)
 - 📈 Painel "Visão do mês" com números ilustrativos
 - 👩‍💼 Apresentação da contadora responsável
 - 💬 "A Lupi explica" e perguntas frequentes

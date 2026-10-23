@@ -10,7 +10,7 @@ test('[fluxos] saudação inicial com aviso de IA/privacidade e menu', () => {
   const c = newConversation();
   assert.equal(c.messages[0].text, TEXT.greeting);
   assert.equal(c.messages[1].role, 'notice');
-  assert.deepEqual(chipLabels(c), ['Conhecer os serviços', 'Abrir uma empresa', 'Trocar de contador', 'Sou MEI', 'Solicitar proposta']);
+  assert.deepEqual(chipLabels(c), ['Conhecer os serviços', 'Abrir uma empresa', 'Trocar de contador', 'Sou MEI', 'Conhecer os planos', 'Solicitar proposta']);
 });
 
 test('[fluxos] fluxo completo pelos chips até o resumo para a Priscila', async () => {
@@ -196,7 +196,7 @@ test('[whatsapp] encaminhamento exige confirmação e usa o link oficial', async
   assert.match(card.text, /regime para clínica odontológica/);
   const r = c.confirmHandoff(card.id, card.text + ' Obrigada!');
   assert.equal(r.ok, true);
-  assert.match(r.link, /^https:\/\/wa\.me\/5519997447919\?text=/);
+  assert.match(r.link, /^https:\/\/wa\.me\/5519971310182\?text=/);
   assert.match(decodeURIComponent(r.link), /Obrigada!$/);
   assert.equal(card.state, 'opened');
 });
@@ -283,4 +283,52 @@ test('[conversa] mensagem longa é cortada no limite e vazia é ignorada', async
   assert.equal(c.messages.length, n);
   await c.send('pergunta aberta sobre contabilidade '.repeat(40));
   assert.ok(c.messages.find(m => m.role === 'user').text.length <= 500);
+});
+
+// ---- Planos, BPO e WhatsApp comercial (atualização de 23/10/2026) ----
+test('[planos] fluxo "Conhecer os planos" termina na mensagem exata para o WhatsApp comercial', async () => {
+  const c = newConversation();
+  await c.act({ kind: 'startFlow', id: 'planos' }, 'Conhecer os planos');
+  assert.match(lastBot(c).text, /Qual plano você quer conhecer/);
+  await c.act({ kind: 'option', index: 3 }); // Lup Prime
+  assert.ok(botTexts(c).some(t => /Inclui todos os benefícios do \*\*Lup Plus\*\*/.test(t)));
+  await c.act({ kind: 'handoff' }, 'Tenho interesse');
+  const card = c.messages.at(-1);
+  assert.equal(card.text, 'Olá! Tenho interesse no plano Lup Prime da ContLup e gostaria de saber mais informações.');
+  const r = c.confirmHandoff(card.id);
+  assert.equal(r.link, 'https://wa.me/5519971310182?text=' + encodeURIComponent(card.text));
+});
+
+test('[planos] "me ajude a escolher" mostra as diferenças e depois deixa escolher', async () => {
+  const c = newConversation();
+  await c.send('qual plano escolher?');
+  await c.send('me ajude a escolher');
+  assert.ok(botTexts(c).some(t => /Lup Plus\*\* traz tudo do Start/.test(t)));
+  await c.send('Lup Start');
+  await c.act({ kind: 'handoff' });
+  assert.match(c.messages.at(-1).text, /plano Lup Start da ContLup/);
+});
+
+for (const [q, re] of [
+  ['o que tem no lup mei?', /Declaração Anual do MEI \(DASN-SIMEI\)/],
+  ['qual a diferença entre os planos?', /trimestrais[\s\S]*mensais/],
+  ['vocês fazem BPO financeiro?', /rotinas financeiras/],
+  ['qual o whatsapp comercial?', /\(19\) 97131-0182/],
+]) {
+  test(`[planos] Lupi responde com informação confirmada: "${q}"`, async () => {
+    const ai = mockAI();
+    const c = newConversation({ ai });
+    await c.send(q);
+    assert.match(botTexts(c).slice(-3).join('\n'), re);
+    assert.equal(ai.calls.length, 0, 'resposta aprovada, sem IA');
+  });
+}
+
+test('[comercial inexistente] preço de plano e detalhes do BPO não são inventados', async () => {
+  const c = newConversation();
+  for (const q of ['quanto custa o plano prime por mês?', 'o que exatamente o BPO financeiro faz?', 'tem desconto no lup plus?']) {
+    await c.send(q);
+    const t = botTexts(c).slice(-2).join('\n');
+    assert.doesNotMatch(t, /R\$|\d+\s?%|contas a pagar|conciliação bancária/, q);
+  }
 });

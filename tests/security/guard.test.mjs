@@ -61,6 +61,7 @@ const OK_OUTPUT = [
   'O valor da contabilidade depende do porte e do regime; a Priscila envia uma proposta.',
   'Margem é a diferença entre o preço e o custo. Quer que eu explique com um exemplo?',
   'Você pode falar com a Priscila pelo WhatsApp (19) 99744-7919.',
+  'O WhatsApp comercial da ContLup é (19) 97131-0182.',
   'Tenho 20 anos? Não, a Priscila tem mais de 20 anos de experiência.',
 ];
 for (const text of OK_OUTPUT) {

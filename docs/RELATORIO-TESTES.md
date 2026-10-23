@@ -1,3 +1,21 @@
+# Relatório de testes
+
+## Atualização de 23/10/2026: Planos, BPO Financeiro e WhatsApp comercial
+
+| Bateria | Executados | Aprovados | Falhas | Pulados |
+|---|---|---|---|---|
+| `npm test` (unidade, integração, segurança, runtime do Worker) | 230 | 230 | 0 | 0 |
+| `npm run test:ui` (Chromium) | 44 | 44 | 0 | 0 |
+| `npm run test:live` (IA real) | 0 | 0 | 0 | 10 (sem chaves; IA desligada por decisão) |
+
+Testes novos desta atualização (31):
+- **Conteúdo do HTML** (`tests/unit/site-content.test.mjs`): os 4 planos têm exatamente o texto do briefing; cada "Tenho interesse" abre `wa.me/5519971310182` com a mensagem exata; não há preços, descontos ou destaques inventados; "Planos" está na barra lateral e no menu do celular com numeração 01–08; o BPO tem só a descrição genérica; todos os links de WhatsApp são o comercial, exceto os dois "direto com a Priscila"; o formulário e os dados estruturados usam o número comercial; a base da Lupi tem os mesmos benefícios do site.
+- **Layout no navegador** (`tests/ui/plans.test.mjs`): 4 cards lado a lado cabendo em uma tela em 1366×768, 1440×900, 1536×864 e 1920×1080; 2 colunas em 1024×768 e 820×1180; 1 coluna em 390×844 e 320×568. Em todos: os 27 benefícios visíveis, nada cortado ou fora do card, sem rolagem interna nem horizontal, fonte mínima de 14px e botões alinhados na base. Também: contraste AA nos temas claro e escuro, navegação até a seção (desktop e celular), foco pelo teclado, nomes acessíveis e área de toque dos botões, e o card do BPO.
+- **Lupi** (`tests/integration/conversation.test.mjs`): o fluxo "Conhecer os planos" termina na mensagem exata para o WhatsApp comercial, a ajuda para escolher mostra as diferenças, as respostas sobre planos, BPO e WhatsApp comercial vêm da base aprovada, e preço de plano e detalhes do BPO não são inventados.
+- **Verificação por mutação:** mensagem de plano errada, benefício removido, link comercial com o número antigo, Lupi com o número antigo, mensagem da Lupi alterada e lista de benefícios cortada por CSS. Todas foram detectadas.
+
+---
+
 # Relatório de testes da Lupi 2.0
 
 Execução: 19/10/2026, Node.js 22, Chromium (Playwright 1.56), Wrangler 4.42 (workerd local).

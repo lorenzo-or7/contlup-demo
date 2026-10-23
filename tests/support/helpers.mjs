@@ -35,7 +35,7 @@ export function memoryStorage() {
 }
 
 export function newConversation(opts = {}) {
-  const c = new Conversation({ knowledge, flows, ai: opts.ai || mockAI({ configured: false }), store: opts.store || null, whatsapp: '5519997447919' });
+  const c = new Conversation({ knowledge, flows, ai: opts.ai || mockAI({ configured: false }), store: opts.store || null, whatsapp: '5519971310182' });
   c.init();
   return c;
 }

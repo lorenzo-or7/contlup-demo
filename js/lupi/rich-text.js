@@ -5,7 +5,7 @@
 const ALLOWED_LINK = [
   /^#[a-z0-9-]+$/i,
   /^mailto:contato@contlup\.com\.br$/i,
-  /^https:\/\/wa\.me\/5519997447919(\?.*)?$/,
+  /^https:\/\/wa\.me\/(5519971310182|5519997447919)(\?.*)?$/,
   /^https:\/\/(www\.)?instagram\.com\/contlupstudiocontabil\/?$/,
   /^https:\/\/([a-z0-9-]+\.)*gov\.br(\/[^\s]*)?$/i,
 ];

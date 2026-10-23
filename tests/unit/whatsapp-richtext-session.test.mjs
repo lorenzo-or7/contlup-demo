@@ -24,7 +24,7 @@ test('[whatsapp] sem contexto gera mensagem genérica', () => {
 
 test('[whatsapp] link usa só o número oficial e codifica o texto', () => {
   const l = buildWhatsAppLink('Olá & tudo bem? #1');
-  assert.equal(l, 'https://wa.me/5519997447919?text=Ol%C3%A1%20%26%20tudo%20bem%3F%20%231');
+  assert.equal(l, 'https://wa.me/5519971310182?text=Ol%C3%A1%20%26%20tudo%20bem%3F%20%231');
   assert.throws(() => buildWhatsAppLink('x', '123'));
 });
 
@@ -43,7 +43,8 @@ test('[whatsapp] sanitizeSummary limita o tamanho', () => {
 test('[segurança] links fora da lista viram texto; javascript: nunca é link', () => {
   assert.equal(isAllowedLink('javascript:alert(1)'), false);
   assert.equal(isAllowedLink('https://evil.example.com'), false);
-  assert.equal(isAllowedLink('https://wa.me/5519997447919?text=oi'), true);
+  assert.equal(isAllowedLink('https://wa.me/5519971310182?text=oi'), true, 'WhatsApp comercial');
+  assert.equal(isAllowedLink('https://wa.me/5519997447919?text=oi'), true, 'WhatsApp da Priscila (links específicos)');
   assert.equal(isAllowedLink('https://wa.me/5511999999999'), false, 'outro número de WhatsApp');
   assert.equal(isAllowedLink('https://www.gov.br/receitafederal'), true);
   const parts = parseInline('veja [aqui](javascript:alert(1)) e https://phishing.example/x');
@@ -105,4 +106,11 @@ test('[histórico] limpar apaga tudo; sem sessionStorage não quebra', () => {
   const none = createSessionStore(null);
   assert.equal(none.save({ messages: [] }), false);
   assert.equal(none.load(), null);
+});
+
+test('[whatsapp] Lupi encaminha para o WhatsApp comercial (configuração e padrão)', async () => {
+  const { readConfig } = await import('../../js/lupi/config.js');
+  const { OFFICIAL_NUMBER } = await import('../../js/lupi/whatsapp.js');
+  assert.equal(readConfig({ querySelector: () => null }).whatsapp, '5519971310182');
+  assert.equal(OFFICIAL_NUMBER, '5519971310182');
 });

@@ -54,7 +54,7 @@ test('[convite] clicar no convite abre o chat', async () => {
 
 test('[regressão] restante do site continua funcionando (tema, menu, formulário, animação, seções)', async () => {
   const { page, ctx, errors } = await openPage(env);
-  for (const id of ['inicio', 'contlup', 'servicos', 'comecar', 'numeros', 'priscila', 'duvidas', 'contato']) {
+  for (const id of ['inicio', 'contlup', 'servicos', 'svc-bpo', 'planos', 'comecar', 'numeros', 'priscila', 'duvidas', 'contato']) {
     assert.equal(await page.locator('#' + id).count(), 1, `seção #${id}`);
   }
   await page.click('.sb-btn.theme');

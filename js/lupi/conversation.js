@@ -32,7 +32,7 @@ export const TEXT = {
   invalid: 'Não consegui entender essa mensagem. Pode escrever de outro jeito, com até 500 caracteres?',
   sensitive: (list) => `Por segurança, removi ${list} da sua mensagem. Por aqui você não precisa compartilhar dados pessoais. 💜`,
   onlySensitive: 'Por segurança, eu não guardo nem envio esse tipo de dado. Me conta a sua dúvida sem informações pessoais?',
-  handoffIntro: 'Preparei um resumo curto para você enviar à Priscila pelo WhatsApp. Revise, edite se quiser e confirme para abrir o WhatsApp. Nada é enviado sem a sua confirmação.',
+  handoffIntro: 'Preparei uma mensagem curta para você enviar ao WhatsApp comercial da ContLup. Revise, edite se quiser e confirme para abrir o WhatsApp. Nada é enviado sem a sua confirmação.',
 };
 
 export const MENU = [
@@ -40,6 +40,7 @@ export const MENU = [
   { label: 'Abrir uma empresa', action: { kind: 'startFlow', id: 'abrir_empresa' } },
   { label: 'Trocar de contador', action: { kind: 'startFlow', id: 'troca_contador' } },
   { label: 'Sou MEI', action: { kind: 'startFlow', id: 'mei' } },
+  { label: 'Conhecer os planos', action: { kind: 'startFlow', id: 'planos' } },
   { label: 'Solicitar proposta', action: { kind: 'startFlow', id: 'proposta' } },
 ];
 

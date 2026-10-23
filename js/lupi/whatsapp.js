@@ -5,7 +5,7 @@
 import { redact, detectSensitive } from './shared/privacy.js';
 import { truncate } from './shared/text.js';
 
-export const OFFICIAL_NUMBER = '5519997447919';
+export const OFFICIAL_NUMBER = '5519971310182'; // WhatsApp comercial da ContLup
 export const MAX_SUMMARY = 500;
 const OPENING = 'Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.';
 
