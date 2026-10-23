@@ -392,3 +392,22 @@ test('[revisão] assunto em revisão na interface: só o aviso e o contato, sem 
   assert.deepEqual(errors, []);
   await ctx.close();
 });
+
+test('[dados oficiais] a Lupi responde sobre BPO, atendimento online, endereço e CNPJ na interface', async () => {
+  const { page, ctx, errors } = await openPage(env, { reducedMotion: 'reduce' });
+  await openChat(page);
+  for (const [q, re] of [
+    ['Quais atividades o BPO financeiro inclui?', /Gestão de contas a pagar/],
+    ['e os pagamentos?', /sujeitos à aprovação do cliente/],
+    ['A ContLup atende online?', /100% online/],
+    ['vocês têm endereço físico?', /não tem endereço físico/],
+    ['qual o CNPJ de vocês?', /68\.970\.978\/0001-10/],
+  ]) {
+    await page.fill('#lc-in', q);
+    await page.press('#lc-in', 'Enter');
+    await page.waitForFunction((src) => new RegExp(src).test([...document.querySelectorAll('.lc-bot .lc-b')].at(-1)?.textContent || ''), re.source);
+  }
+  assert.doesNotMatch(await page.textContent('.lc-log'), /R\$/);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});

@@ -37,15 +37,16 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 
 ## ✨ Funcionalidades
 
-Seções, na ordem: **Início → Sobre a ContLup → Serviços → Planos → Entenda seus números → Contato**.
+Seções, na ordem: **Início → Serviços → Planos → Sobre a ContLup → Entenda seus números → Contato**.
 
 - 🧭 Barra lateral que expande ao passar o mouse, com opção de fixar aberta (desktop), e menu de tela cheia no celular, ambos com o item da seção atual destacado
 - 🌗 Tema escuro e claro
 - 👩‍💼 Sobre a ContLup: a empresa, a contadora responsável e o jeito de trabalhar
-- 🗂️ Cinco serviços: contábil, fiscal e tributário, trabalhista, societário e BPO Financeiro (descrição provisória)
+- 🗂️ Cinco serviços: contábil, fiscal e tributário, trabalhista, societário e BPO Financeiro, com painel lateral de detalhes (atividades, benefícios e aprovação dos pagamentos)
+- 🌐 Atendimento 100% online, com o CNPJ no rodapé
 - 💳 Planos ContLup (Lup MEI, Start, Plus e Prime) com contato direto pelo WhatsApp comercial
 - 📈 Entenda seus números: números que fazem sentido (painel ilustrativo), problemas reais, assuntos do dia a dia e "A Lupi explica"
-- 🤖 **Lupi 2.0**, assistente virtual **sem IA**: entende perguntas por regras (sinônimos, erros leves de digitação, desambiguação), lembra o contexto da conversa ("E quanto custa?", "Esse plano inclui folha?"), tem 35 respostas aprovadas no ar (outras 39 aguardam revisão profissional e ficam fora do ar), fluxos guiados (incluindo "Encontrar um plano") e prepara a mensagem para o WhatsApp comercial, que o visitante revisa antes de enviar
+- 🤖 **Lupi 2.0**, assistente virtual **sem IA**: entende perguntas por regras (sinônimos, erros leves de digitação, desambiguação), lembra o contexto da conversa ("E quanto custa?", "Esse plano inclui folha?"), tem 41 respostas aprovadas no ar, incluindo BPO Financeiro, atendimento online e CNPJ (outras 39 aguardam revisão profissional e ficam fora do ar), fluxos guiados (incluindo "Encontrar um plano") e prepara a mensagem para o WhatsApp comercial, que o visitante revisa antes de enviar
 - 📝 Formulário de pedido de proposta
 - 📲 Contatos com botão de copiar e WhatsApp
 

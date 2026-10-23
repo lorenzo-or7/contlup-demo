@@ -178,6 +178,41 @@
     setTimeout(()=>{card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash'); card.setAttribute('tabindex','-1'); card.focus({preventScroll:true})}, reduce?0:650);
   }));
 
+  /* ---- BPO Financeiro: painel lateral. <dialog> modal: foco preso, fundo inerte e Escape são nativos;
+         aqui ficam a animação, o clique fora, a rolagem travada e a volta do foco ao botão que abriu ---- */
+  const bpo=$('#bpo-painel');
+  if(bpo&&bpo.showModal){
+    const bBody=$('.bpo-body',bpo); let opener=null, tClose=0;
+    function openBpo(from){
+      opener=from; clearTimeout(tClose); bpo.classList.remove('is-closing');
+      if(!bpo.open) bpo.showModal();
+      document.body.classList.add('bpo-lock'); bBody.scrollTop=0;
+      $('.js-bpo-close',bpo).focus({preventScroll:true});
+      requestAnimationFrame(()=>requestAnimationFrame(()=>bpo.classList.add('is-open')));
+    }
+    function closeBpo(){
+      if(!bpo.open||bpo.classList.contains('is-closing')) return;
+      bpo.classList.remove('is-open'); bpo.classList.add('is-closing');
+      tClose=setTimeout(()=>bpo.close(), reduce?0:480);
+    }
+    bpo.addEventListener('close',()=>{
+      clearTimeout(tClose); bpo.classList.remove('is-open','is-closing'); document.body.classList.remove('bpo-lock');
+      if(opener&&opener.isConnected) opener.focus({preventScroll:true});
+    });
+    bpo.addEventListener('cancel',e=>{ e.preventDefault(); closeBpo() });
+    bpo.addEventListener('click',e=>{ if(!e.target.closest('.bpo-panel')) closeBpo() });
+    // Tab dá a volta dentro do painel (sem isso o foco sai para a barra do navegador)
+    bpo.addEventListener('keydown',e=>{
+      if(e.key!=='Tab') return;
+      const f=$$('button,a[href]',bpo).filter(x=>x.offsetParent!==null); if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey&&(document.activeElement===first||!bpo.contains(document.activeElement))){e.preventDefault(); last.focus()}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault(); first.focus()}
+    });
+    $$('.js-bpo-close',bpo).forEach(b=>b.addEventListener('click',closeBpo));
+    $$('.js-bpo-open').forEach(b=>b.addEventListener('click',()=>openBpo(b)));
+  }
+
   mode(); onScroll();
   addEventListener('scroll',()=>requestAnimationFrame(onScroll),{passive:true});
   addEventListener('resize',()=>{mode(); cur=''; onScroll()});

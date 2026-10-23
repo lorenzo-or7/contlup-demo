@@ -50,7 +50,7 @@ Para cada mensagem, a Lupi decide nesta ordem:
 Guarda só identificadores: `lastIntent`, `topic` (categoria), `plan` e `prevPlan` (para "o outro"), `subject` (os grupos de assunto
 de uma sequência de acompanhamentos) e `unknownStreak`.
 
-- **Acompanhamento por assunto:** `contextGroups` reúne intenções do mesmo assunto (`das`, `mei`, `notas`, `regimes`, `servicos`, e um
+- **Acompanhamento por assunto:** `contextGroups` reúne intenções do mesmo assunto (`bpo`, `das`, `mei`, `notas`, `regimes`, `servicos`, e um
   grupo por `forMei`); cada regra em `followUps` diz, para um grupo, quais expressões (`match`) levam a quais destinos (`targets`).
   Um destino pode ser uma intenção ou uma pergunta pronta (`{ "label": "Preço do plano Lup MEI", "ask": "quanto custa o lup mei?" }`).
 - **Sequência:** enquanto as mensagens forem de acompanhamento ("e…?", curtas), o assunto continua (serviço fiscal → "e como contrato?"

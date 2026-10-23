@@ -1,6 +1,6 @@
 # Pendências para revisão da Priscila
 
-Atualizado em 23/10/2026 (reorganização do site e Lupi 2.0 sem IA).
+Atualizado em 23/10/2026 (dados institucionais oficiais, BPO Financeiro detalhado e nova ordem das seções).
 
 A Lupi só usa o que está com `"status": "approved"` em `data/lupi-knowledge.json`. Para tirar qualquer resposta do ar
 sem apagar, troque o `status` para `outdated`. Cada intenção tem o bloco `review` com a origem do texto.
@@ -54,7 +54,10 @@ Planos e BPO: `serv-bpo`, `planos`, `plano-lup-mei`, `plano-lup-start`, `plano-l
 - [ ] **Planos:** confirmar nomes, chamadas, públicos e benefícios exatamente como estão no site.
 - [ ] **Lup Prime:** a lista repete "Balanço Patrimonial anual", que também está no Lup Plus. Mantido como enviado.
 - [ ] **"Portal para documentos e guias"** (Lup MEI e Lup Start): confirmar que já está disponível.
-- [ ] **BPO Financeiro:** enviar a descrição definitiva e o que está incluído. Hoje o site e a Lupi usam só a frase provisória e dizem que os detalhes ainda serão publicados.
+- [x] **BPO Financeiro:** descrição, 7 atividades, 7 benefícios, público indicado e regra de aprovação dos pagamentos publicados no painel lateral do site e na Lupi (`serv-bpo`, `bpo-atividades`, `bpo-beneficios`, `bpo-publico`, `bpo-proposta`, `bpo-aprovacao`), exatamente como enviados.
+- [ ] **Proposta de BPO Financeiro:** o botão do painel diz "Solicitar proposta de BPO Financeiro" e leva ao WhatsApp comercial. Planos, o que cada um inclui e valores não foram enviados; a Lupi diz que os valores são apresentados na proposta e não informa preços.
+- [ ] **Aprovação dos pagamentos:** o site e a Lupi dizem que todos os pagamentos dependem da aprovação do cliente e que "os detalhes de como essa aprovação é organizada no dia a dia são combinados com a equipe". Se houver um processo definido (por exemplo, como o cliente aprova), envie para publicarmos.
+- [ ] **Sistemas e bancos:** nada foi dito sobre integrações bancárias, sistemas ou acesso a contas, e nada foi publicado sobre isso. A Lupi orienta a não compartilhar senhas nem dados bancários pelo chat.
 
 ## 4. Regras da indicação de plano (fluxo "Encontrar um plano")
 
@@ -86,10 +89,12 @@ montadas só com o público de cada plano publicado no site e **precisam ser val
 
 Foram retirados do rodapé e do contato os campos "a inserir" (sem inventar dados). Se quiser publicá-los, envie:
 
-- [ ] Registro no **CRC** da Priscila e **CNPJ** da ContLup
-- [ ] **Endereço completo** do escritório
-- [ ] **Dias e horários** de atendimento
-- [ ] Se há **atendimento presencial** e em **quais cidades**
+- [x] **CNPJ** da ContLup: 68.970.978/0001-10, no rodapé (linha legal), nos dados estruturados da página e na Lupi (`inst-cnpj`)
+- [x] **Atendimento 100% online, sem endereço físico:** no topo da página, em "Sobre", no contato, no rodapé e na Lupi (`inst-atendimento`, `inst-localizacao`). Os textos que diziam "escritório em Pedreira/SP" foram trocados
+- [ ] Registro no **CRC** da Priscila (não publicado)
+- [ ] **Dias e horários** de atendimento (a Lupi continua dizendo que não foram publicados)
+- [ ] **Atendimento por cidade/estado:** com o atendimento online, confirmar se a ContLup atende qualquer cidade do Brasil. Hoje a Lupi pede para o visitante confirmar com a equipe, e os dados estruturados da página não informam área atendida
+- [ ] **"Pedreira/SP" no site:** o título da página ("Contabilidade em Pedreira/SP"), o canto do topo e o rodapé ("De Pedreira/SP") continuam citando a cidade como origem da ContLup. Confirmar se deve continuar
 - [ ] Alguma **condição comercial** que possa ser divulgada (a Lupi hoje nunca fala de valores, descontos, fidelidade ou prazos)
 
 ## 7. Textos para validar

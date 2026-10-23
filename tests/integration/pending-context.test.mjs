@@ -18,6 +18,8 @@ const APPROVED_IDS = [
   'serv-fiscal', 'serv-trabalhista', 'serv-societario', 'serv-bpo', 'planos', 'plano-lup-mei', 'plano-lup-start', 'plano-lup-plus',
   'plano-lup-prime', 'planos-diferencas', 'planos-qual-escolher', 'mei-atende', 'emp-abertura', 'emp-troca', 'rot-saldo-lucro',
   'rot-sobra-caixa', 'rot-margem', 'rot-precificacao', 'duv-emitir-nota',
+  // dados oficiais de 23/10/2026: BPO Financeiro e CNPJ
+  'bpo-atividades', 'bpo-beneficios', 'bpo-publico', 'bpo-proposta', 'bpo-aprovacao', 'inst-cnpj',
 ];
 
 /** Nenhum texto pendente em nenhuma mensagem e nenhuma sugestão apontando para pendente. */
@@ -242,6 +244,20 @@ test('[contexto] serviços: a sequência de acompanhamentos mantém o assunto', 
   assert.equal(c.ctx.lastIntent, 'planos');
   await c.send('e a proposta?');
   assert.equal(c.ctx.lastIntent, 'atd-proposta');
+});
+
+test('[contexto] BPO: atividades, benefícios, público, preço e pagamentos em sequência', async () => {
+  const c = await run('O que é BPO financeiro?');
+  const seq = [['e quais atividades?', 'bpo-atividades'], ['e os benefícios?', 'bpo-beneficios'], ['e para quem é?', 'bpo-publico'], ['e quanto custa?', 'bpo-proposta'], ['e os pagamentos?', 'bpo-aprovacao']];
+  for (const [q, id] of seq) {
+    await c.send(q);
+    assert.equal(c.ctx.lastIntent, id, q);
+  }
+  assert.doesNotMatch(c.messages.filter(m => m.role === 'bot').map(m => m.text).join('\n'), /R\$/);
+  // "e os planos?" depois do BPO pode ser os planos ContLup ou os planos de BPO: pergunta
+  const d = await run('O que é BPO financeiro?', 'e os planos?');
+  assert.ok(lastBot(d).text.startsWith(TEXT.followUpWhich), lastBot(d).text);
+  assert.deepEqual(d.chips.filter(x => x.action.kind === 'kb').map(x => x.action.id).sort(), ['bpo-proposta', 'planos']);
 });
 
 test('[contexto] pergunta nova encerra o assunto anterior; sem contexto, pede esclarecimento', async () => {

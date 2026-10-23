@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, knowledge } from '../support/helpers.mjs';
+import { BPO, BPO_FORBIDDEN } from '../support/official.mjs';
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const COMMERCIAL = '5519971310182';
@@ -59,25 +60,47 @@ test('[planos] acesso pela navegação: barra lateral e menu do celular, numera�
   for (const nav of [html.match(/<ol class="sb-nav">([\s\S]*?)<\/ol>/)[1], html.match(/<div class="mmenu"[\s\S]*?<ol>([\s\S]*?)<\/ol>/)[1]]) {
     const items = [...nav.matchAll(/href="#([a-z]+)"[^>]*><span class="n">(\d+)<\/span><span class="lbl">([^<]+)</g)].map(m => [m[1], m[2], m[3]]);
     assert.deepEqual(items.map(x => x[1]), ['01', '02', '03', '04', '05', '06']);
-    assert.deepEqual(items[3], ['planos', '04', 'Planos']);
+    assert.deepEqual(items[2], ['planos', '03', 'Planos']);
     for (const [id] of items) assert.match(html, new RegExp(`id="${id}"`), `âncora #${id}`);
   }
   assert.match(html, /id="planos" data-sec="planos"/);
   assert.match(html, /data-target="planos"/);
 });
 
-test('[BPO] card na seção de serviços só com a descrição genérica provisória', () => {
+test('[BPO] card com descrição objetiva e "Saiba mais" que controla o painel lateral', () => {
   const card = html.match(/<article class="svc svc--wide rv" id="svc-bpo">[\s\S]*?<\/article>/);
   assert.ok(card, 'card do BPO ausente');
   const text = strip(card[0]);
   assert.match(text, /BPO Financeiro/);
-  assert.match(text, /Apoio à organização e ao acompanhamento das rotinas financeiras da sua empresa\./);
-  assert.doesNotMatch(card[0], /<li>/, 'sem lista de atividades inventadas');
-  assert.doesNotMatch(text, /R\$|garant|conciliação|contas a pagar|contas a receber|fluxo de caixa/i);
-  const href = decode(card[0].match(/href="([^"]+)"/)[1]);
-  assert.ok(href.startsWith(`https://wa.me/${COMMERCIAL}?text=`));
-  const servicos = html.slice(html.indexOf('id="servicos"'), html.indexOf('<!-- ================= PLANOS'));
+  assert.match(text, /Terceirização das rotinas financeiras/);
+  assert.match(card[0], /<button class="btn btn-ghost bpo-open js-bpo-open" type="button" aria-haspopup="dialog" aria-controls="bpo-painel">Saiba mais/);
+  assert.doesNotMatch(text, BPO_FORBIDDEN);
+  const servicos = html.slice(html.indexOf('id="servicos"'), html.indexOf('<!-- ================= 3. PLANOS'));
   assert.ok(servicos.includes('id="svc-bpo"'), 'BPO fica dentro da seção de serviços');
+  assert.equal((servicos.match(/<article class="svc[ "]/g) || []).length, 5, 'continuam 5 serviços');
+});
+
+test('[BPO] painel lateral com exatamente o conteúdo confirmado e CTA para o WhatsApp comercial', () => {
+  const dlg = html.match(/<dialog class="bpo" id="bpo-painel"[^>]*>[\s\S]*?<\/dialog>/);
+  assert.ok(dlg, 'painel ausente');
+  const d = dlg[0];
+  assert.match(d, /aria-labelledby="bpo-t"/);
+  assert.match(d, /<h2 class="display bpo-t" id="bpo-t">BPO Financeiro<\/h2>/);
+  assert.ok(strip(d).includes(BPO.headline));
+  assert.ok(strip(d).includes(BPO.intro));
+  const acts = [...d.matchAll(/<li><span class="bpo-n">(\d+)<\/span><div><b>([^<]+)<\/b><span>([^<]+)<\/span><\/div><\/li>/g)].map(m => [m[2], m[3]]);
+  assert.deepEqual(acts, BPO.activities);
+  const bens = [...d.match(/<ul class="bpo-bens">([\s\S]*?)<\/ul>/)[1].matchAll(/<li>([^<]+)<\/li>/g)].map(m => m[1]);
+  assert.deepEqual(bens, BPO.benefits);
+  assert.ok(strip(d).includes(BPO.audience));
+  assert.match(strip(d), /todos os pagamentos permanecem sujeitos à aprovação do cliente/);
+  assert.doesNotMatch(strip(d), BPO_FORBIDDEN);
+  const cta = d.match(/<a class="btn btn-primary bpo-cta" href="([^"]+)" target="_blank" rel="noopener">([\s\S]*?)<\/a>/);
+  assert.equal(strip(cta[2]), BPO.cta);
+  const url = new URL(decode(cta[1]));
+  assert.equal(url.origin + url.pathname, `https://wa.me/${COMMERCIAL}`);
+  assert.equal(url.searchParams.get('text'), BPO.message);
+  assert.match(d, /class="bpo-x js-bpo-close" type="button" aria-label="Fechar o painel do BPO Financeiro"/);
 });
 
 test('[whatsapp] links comerciais usam o novo número; só os dois "direto com a Priscila" mantêm o anterior', () => {
@@ -135,7 +158,6 @@ test('[Lupi] base de conhecimento com os planos iguais ao site e BPO sem detalhe
     assert.deepEqual(own, PLANS[p.name].items, `${p.name}: dados estruturados iguais ao site`);
   }
   assert.match(kb['planos-diferencas'].answer, /trimestrais[\s\S]*mensais/);
-  assert.match(kb['serv-bpo'].answer, /rotinas financeiras/);
-  assert.match(kb['serv-bpo'].answer, /ainda vão ser publicados/);
+  assert.match(kb['serv-bpo'].answer, /terceirização das rotinas financeiras/);
   assert.equal(knowledge.contact.whatsappDisplay, '(19) 97131-0182');
 });

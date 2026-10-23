@@ -1,5 +1,42 @@
 # Relatório de testes
 
+## Dados institucionais, BPO Financeiro e nova ordem das seções (23/10/2026)
+
+| Bateria | Comando | Executados | Aprovados | Falhas | Pulados |
+|---|---|---|---|---|---|
+| Unidade + integração + segurança (inclui o Worker no runtime real) | `npm test` | 418 | 418 | 0 | 0 |
+| Interface no Chromium | `npm run test:ui` | 82 | 82 | 0 | 0 |
+| IA real | `npm run test:live` | 0 | 0 | 0 | 10 (sem chaves; IA desligada por decisão) |
+
+Testes novos ou atualizados:
+
+- **Painel do BPO** (`tests/ui/bpo-panel.test.mjs`, 15): abre pela direita com o fundo escurecido e travado; foco vai para o botão de fechar; Tab e Shift+Tab ficam dentro do painel; Escape, botão de fechar e clique fora fecham, e o foco volta para o "Saiba mais"; clique dentro não fecha; página de fundo inerte; rolagem interna sem mover a página; movimento reduzido sem animação (inclusive no escurecido); e, em 320, 375, 768, 1024 e 1440 px nos temas claro e escuro: painel inteiro na tela (largura total no celular), sem rolagem lateral, botão de fechar e CTA visíveis com área de toque, contraste AA.
+- **Conteúdo do BPO** (`tests/unit/site-content.test.mjs` e `tests/unit/knowledge.test.mjs`): o painel e a Lupi têm exatamente as 7 atividades, os 7 benefícios, o público e a regra de aprovação enviados (lista de referência em `tests/support/official.mjs`); nenhum preço, prazo, integração bancária ou movimentação sem aprovação; CTA "Solicitar proposta de BPO Financeiro" para o WhatsApp comercial, com a mensagem de pedido de proposta de BPO.
+- **Dados institucionais** (`tests/unit/site-structure.test.mjs`): CNPJ uma vez, na linha legal do rodapé, e nos dados estruturados; "100% online" no contato, em "Sobre" e no rodapé; nenhum endereço, CEP, CRC, horário ou "escritório em Pedreira"; dados estruturados sem endereço.
+- **Ordem e navegação**: Início → Serviços → Planos → Sobre (com a Priscila) → Entenda seus números → Contato, na página, na barra lateral, no menu do celular e nos indicadores de seção ativa (`site-structure` e `ui/site-layout`).
+- **Lupi**: 17 entradas novas na bateria (agora 157), incluindo atividades, benefícios, público, proposta e preço do BPO, aprovação dos pagamentos, atendimento online, presencial, endereço físico, "posso ir até o escritório?", CNPJ e acompanhamentos ("e quais atividades?", "e os pagamentos?", "e quanto custa?" depois do BPO); teste de sequência do BPO e de "e os planos?" ambíguo (BPO ou planos ContLup) em `pending-context`; teste de interface no chat.
+- **Bloqueio das 39 pendentes**: a lista exata das aprovadas passou de 35 para 41 (as 6 novas); as 39 continuam em `pending_review`, e todos os testes de bloqueio continuam passando.
+
+### Teste de mutação do painel
+
+| Defeito introduzido de propósito | Testes que falharam |
+|---|---|
+| Painel aberto como não modal (fundo interativo) | 3 |
+| Tab sai do painel | 1 |
+| Fundo continua rolando | 1 |
+| Clique fora não fecha | 1 |
+| Sem rolagem interna | 1 |
+| Movimento reduzido ignorado no painel | 0 na primeira rodada → teste novo para o `::backdrop` (fora da regra global do site) → 1 |
+| Foco não volta ao "Saiba mais" pelo nosso código | 0: no Chromium o próprio `<dialog>` devolve o foco; o código fica como garantia para outros navegadores |
+
+### Limitações
+
+- O painel usa `<dialog>` nativo (Chrome, Edge, Firefox e Safari 15.4 ou mais recentes). Em navegadores mais antigos o botão "Saiba mais" não abre o painel, e o card continua com o resumo do serviço.
+- As áreas seguras do iPhone (`env(safe-area-inset-*)`) estão no CSS, mas só foram verificadas por emulação no Chromium, não em aparelho físico.
+- Sem testes com leitor de tela real.
+
+---
+
 ## Ajustes finais antes da publicação (23/10/2026)
 
 | Bateria | Comando | Executados | Aprovados | Falhas | Pulados |
