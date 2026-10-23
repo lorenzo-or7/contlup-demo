@@ -184,7 +184,7 @@ export class Conversation {
         const opt = flow.steps[step.stepId]?.options?.[action.index];
         if (!opt) break;
         this.#push({ role: 'user', text: opt.label });
-        this.#renderFlow(this.engine.choose(action.index));
+        this.#renderFlow(this.engine.choose(action.index), { answered: true });
         break;
       }
       case 'back': this.#push({ role: 'user', text: 'Voltar' }); this.#renderFlow(this.engine.back()); break;
@@ -223,14 +223,14 @@ export class Conversation {
       const switching = best && (best.kind === 'flow' || best.kind === 'kb') && best.group !== this.#groupOfFlow(active.flowId) && !this.#isOptionText(text);
       if (!switching) {
         const out = this.engine.answerText(text);
-        if (out) return this.#renderFlow(out);
+        if (out) return this.#renderFlow(out, { answered: true });
       }
       this.#suspend();
     }
 
     if (cmd === 'greeting') { this.#bot(this.messages.some(m => m.role === 'user' && m !== this.messages.at(-1)) ? TEXT.greetingAgain : TEXT.greeting, 'welcome'); return this.#setChips(this.#withResume(MENU)); }
-    if (cmd === 'thanks') { this.#bot(TEXT.thanks, 'success'); return this.#setChips(this.#withResume(MENU)); }
-    if (cmd === 'bye') { this.#bot(TEXT.bye, 'success'); return this.#setChips(this.#withResume(MENU)); }
+    if (cmd === 'thanks') { this.#bot(TEXT.thanks, 'success', { visual: 'thanks' }); return this.#setChips(this.#withResume(MENU)); }
+    if (cmd === 'bye') { this.#bot(TEXT.bye, 'success', { visual: 'goodbye' }); return this.#setChips(this.#withResume(MENU)); }
     if (cmd === 'menu') return this.#menu();
     if (cmd === 'resume') return this.#resume();
     if (cmd === 'back' || cmd === 'cancel') { this.#bot(TEXT.nothingToCancel, 'idle'); return this.#setChips(this.#withResume(MENU)); }
@@ -431,7 +431,8 @@ export class Conversation {
     if (plan) rememberPlan(this.ctx, plan.id);
     // intenção que existe para abrir um fluxo (sem ações próprias): começa o fluxo
     if (e.flow && !(e.actions || []).length && this.engine.has(e.flow)) return this.#startFlow(e.flow, { withIntro: true });
-    this.#bot(e.answer, e.expression || 'explaining', caveat || e.review?.legalSensitive ? { caveat: TEXT.caveat } : {});
+    // id e categoria vão junto só para a camada visual escolher a pose (ex.: gráfico no BPO); nada de texto do visitante
+    this.#bot(e.answer, e.expression || 'explaining', { intent: e.id, category: e.category, ...(caveat || e.review?.legalSensitive ? { caveat: TEXT.caveat } : {}) });
     const chips = (e.actions || []).map(a => this.#chipForAction(a)).filter(Boolean);
     if (!chips.some(c => c.action.kind === 'handoff')) chips.push(HANDOFF_CHIP);
     this.#setChips(this.#withResume(chips.slice(0, 4)));
@@ -486,12 +487,12 @@ export class Conversation {
   }
 
   #menu() {
-    this.#bot(TEXT.menu, 'idle');
+    this.#bot(TEXT.menu, 'idle', { visual: 'idea' });
     this.#setChips(this.#withResume(MENU));
   }
 
   #showCategories() {
-    this.#bot(TEXT.categories, 'idle');
+    this.#bot(TEXT.categories, 'idle', { visual: 'idea' });
     this.#setChips(this.#withResume([...this.categories.map(c => ({ label: c.label, action: { kind: 'category', id: c.id } })), MENU_CHIP]));
   }
 
@@ -499,7 +500,7 @@ export class Conversation {
     const cat = this.categories.find(c => c.id === id);
     if (!cat) return this.#showCategories();
     const list = [...this.intents.values()].filter(e => e.category === id && e.menu !== false);
-    this.#bot(TEXT.category(cat.label), 'explaining');
+    this.#bot(TEXT.category(cat.label), 'explaining', { visual: 'idea' });
     this.#setChips(this.#withResume([...list.slice(0, 12).map(e => ({ label: e.title, action: { kind: 'kb', id: e.id } })), { label: 'Outros assuntos', action: { kind: 'categories' }, secondary: true }]));
   }
 
@@ -526,9 +527,14 @@ export class Conversation {
     this.#renderFlow(this.engine.start(id, { ...opts, skipRef }));
   }
 
-  #renderFlow(out) {
+  /** answered: o visitante acabou de responder uma etapa (a Lupi mostra o "ok" antes da próxima pergunta). */
+  #renderFlow(out, { answered = false } = {}) {
     if (!out) return;
-    for (const m of out.messages) this.#bot(m.text, m.expression);
+    out.messages.forEach((m, i) => {
+      const last = i === out.messages.length - 1;
+      const visual = last ? (out.done ? 'celebrate' : answered ? 'stepDone' : 'notes') : m.visual;
+      this.#bot(m.text, m.expression, visual ? { visual } : {});
+    });
     this.placeholder = out.placeholder || '';
     if (out.done) {
       this.lastCompleted = this.engine.lastCompleted;
@@ -621,7 +627,7 @@ export class Conversation {
     const summary = message
       ? sanitizeSummary(message)
       : buildHandoffSummary({ flowSummary: this.lastCompleted?.summary || '', intentMessage: intentMsg || '', topic: last ? (last.topicLabel || last.title) : '' });
-    this.#bot(TEXT.handoffIntro, 'success');
+    this.#bot(TEXT.handoffIntro, 'success', { visual: 'handoff' });
     this.#push({ role: 'bot', kind: 'handoff', text: summary, state: 'draft' });
     this.#setChips(this.#withResume([MENU_CHIP]));
   }

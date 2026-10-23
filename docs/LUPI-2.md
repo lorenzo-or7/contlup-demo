@@ -20,6 +20,7 @@ Visitante ──> Site (GitHub Pages, tudo estático)
                  ├─ plans.js          perguntas sobre planos (inclui? quanto custa? diferença? para quem?)
                  ├─ flow-engine.js    fluxos guiados (perguntas, recomendação de plano, mensagem final)
                  ├─ whatsapp.js       mensagem e link do WhatsApp comercial (nunca envia sozinho)
+                 ├─ visual.js         Lupi 3.0: poses, estados visuais e animações (separada da conversa)
                  └─ ui.js             interface (digitando…, ressalvas, links para seções do site)
                data/lupi-knowledge.json   repertório (intenções, sinônimos, planos)
                data/lupi-flows.json       fluxos guiados
@@ -123,9 +124,17 @@ Cada intenção em `data/lupi-knowledge.json` tem:
 - **Nunca coloque** preços, percentuais, valores de limite, horários ou prazos que não tenham sido confirmados. Os testes falham se aparecer `R$ 1…`, `10%`, `81.000`, `9h` etc.
 - Depois de editar, rode `npm test`: ele confere ids, categorias, ações, metadados de revisão, se todas as perguntas de exemplo chegam à intenção certa (também sem acento e em maiúsculas) e a bateria de entradas representativas.
 
-### Expressões da Lupi
+### Lupi 3.0: poses, estados e animações (`js/lupi/visual.js`)
 
-Os estados `idle`, `welcome`, `thinking`, `explaining` e `success` usam as ilustrações **originais** da personagem (veja `img/lupi/estados/LEIA-ME.md`). Para trocar por artes novas, basta alterar `js/lupi/expressions.js`.
+A parte visual é uma camada separada do motor de conversa:
+
+- **A conversa só marca as mensagens:** expressão, id e categoria da intenção respondida, e dicas como `stepDone` (etapa respondida), `celebrate` (atendimento concluído), `idea` (menu), `thanks` e `handoff`. Nada disso reclassifica perguntas nem muda respostas.
+- **`visualStateFor(mensagem)`** (função pura) transforma as marcas em um dos 14 estados: `idle`, `welcome`, `thinking`, `explaining`, `finance`, `organize`, `idea`, `notes`, `stepDone`, `handoff`, `doubt`, `celebrate`, `thanks`, `goodbye`.
+- **`createLupiVisual()`** troca a pose com crossfade (duas camadas de imagem, palco de tamanho fixo, sem mudança de layout) e aplica um movimento curto (aceno, inclinação, deslocamento, "pop", pulinho). Estados passageiros voltam sozinhos ao `idle` sem atrasar a conversa. Fechar ou reiniciar volta ao inicial.
+- **Carregamento:** nada da personagem é baixado antes de abrir o chat; ao abrir, só 3 poses (idle, aceno e pensando) em 1x ou 2x conforme a tela; as outras quando o navegador estiver livre. Se uma pose falhar, usa a padrão; se todas falharem, o avatar.
+- **Movimento reduzido:** sem flutuação, sem movimentos e com troca instantânea.
+
+A tabela de poses está em `img/lupi/estados/LEIA-ME.md`.
 
 ---
 

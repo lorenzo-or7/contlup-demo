@@ -101,6 +101,9 @@ test('[conteúdo] nada se perdeu em relação à versão publicada (exceto o que
     // dados oficiais de 23/10/2026: BPO detalhado no painel, atendimento 100% online, sem endereço físico
     /^Apoio à organização e ao acompanhamento das rotinas financeiras/, /^Cidade Pedreira\/SP$/, /^Atendimento Pelo WhatsApp e por e-mail$/,
     /^Escritório de contabilidade em Pedreira\/SP\./,
+    // rodapé reorganizado (coluna Serviços virou Navegação) e Hero sem referência geográfica
+    /^Contabilidade 100% online$/, /^Pedreira\/SP Atendimento personalizado$/, /De Pedreira\/SP\.$/,
+    /^Abrir empresa ou trocar de contador$/, /^E-mail · contato@contlup\.com\.br$/,
   ];
   const lost = blocks.filter(b => !text.includes(b) && !intentional.some(re => re.test(b)));
   assert.deepEqual(lost, []);
@@ -118,13 +121,80 @@ test('[contato] WhatsApp comercial em destaque, outros canais, formulário e pro
   assert.doesNotMatch(s, /a inserir/);
 });
 
-test('[rodapé] CNPJ oficial discreto na linha legal; sem CRC, endereço ou horários fictícios', () => {
-  const footerHtml = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'));
-  const footer = strip(footerHtml);
-  assert.match(footerHtml, /<div class="legal"><span>[^<]*<span class="cnpj">CNPJ 68\.970\.978\/0001-10<\/span>/);
-  assert.equal((footer.match(/68\.970\.978\/0001-10/g) || []).length, 1, 'CNPJ aparece uma vez');
-  assert.doesNotMatch(footer, /CRC|a inserir|\bRua\b|\bAv\.|\bCEP\b|\d{1,2}h\b|\d{1,2}:\d{2}|[Ee]scritório/);
+const footerHtml = html.slice(html.indexOf('<footer class="site-foot">'), html.indexOf('</footer>', html.indexOf('<footer class="site-foot">')));
+const footer = strip(footerHtml);
+const col = (cls) => footerHtml.match(new RegExp(`<(?:div|nav) class="foot-col ${cls}"[^>]*>([\\s\\S]*?)</(?:div|nav)>\\s*(?=<(?:div|nav) class="foot-col|</div>\\s*<!-- Nível 2)`))[1];
+const links = (h) => [...h.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)].map(m => [m[1].replace(/&amp;/g, '&'), strip(m[2])]);
+
+test('[rodapé] nível 1: quatro colunas (institucional, navegação, contato, links úteis)', () => {
+  const heads = [...footerHtml.matchAll(/<h4>([^<]+)<\/h4>/g)].map(m => m[1]);
+  assert.deepEqual(heads, ['Navegação', 'Contato', 'Links úteis']);
+  const brand = col('foot-brand');
+  assert.match(brand, /<img src="img\/logo\.png" alt="ContLup Studio Contábil"/);
+  assert.match(strip(brand), /Atendimento 100% online/);
+  assert.deepEqual(links(col('foot-nav')), [['#inicio', 'Início'], ['#servicos', 'Serviços'], ['#planos', 'Planos'], ['#contlup', 'Sobre'], ['#numeros', 'Seus números'], ['#contato', 'Contato']]);
+  const contact = links(col('foot-contact'));
+  assert.equal(contact.length, 3);
+  assert.match(contact[0][0], /^https:\/\/wa\.me\/5519971310182\?text=/);
+  assert.equal(contact[0][1], 'WhatsApp (19) 97131-0182');
+  assert.deepEqual(contact.slice(1), [['mailto:contato@contlup.com.br', 'E-mail contato@contlup.com.br'], ['https://www.instagram.com/contlupstudiocontabil/', 'Instagram @contlupstudiocontabil']]);
+});
+
+test('[rodapé] links úteis oficiais preservados exatamente como na versão publicada', (t) => {
+  const now = links(col('foot-links'));
+  assert.deepEqual(now.map(l => l[1]), ['Receita Federal', 'Simples Nacional', 'Portal do Empreendedor (MEI)', 'eSocial']);
+  for (const [href] of now) assert.match(href, /^https:\/\/(www\.gov\.br|www8\.receita\.fazenda\.gov\.br)\//);
+  let old;
+  try { old = execFileSync('git', ['show', 'origin/main:index.html'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); }
+  catch { t.skip('origin/main indisponível'); return; }
+  const oldUseful = links(old.match(/<h4>Links úteis<\/h4><ul>([\s\S]*?)<\/ul>/)[1]);
+  assert.deepEqual(now, oldUseful);
+});
+
+test('[rodapé] nível 2: faixa legal com empresa, CNPJ, responsável técnica, privacidade (uma vez) e direitos', () => {
+  const legal = footerHtml.match(/<div class="legal">([\s\S]*?)<\/div>/)[1];
+  const t2 = strip(legal);
+  assert.match(t2, /ContLup Studio Contábil/);
+  assert.match(t2, /CNPJ 68\.970\.978\/0001-10/);
+  assert.match(t2, /Responsável técnica: Priscila Petean · Contadora/);
+  assert.match(t2, /© 2026 · Todos os direitos reservados/);
+  assert.equal((footer.match(/68\.970\.978\/0001-10/g) || []).length, 1, 'CNPJ uma vez');
+  assert.equal((footer.match(/Política de privacidade/gi) || []).length, 1, 'acionador da política aparece uma vez');
+  assert.match(legal, /<button class="legal-priv js-priv-toggle" type="button" aria-expanded="false" aria-controls="privacidade">Política de privacidade<\/button>/);
+  assert.doesNotMatch(footerHtml, /<details|<summary/);
+  // o texto completo continua no site, fechado até alguém pedir
+  assert.match(footerHtml, /<div class="privacy" id="privacidade" role="region" aria-label="Política de privacidade" tabindex="-1" hidden>\s*<p>Este site não usa cookies de rastreamento/);
+  assert.match(footerHtml, /Lei Geral de Proteção de Dados \(Lei nº 13\.709\/2018\)/);
+});
+
+test('[rodapé] nível 3: assinatura Or7 — Lorenzo Orsetti logo abaixo da faixa legal', () => {
+  const iLegal = footerHtml.indexOf('<div class="legal">'), iPriv = footerHtml.indexOf('id="privacidade"'), iSig = footerHtml.indexOf('<div class="sig"');
+  assert.ok(iLegal < iPriv && iPriv < iSig, 'ordem: faixa legal, texto da política, assinatura');
+  assert.match(footerHtml, /<span class="sig-mark" aria-hidden="true">Or<b>7<\/b><\/span>/);
+  assert.match(footer, /Idealizado e desenvolvido por Lorenzo Orsetti/);
+  assert.match(footerHtml, /aria-label="Idealizado e desenvolvido por Or7, Lorenzo Orsetti"/);
+});
+
+test('[rodapé] sem CRC, endereço, horário, escritório ou Pedreira/SP', () => {
+  assert.doesNotMatch(footer, /CRC|a inserir|\bRua\b|\bAv\.|\bCEP\b|\d{1,2}h\b|\d{1,2}:\d{2}|[Ee]scritório|Pedreira/);
   assert.match(footer, /100% online/);
+});
+
+test('[Hero] microtexto do topo: atendimento 100% online, sem cidade', () => {
+  assert.match(html, /<p class="loc"><b>Atendimento 100% online<\/b><br>Contabilidade próxima,<br>onde você estiver<\/p>/);
+  const hero = strip(html.slice(html.indexOf('id="inicio"'), html.indexOf('<!-- ================= 2. SERVIÇOS')));
+  assert.doesNotMatch(hero, /Pedreira|Atendimento personalizado/);
+  const mmenu = strip(html.slice(html.indexOf('<div class="mmenu"'), html.indexOf('<!-- ================= 1. INÍCIO')));
+  assert.doesNotMatch(mmenu, /Pedreira/i, 'menu do celular sem a cidade');
+});
+
+test('[Pedreira/SP] nenhuma menção comercial à cidade: conteúdo, título, descrição, compartilhamento e dados estruturados', () => {
+  assert.doesNotMatch(html, /Pedreira/, 'nenhuma menção no HTML');
+  assert.match(html, /<title>ContLup Studio Contábil \| Contabilidade online para empresas e MEIs<\/title>/);
+  assert.match(html, /<meta property="og:title" content="ContLup Studio Contábil · Contabilidade online para empresas e MEIs">/);
+  assert.match(html, /<meta name="description" content="Contabilidade 100% online, com atendimento próximo pelo WhatsApp e por e-mail\./);
+  for (const e of knowledge.intents.filter(x => x.status === 'approved')) assert.doesNotMatch(e.answer, /Pedreira/, e.id);
+  assert.doesNotMatch(fs.readFileSync(path.join(ROOT, 'worker/src/prompt.js'), 'utf8'), /escritório de contabilidade em/);
 });
 
 test('[institucional] atendimento 100% online em destaque; nenhum endereço físico no site', () => {
@@ -136,4 +206,16 @@ test('[institucional] atendimento 100% online em destaque; nenhum endereço fís
   const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(ld.taxID, '68.970.978/0001-10');
   assert.equal(ld.address, undefined, 'dados estruturados sem endereço');
+});
+
+test('[imagens] toda imagem citada no site existe; nenhuma referência às poses antigas removidas', () => {
+  const files = ['index.html', 'css/style.css', 'css/lupi.css', 'js/main.js', ...fs.readdirSync(path.join(ROOT, 'js/lupi')).filter(f => f.endsWith('.js')).map(f => 'js/lupi/' + f)];
+  const missing = [];
+  for (const f of files) {
+    const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    for (const [ref] of src.matchAll(/img\/[\w\-/]+\.(?:webp|png|svg|jpg)/g)) if (!fs.existsSync(path.join(ROOT, ref))) missing.push(`${f}: ${ref}`);
+    assert.doesNotMatch(src, /img\/lupi\/(aponta|apresenta|celular|confiante|ideia|notebook|pensando|piscadinha)\.webp/, `${f}: pose antiga`);
+  }
+  assert.deepEqual(missing, []);
+  assert.ok(fs.existsSync(path.join(ROOT, 'img/lupi/avatar.webp')), 'avatar padrão (botão, mensagens e último fallback)');
 });

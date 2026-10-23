@@ -1,5 +1,77 @@
 # Relatório de testes
 
+## Revisão final da Lupi 3.0 (23/10/2026): acentos da Hero, Pedreira/SP e imagens antigas
+
+Resultado: `npm test` 432 de 432 · `npm run test:ui` 121 de 121 · `npm run test:live` 10 pulados (IA desligada).
+
+- **Acentos da Hero**:
+  - **Corte do gradiente:** abaixo de 900 px (não só em 320 px), cada palavra do título vira bloco com `line-height: .88`, e o gradiente recortado no texto (`background-clip: text`) só é pintado dentro dessa caixa, que começava 6–12 px abaixo do topo dos acentos de "Ú" e "Õ". Corrigido com `padding-top` e margem negativa equivalente.
+  - **Contraste no tema claro:** no celular, o título escuro passa sobre o blazer azul-marinho da foto. Um halo claro (`drop-shadow`) mantém letras e acentos legíveis.
+  - **Camada do halo:** o filtro cria uma camada do tamanho do título, então o título ganhou respiro no topo para não cortar o acento da primeira linha.
+  - **Teste de regressão** (`tests/ui/footer-hero.test.mjs`, 10 cenários: 5 larguras × 2 temas): confere a geometria (área pintada acima do topo da fonte) e os pixels (tinta na zona do acento de "Ú" e "Õ", com foto e fundo escondidos). Sem a correção, 8 dos 10 falham; sem o respiro do filtro, 5.
+- **Pedreira/SP:** removida do título, da descrição, do título de compartilhamento, das respostas `inst-contlup` e `inst-localizacao` e do prompt do backend de IA desligado. Um teste garante zero menções no HTML e nas respostas aprovadas. As 39 respostas pendentes continuam idênticas.
+- **Imagens antigas:** as 8 poses da Lupi 2.0 não tinham nenhuma referência e foram removidas. Um teste garante que toda imagem citada no HTML, CSS e JS existe e que nenhuma pose antiga volta a ser referenciada.
+
+---
+
+## Rodapé, Hero e Lupi 3.0 (23/10/2026)
+
+| Bateria | Comando | Executados | Aprovados | Falhas | Pulados |
+|---|---|---|---|---|---|
+| Unidade + integração + segurança | `npm test` | 431 | 431 | 0 | 0 |
+| Interface no Chromium | `npm run test:ui` | 111 | 111 | 0 | 0 |
+| IA real | `npm run test:live` | 0 | 0 | 0 | 10 (sem chaves; IA desligada) |
+
+Testes novos:
+
+- **Rodapé** (`tests/unit/site-structure.test.mjs` e `tests/ui/footer-hero.test.mjs`):
+  - as quatro colunas e seus links;
+  - links úteis idênticos aos da versão publicada;
+  - CNPJ uma vez e numa linha só;
+  - "Política de privacidade" com um único acionador, que abre e fecha o texto completo (o link do chat também abre);
+  - assinatura Or7 logo abaixo da faixa legal;
+  - sem CRC, endereço, horário ou Pedreira/SP;
+  - 4 colunas em 1024 e 1440 px, 2 em 768 px e grupos compactos em 320 e 375 px, nos dois temas, com contraste AA e sem sobreposição;
+  - microinteração de hover nos links.
+- **Hero:** "Atendimento 100% online / Contabilidade próxima, onde você estiver" dentro da tela nas 5 larguras; nenhuma menção visível a Pedreira/SP no conteúdo. As únicas menções restantes (title, description e og:title) foram mantidas de propósito.
+- **Lupi 3.0** (`tests/unit/visual.test.mjs`, 7, e `tests/ui/lupi-visual.test.mjs`, 12):
+  - as 12 poses em 2x e 1x, com transparência e proporções preservadas;
+  - os 14 estados com pose existente e volta automática sem ciclos;
+  - mapeamento das mensagens para os estados (gráfico no BPO, checklist nos planos, ideia no menu, pensando na ambiguidade, headset no WhatsApp, carinho no obrigado);
+  - fluxo guiado com anotando → ok → comemoração (sem dizer que algo foi contratado);
+  - marcas visuais só com ids;
+  - nada baixado antes de abrir o chat e só 3 poses ao abrir;
+  - aceno uma vez por abertura;
+  - fechar e reiniciar sem estado preso;
+  - fallback para a pose padrão e para o avatar;
+  - pose lenta não sobrepõe um estado mais novo;
+  - movimento reduzido sem animações;
+  - personagem decorativa, sem anúncio no leitor de tela, e foco do chat intacto;
+  - botão flutuante com reação ao hover e sem indicadores falsos;
+  - cabeçalho do chat sem cobrir os botões em 320 e 375 px.
+
+### Teste de mutação
+
+| Defeito introduzido de propósito | Testes que falharam |
+|---|---|
+| Sem fallback de imagem | 1 |
+| Pose baixada antes de abrir o chat | 1 |
+| Movimentos aplicados com movimento reduzido | 1 |
+| Fluxo sem "ok"/comemoração | 2 |
+| BPO sem a pose de finanças | 2 |
+| Rodapé sem microinteração nos links | 1 |
+| Botão da política de privacidade não abre | 1 |
+| Fechar o chat não reinicia o estado | 0 na primeira rodada → teste novo fechando no meio de um estado → 1 |
+| Corrida entre poses (pose lenta por cima de uma mais nova) | 0 na primeira rodada → teste novo com carregamento lento → 1 |
+| Regra de movimento reduzido da Lupi removida | 0: equivalente, a regra global do site (`*{animation:none}`) já cobre |
+
+### Limitações
+
+- As poses vêm de uma arte única com fundo escuro. Foram recortadas automaticamente e conferidas sobre o fundo roxo do cabeçalho do chat, que é onde aparecem, nos dois temas. Sobre fundo claro sobram halos leves em volta dos ícones (balão, gráfico), então não devem ser usadas fora do chat sem novos arquivos individuais.
+- A resolução de cada pose é a da arte (cerca de 300 px de altura), suficiente para o palco de 150 px em 2x. Telas acima de 2x mostram a versão 2x ampliada.
+
+---
+
 ## Dados institucionais, BPO Financeiro e nova ordem das seções (23/10/2026)
 
 | Bateria | Comando | Executados | Aprovados | Falhas | Pulados |
