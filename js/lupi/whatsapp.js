@@ -7,19 +7,21 @@ import { truncate } from './shared/text.js';
 
 export const OFFICIAL_NUMBER = '5519971310182'; // WhatsApp comercial da ContLup
 export const MAX_SUMMARY = 500;
-const OPENING = 'Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.';
+const OPENING = 'Olá! Vim pelo site da ContLup e conversei com a Lupi.';
 
 /**
- * Resumo curto para a Priscila.
- * - fluxo concluído: usa o resumo do fluxo;
- * - conversa livre: usa o tema indicado pela IA ou a última pergunta (sempre sem dados pessoais);
+ * Mensagem curta para o WhatsApp comercial. Nunca inclui o texto livre digitado pelo visitante
+ * (que pode ter dados pessoais, financeiros ou tributários): usa só conteúdos preparados.
+ * - fluxo concluído: o resumo do fluxo;
+ * - assunto reconhecido: a mensagem da ação de WhatsApp da intenção ou o título do assunto;
  * - sem contexto: mensagem genérica.
  */
-export function buildHandoffSummary({ flowSummary = '', topic = '', lastQuestion = '' } = {}) {
+export function buildHandoffSummary({ flowSummary = '', intentMessage = '', topic = '' } = {}) {
   if (flowSummary) return sanitizeSummary(flowSummary);
-  const subject = cleanFragment(topic) || cleanFragment(lastQuestion);
-  if (subject) return sanitizeSummary(`${OPENING} Gostaria de orientação sobre: ${subject}. Podemos conversar?`);
-  return sanitizeSummary(`${OPENING} Gostaria de conversar sobre a contabilidade do meu negócio. Podemos conversar?`);
+  if (intentMessage) return sanitizeSummary(intentMessage);
+  const subject = cleanFragment(topic);
+  if (subject) return sanitizeSummary(`${OPENING} Gostaria de conversar sobre ${subject.charAt(0).toLowerCase() + subject.slice(1)}.`);
+  return sanitizeSummary(`${OPENING} Gostaria de conversar com a equipe.`);
 }
 
 function cleanFragment(s) {

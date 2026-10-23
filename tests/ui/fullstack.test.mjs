@@ -46,13 +46,13 @@ test('[integração ponta a ponta] site + Worker real: status de IA, falha real 
   await page.goto(SITE + '/');
   await page.click('.lc-launch');
   await page.waitForFunction(() => document.querySelector('.lc-status')?.dataset.state === 'ai', null, { timeout: 15000 });
-  await page.fill('#lc-in', 'como funciona a depreciação de máquinas na contabilidade?');
+  await page.fill('#lc-in', 'qual a melhor marca de café para o escritório?');
   await page.press('#lc-in', 'Enter');
   await page.waitForFunction(() => /dificuldade temporária/.test(document.querySelector('.lc-log').textContent), null, { timeout: 20000 });
   assert.equal(await page.getAttribute('.lc-status', 'data-state'), 'off');
   assert.equal(await page.locator('.lc-tag').count(), 0, 'não finge resposta de IA');
   // fluxos continuam funcionando com a IA fora
-  await page.click('.lc-chip >> text=Abrir uma empresa');
-  await page.waitForFunction(() => /tipo de atividade/.test(document.querySelector('.lc-log').textContent));
+  await page.click('.lc-chip >> text=Encontrar um plano');
+  await page.waitForFunction(() => /Hoje você é MEI/.test(document.querySelector('.lc-log').textContent));
   assert.deepEqual(errors, []);
 });

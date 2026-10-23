@@ -1,50 +1,127 @@
-# Lupi 2.0: assistente virtual híbrida da ContLup
+# Lupi 2.0: assistente virtual da ContLup (sem IA)
 
-Este guia explica como a Lupi 2.0 funciona, como rodar no seu computador, como publicar o backend com segurança e como ligar a IA no site do GitHub Pages.
+Este guia explica como a Lupi funciona, como manter o repertório dela e, para o futuro, como ligar um backend com IA.
 
-> **Decisão atual: a Lupi roda sem IA.** O site usa só os fluxos guiados e as respostas aprovadas, e a interface não menciona IA.
-> O backend com IA (`worker/`) fica guardado no repositório, desligado, para uso futuro. Para ligá-lo, siga as seções 3 e 4 e o checklist da seção 8.
+> **Decisão atual: a Lupi roda sem IA.** Ela entende as perguntas com regras determinísticas (sem OpenAI, Gemini, Claude ou
+> qualquer modelo generativo, sem API externa e sem servidor). O backend com IA (`worker/`) fica guardado, desligado,
+> e o site nem baixa o código de IA enquanto nenhum endereço de API estiver configurado.
 
 ---
 
 ## 1. Como funciona
 
 ```
-Visitante ──> Site (GitHub Pages) ──────────────────────────────┐
-               js/lupi/boot.js   (leve: botão + convite)         │ só quando a IA está ligada
-               js/lupi/app.js    (carregado ao abrir o chat)      ▼
-                 ├─ conversation.js  roteador híbrido     Cloudflare Worker (worker/)
-                 ├─ flow-engine.js   fluxos guiados  ───>  ├─ valida e limita (Durable Object)
-                 ├─ intents.js       respostas aprovadas   ├─ remove dados pessoais
-                 └─ ai-client.js     chama o Worker        ├─ monta instruções + base aprovada
-                                                           ├─ Gemini OU OpenAI (escolha no servidor)
-                                                           └─ guardas de saída (preços, promessas...)
+Visitante ──> Site (GitHub Pages, tudo estático)
+               js/lupi/boot.js        leve: botão, convite e botões "Pergunte à Lupi" da página
+               js/lupi/app.js         carregado só quando o visitante abre o chat
+                 ├─ conversation.js   orquestrador: decide o que responder
+                 ├─ nlu.js            reconhecimento de intenções (normalização, sinônimos, pontuação, desambiguação)
+                 ├─ context.js        contexto da sessão (intenção anterior, assunto, plano em discussão)
+                 ├─ plans.js          perguntas sobre planos (inclui? quanto custa? diferença? para quem?)
+                 ├─ flow-engine.js    fluxos guiados (perguntas, recomendação de plano, mensagem final)
+                 ├─ whatsapp.js       mensagem e link do WhatsApp comercial (nunca envia sozinho)
+                 └─ ui.js             interface (digitando…, ressalvas, links para seções do site)
+               data/lupi-knowledge.json   repertório (intenções, sinônimos, planos)
+               data/lupi-flows.json       fluxos guiados
 ```
 
 Para cada mensagem, a Lupi decide nesta ordem:
 
-1. **Proteção de dados:** CPF, CNPJ, cartão, e-mail, telefone e senha são removidos antes de guardar ou enviar.
-2. **Comandos:** voltar, cancelar, falar com a Priscila, oi, obrigado.
-3. **Fluxo guiado em andamento:** a resposta da etapa ou a mudança de assunto (o fluxo fica pausado e pode ser retomado).
-4. **Respostas aprovadas** da base de conhecimento e início de fluxos.
-5. **IA** para perguntas abertas, quando disponível.
-6. **Modo básico honesto** quando a IA não está disponível. Ela nunca finge que a IA respondeu.
+1. **Proteção de dados:** CPF, CNPJ, cartão, e-mail, telefone e senha são removidos antes de guardar.
+2. **Comandos:** falar com a ContLup, recomeçar, voltar, cancelar, menu, oi, obrigado. Um número ("1", "2"…) escolhe a sugestão correspondente.
+3. **Fluxo guiado em andamento:** aceita a resposta da etapa (botão, número ou texto curto como "tenho empresa"), ou pausa o fluxo se o visitante mudar de assunto (dá para retomar).
+4. **Perguntas sobre planos e de acompanhamento,** usando o contexto: "E quanto custa?", "Esse plano inclui folha?", "Qual a diferença para o outro?", "E para quem é MEI?". Sem contexto suficiente, ela pergunta em vez de chutar.
+5. **Acompanhamento por assunto** ("e se eu atrasar?" depois do DAS, "e como contrato?" depois de um serviço), pelas regras `followUps` do repertório. Se a regra tem mais de um destino possível ("e quanto custa?" depois do DAS: valor do DAS ou preço do plano?), ela **pede confirmação** em vez de presumir.
+6. **Intenções do repertório,** com desambiguação: se dois assuntos empatam (ou aparecem juntos, como "trocar de contador e abrir empresa"), ela oferece as opções. Só respostas aprovadas viram opção.
+7. **Assunto em revisão:** se a pergunta é sobre uma resposta `pending_review`, ela diz que o assunto está em revisão e oferece o contato, sem mostrar nada da resposta pendente.
+8. **Sem resposta no repertório:** diz isso com naturalidade, sugere até 3 assuntos parecidos e oferece o contato. Na segunda pergunta seguida sem resposta, indica direto o WhatsApp comercial (sem repetir a mesma frase).
+
+### Como ela entende as perguntas (`js/lupi/nlu.js`)
+
+- **Normalização:** minúsculas, sem acentos, sem pontuação, espaços únicos (Unicode NFD).
+- **Sinônimos** (`synonyms` no JSON, 29 grupos hoje): "zap" e "wpp" viram "whatsapp", "microempreendedor" vira "mei", "tributos" vira "imposto", "mudar de contabilidade" vira "trocar de contador".
+- **Erros leves de digitação:** até 1 erro (letra trocada, faltando ou sobrando) em palavras de 5 a 7 letras e até 2 em palavras de 8 ou mais, sempre com a mesma primeira letra (exceto o "h" mudo: "orario" → "horário"). Palavras de até 4 letras precisam ser exatas, salvo dentro de uma expressão em que outra palavra já bateu exatamente.
+- **Palavras inteiras e expressões compostas:** "das" só vale como palavra inteira; expressões maiores valem mais ("lucro presumido" ganha de "lucro").
+- **Pontuação de relevância:** expressões, perguntas de exemplo parecidas e prioridade de temas comerciais. Abaixo do limiar mínimo (`MIN_SCORE`), ela não responde direto.
+- **Desambiguação:** quando o segundo colocado chega a 70% da nota do primeiro, ou quando há dois assuntos ligados por "e"/"ou", ela pergunta. Pedido de orientação para um caso específico ("analisa o meu caso: vale a pena sair do MEI?") recebe a explicação geral do assunto com a ressalva.
+
+### Contexto da sessão (`js/lupi/context.js`)
+
+Guarda só identificadores: `lastIntent`, `topic` (categoria), `plan` e `prevPlan` (para "o outro"), `subject` (os grupos de assunto
+de uma sequência de acompanhamentos) e `unknownStreak`.
+
+- **Acompanhamento por assunto:** `contextGroups` reúne intenções do mesmo assunto (`das`, `mei`, `notas`, `regimes`, `servicos`, e um
+  grupo por `forMei`); cada regra em `followUps` diz, para um grupo, quais expressões (`match`) levam a quais destinos (`targets`).
+  Um destino pode ser uma intenção ou uma pergunta pronta (`{ "label": "Preço do plano Lup MEI", "ask": "quanto custa o lup mei?" }`).
+- **Sequência:** enquanto as mensagens forem de acompanhamento ("e…?", curtas), o assunto continua (serviço fiscal → "e como contrato?"
+  → "e tem plano?" → "e a proposta?"). Uma pergunta nova e completa encerra a sequência, e o plano visto antes não é presumido depois
+  de mudar de assunto.
+- **Ambiguidade:** mais de um destino = a Lupi pergunta qual; destinos em revisão não viram opção (ela avisa que parte do assunto está em revisão).
+**Nunca guarda o texto digitado.** Fica no `sessionStorage` da aba (some ao fechar) e é apagado com "Recomeçar".
+
+### Respostas em revisão (`pending_review`)
+
+- Ficam no índice **só para reconhecer o assunto** (sem isso, "como pagar o DAS?" cairia numa resposta aprovada parecida, como o plano Lup MEI).
+- Nunca aparecem: nem o texto, nem o título, nem as ações. Não entram em sugestões, desambiguação, "Dúvidas gerais", fluxos (que usam o `fallbackText`), acompanhamentos nem no prompt do backend de IA.
+- Dentro do mesmo assunto, uma resposta aprovada com correspondência forte ganha da que está em revisão ("quero trocar de contador" → `emp-troca`).
+- Botão antigo salvo na sessão que aponte para uma resposta que voltou para revisão também só mostra o aviso.
+
+### Fluxos guiados (`data/lupi-flows.json`)
+
+| Fluxo | Para quê | Termina em |
+|---|---|---|
+| `encontrar_plano` | Até 3 perguntas (tipo de empresa, regime, prioridade) e uma **indicação preliminar** de plano | Mensagem "Olá! Gostaria de saber mais sobre o plano X." |
+| `planos` | Conhecer cada plano ou ver as diferenças | Mensagem de interesse no plano escolhido |
+| `servicos` | Conhecer as 5 áreas, incluindo o BPO Financeiro | Mensagem sobre o serviço |
+| `primeiro_atendimento` | Abrir empresa, trocar de contador, regularizar ou contratar | "Olá! Gostaria de conversar sobre …" |
+| `abrir_empresa`, `troca_contador`, `mei`, `proposta` | Atendimentos específicos | Resumo revisável para o WhatsApp |
+
+"Dúvidas gerais" mostra as 8 categorias e as perguntas de cada uma. Todos os fluxos aceitam **Voltar**, **Cancelar**, **Recomeçar** e mudança de assunto.
+
+### WhatsApp comercial
+
+Destino único: `5519971310182`. A mensagem vem do fluxo concluído, da ação da intenção (por exemplo, "Olá! Tenho interesse no BPO Financeiro da ContLup.") ou de uma frase genérica.
+**O texto livre digitado pelo visitante não entra na mensagem.** O visitante vê, pode editar e só então confirma; o link (`wa.me/…?text=`) é codificado com `encodeURIComponent` e nada é enviado automaticamente.
 
 ### Arquivos
 
 | Caminho | O que é |
 |---|---|
-| `data/lupi-knowledge.json` | Base de conhecimento editável (com status de revisão) |
-| `data/lupi-flows.json` | Fluxos guiados editáveis (abrir empresa, troca de contador, MEI, serviços, proposta) |
-| `js/lupi/` | Frontend da Lupi (módulos ES, sem dependências) |
+| `data/lupi-knowledge.json` | Repertório editável: intenções, sinônimos, planos e benefícios |
+| `data/lupi-flows.json` | Fluxos guiados editáveis |
+| `js/lupi/` | Lupi no navegador (módulos ES, sem dependências) |
 | `js/lupi/shared/` | Código usado pelo site **e** pelo Worker (texto e privacidade) |
-| `css/lupi.css` | Visual do chat (usa os tokens de cor do site: temas claro e escuro) |
-| `worker/` | Backend serverless (Cloudflare Worker + Durable Object) |
-| `worker/src/providers/` | Adaptadores `GeminiProvider` e `OpenAIProvider` (mesma interface) |
-| `worker/src/prompt.js` | Instruções da Lupi para o modelo |
-| `worker/src/guard.js` | Guardas de segurança de entrada e saída |
-| `eval/` | Avaliação comparativa Gemini x OpenAI |
-| `tests/` | Testes automatizados (unidade, integração, segurança, interface, IA real) |
+| `css/lupi.css` | Visual do chat (temas claro e escuro) |
+| `worker/` | Backend com IA, **desligado** (guardado para o futuro) |
+| `tests/` | Testes automatizados |
+
+## 1.1 Como manter o repertório
+
+Cada intenção em `data/lupi-knowledge.json` tem:
+
+```json
+{
+  "id": "mei-das",                     // estável: não mude (é usado em ações, fluxos e testes)
+  "category": "mei",                   // contlup, servicos, planos, mei, empresas, regimes, rotinas, duvidas
+  "title": "DAS do MEI",
+  "examples": ["Como pago o DAS?", "…"],  // perguntas reais; os testes exigem que todas cheguem a esta intenção
+  "keywords": ["pagar das", "guia do mei", "…"],  // sem acentos, em minúsculas
+  "exclude": ["dasn simei"],           // opcional: expressões que impedem a intenção
+  "answer": "Texto em **markdown simples**",
+  "actions": [ { "type": "intent", "id": "mei-pendencias", "label": "DAS atrasado" },
+               { "type": "whatsapp", "label": "Falar com a ContLup", "message": "Olá! …" },
+               { "type": "flow", "id": "mei", "label": "…" },
+               { "type": "link", "href": "#planos", "label": "Ver os planos no site" } ],
+  "status": "approved",                // só "approved" aparece; use "outdated" para desligar
+  "review": { "legalSensitive": true, "professionalReview": "pendente", "approvedBy": "…", "source": "…", "updatedAt": "2026-10-23" }
+}
+```
+
+(Os comentários `//` acima são só explicação: o arquivo é JSON puro.)
+
+- **Conteúdo sujeito a mudança legal** (`legalSensitive: true`) mostra automaticamente a ressalva "Explicação geral: regras, valores e prazos podem mudar…".
+- **Nunca coloque** preços, percentuais, valores de limite, horários ou prazos que não tenham sido confirmados. Os testes falham se aparecer `R$ 1…`, `10%`, `81.000`, `9h` etc.
+- Depois de editar, rode `npm test`: ele confere ids, categorias, ações, metadados de revisão, se todas as perguntas de exemplo chegam à intenção certa (também sem acento e em maiúsculas) e a bateria de entradas representativas.
 
 ### Expressões da Lupi
 
@@ -63,7 +140,7 @@ npm run serve          # abre o site em http://localhost:8080
 
 > O chat usa módulos JavaScript modernos, que **não funcionam abrindo o `index.html` direto do disco** (`file://`). Use sempre um servidor, como o comando acima.
 
-Sem configurar nada, a Lupi roda no **modo básico**. Para testar a IA localmente:
+Sem configurar nada, a Lupi roda **sem IA** (é o modo oficial do site). Só se um dia quiser testar a IA localmente:
 
 1. `cd worker && npm install`
 2. Copie `worker/.dev.vars.example` para `worker/.dev.vars` e preencha a chave e o modelo (esse arquivo é ignorado pelo Git).
@@ -187,7 +264,7 @@ Critérios e pesos: segurança e precisão 35% · fidelidade à ContLup 20% · c
 
 ```bash
 npm test              # unidade + integração + segurança (inclui o Worker no runtime real, se worker/node_modules existir)
-npm run test:ui       # interface no Chromium (Playwright): desktop, celular, temas, acessibilidade, fallback
+npm run test:ui       # interface no Chromium (Playwright): chat, site em 320–1440 px, temas, navegação, acessibilidade
 npm run test:live     # IA real: só roda com chaves no .env; sem elas, fica "pulado"
 npm run eval          # avaliação comparativa (precisa de chaves)
 ```

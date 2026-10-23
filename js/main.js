@@ -81,12 +81,13 @@
   function parallax(){ if(reduce)return; const y=scrollY; if(y<innerHeight*1.2){par.style.setProperty('--py',(y*.08).toFixed(1)+'px'); ring.style.setProperty('--rot',(y*.02).toFixed(2)+'deg')}}
 
   /* ---- sidebar scroll spy ---- */
-  const links=$$('.sb-nav a'), ind=$('.sb-ind'), secs=$$('[data-sec]'); let cur='';
+  const links=$$('.sb-nav a'), mlinks=$$('#mmenu ol a'), ind=$('.sb-ind'), secs=$$('[data-sec]'); let cur='';
   function navSpy(){
     let id=secs[0].dataset.sec; const line=innerHeight*.4;
     secs.forEach(s=>{ if(s.getBoundingClientRect().top<=line) id=s.dataset.sec });
     if(id===cur) return; cur=id;
     links.forEach(a=>{const on=a.dataset.target===id; a.classList.toggle('is-active',on); if(on){a.setAttribute('aria-current','true'); ind.style.transform=`translateY(${a.offsetTop+a.offsetHeight/2-3}px)`} else a.removeAttribute('aria-current')});
+    mlinks.forEach(a=>{const on=a.getAttribute('href')==='#'+id; a.classList.toggle('is-active',on); if(on) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current')});
   }
 
   /* ---- reveals ---- */
@@ -124,7 +125,7 @@
       const badN=nome.length<2, badT=tel.replace(/\D/g,'').length<10;
       show(f('f-nome'),'e-nome',badN); show(f('f-tel'),'e-tel',badT);
       if(badN){f('f-nome').focus();return} if(badT){f('f-tel').focus();return}
-      let t=`Olá, Priscila! Vim pelo site da ContLup e gostaria de solicitar uma proposta.\n\n*Nome:* ${nome}`;
+      let t=`Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta.\n\n*Nome:* ${nome}`;
       if(emp) t+=`\n*Empresa:* ${emp}`;
       t+=`\n*Telefone:* ${tel}\n*Assunto:* ${ass}`;
       if(msg) t+=`\n\n${msg}`;

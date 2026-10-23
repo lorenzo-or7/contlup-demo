@@ -5,12 +5,12 @@
 export const PROMPT_VERSION = '2026-10-19.1';
 
 export function approvedEntries(kb) {
-  return (kb?.entries || []).filter(e => e.status === 'approved');
+  return (kb?.intents || kb?.entries || []).filter(e => e.status === 'approved');
 }
 
 export function buildSystemPrompt(kb, context = {}) {
   const c = kb?.contact || {};
-  const facts = approvedEntries(kb).map(e => `- [${e.id}] ${e.title}: ${String(e.content).replace(/\s+/g, ' ').trim()}`).join('\n');
+  const facts = approvedEntries(kb).map(e => `- [${e.id}] ${e.title}: ${String(e.answer ?? e.content).replace(/\s+/g, ' ').trim()}`).join('\n');
   const flowNote = context.flow
     ? `\nO visitante pausou um atendimento guiado (${context.flow}) para fazer esta pergunta.`
     : context.completedFlow ? `\nO visitante concluiu há pouco um atendimento guiado (${context.completedFlow}).` : '';

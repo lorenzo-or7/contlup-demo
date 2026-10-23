@@ -1,5 +1,128 @@
 # Relatório de testes
 
+## Ajustes finais antes da publicação (23/10/2026)
+
+| Bateria | Comando | Executados | Aprovados | Falhas | Pulados |
+|---|---|---|---|---|---|
+| Unidade + integração + segurança (inclui o Worker no runtime real) | `npm test` | 397 | 397 | 0 | 0 |
+| Interface no Chromium | `npm run test:ui` | 66 | 66 | 0 | 0 |
+| IA real | `npm run test:live` | 0 | 0 | 0 | 10 (sem chaves; IA desligada por decisão) |
+
+O que mudou e como foi testado:
+
+1. **39 respostas contábeis novas em `pending_review`**, com o conteúdo preservado; 35 institucionais e comerciais seguem aprovadas.
+2. **Bloqueio das pendentes** (`tests/integration/pending-context.test.mjs`, 22 testes):
+   - todas as perguntas de exemplo das 39 pendentes recebem só o aviso de revisão (ou uma resposta aprovada forte do mesmo assunto, como "quero trocar de contador" → `emp-troca`);
+   - botão antigo salvo na sessão apontando para pendente, ações das 35 aprovadas, todas as categorias de "Dúvidas gerais", todos os fluxos pelas primeiras opções, desambiguação, "não encontrei", encaminhamento, sessão restaurada e prompt do backend de IA: nenhum texto, título ou sugestão de resposta pendente;
+   - lista exata das 35 aprovadas (mudança de status acidental quebra o teste);
+   - todas as perguntas de exemplo das 35 aprovadas continuam respondidas com o texto aprovado.
+3. **Bateria de entradas** (`tests/unit/lupi-inputs.test.mjs`): 140 entradas. Em cada uma, além do resultado esperado, o teste confere que nenhum texto pendente aparece e que nenhuma sugestão aponta para pendente. Entradas de assuntos em revisão exigem o aviso de revisão.
+4. **Contexto** (no mesmo arquivo dos 22 testes): DAS ("e se eu atrasar?", "e se eu esquecer de pagar?", "e a declaração?", "e quanto custa?" → pede confirmação), MEI (plano, preço do plano, "precisa de contador?", preço ambíguo), notas fiscais ("e se eu for MEI?", "e como emito?"), regimes (diferença, plano, imposto ambíguo), serviços (sequência "e como contrato?" → "e quanto custa?" → "e tem plano?" → "e a proposta?"), pergunta nova encerrando o assunto, falta de contexto e "e para quem é MEI?" depois de assunto em revisão.
+5. **WhatsApp** (`tests/unit/site-content.test.mjs`): nenhuma mensagem comercial do site, do formulário ou da Lupi cita a Priscila e todas mencionam a ContLup; os 2 botões pessoais continuam com o mesmo número e texto.
+6. **Reorganização preservada:** as suítes de estrutura (10) e de layout em 320–1440 px nos dois temas (15) continuam passando sem alteração.
+
+### Teste de mutação das proteções novas
+
+| Defeito introduzido de propósito | Testes que falharam |
+|---|---|
+| Respostas pendentes no mapa de respostas | 31 |
+| Pendente tratada como aprovada no índice | 31 |
+| Fluxo lendo respostas pendentes | 1 |
+| Desambiguação oferecendo pendentes | 0 na primeira rodada → teste novo com dois assuntos (um aprovado, um em revisão) → 1 |
+| Regras de acompanhamento desligadas | 10 |
+| Assunto da sequência nunca encerra | 0 na primeira rodada → teste corrigido para criar a sequência antes de mudar de assunto → 1 |
+| Não descartar o assunto já respondido | 1 |
+| Remover o filtro de pendentes das sugestões parciais (`nlu.js`) | 0: mutação equivalente, o filtro da conversa (`#unknown`) bloqueia de novo (defesa em duas camadas) |
+
+### Limitações que continuam
+
+- Com 39 respostas em revisão, muitas perguntas de MEI, regimes e rotinas recebem só o aviso de revisão e o contato. A categoria "Regimes tributários" some de "Dúvidas gerais" (não tem nenhuma resposta aprovada).
+- As regras de acompanhamento cobrem DAS, MEI, notas fiscais, regimes, serviços e "e para MEI?". Outros assuntos dependem de a pergunta citar o tema ("e o balancete?" funciona; "e quem paga?" depois de pró-labore, não).
+- O acompanhamento depende de palavras da regra: "e se eu atrasar?" funciona; formulações sem nenhuma das expressões cadastradas caem no fluxo normal.
+- Erros de digitação dentro de expressões que viram sinônimo antes da comparação (ex.: "pro labori") não são reconhecidos.
+- Sem testes em aparelhos físicos nem com leitor de tela real.
+
+---
+
+## Reorganização do site e Lupi 2.0 sem IA (23/10/2026)
+
+Execução: 23/10/2026, Node.js 22, Chromium (Playwright 1.56.1), Wrangler 4.42 (workerd local).
+
+| Bateria | Comando | Executados | Aprovados | Falhas | Pulados |
+|---|---|---|---|---|---|
+| Unidade + integração + segurança (inclui o Worker no runtime real) | `npm test` | 372 | 372 | 0 | 0 |
+| Interface no Chromium | `npm run test:ui` | 65 | 65 | 0 | 0 |
+| IA real | `npm run test:live` | 0 | 0 | 0 | 10 (sem chaves; IA desligada por decisão) |
+
+Os 372 de `npm test` contam cada entrada da bateria da Lupi como um teste separado (139 entradas).
+
+### Lupi: bateria de entradas representativas (`tests/unit/lupi-inputs.test.mjs`)
+
+139 mensagens, cada uma com o resultado esperado (intenção, fluxo, pedido de escolha, ressalva, encaminhamento ou "não sei"):
+
+| Grupo | Entradas |
+|---|---|
+| Perguntas diretas (todas as categorias) | 54 |
+| Erros leves de digitação | 13 |
+| Sinônimos e outras formas de dizer | 12 |
+| Acompanhamento com contexto ("E quanto custa?", "Esse plano inclui folha?", "o outro"…) | 11 |
+| Sem acentos e em maiúsculas | 8 |
+| Planos (inclui?, comparação, público) | 8 |
+| Desambiguação (abrir × baixa × DAS × declaração; dois assuntos juntos) | 7 |
+| Preços e condições não publicados | 7 |
+| Comandos e mudança de assunto | 6 |
+| Fluxos guiados | 5 |
+| Perguntas desconhecidas | 5 |
+| Pedidos de orientação para um caso específico | 3 |
+
+Em todas: nenhuma resposta pode trazer preço (`R$` seguido de número). Além da bateria, o mesmo arquivo confere que as
+**215 perguntas de exemplo** do repertório chegam à própria intenção, e de novo **sem acentos** e **em maiúsculas** (645 verificações).
+
+### Outros testes novos ou reescritos
+
+- **Estrutura do site** (`tests/unit/site-structure.test.mjs`, 10): ordem das seções, grupo de cada seção na navegação, barra lateral e menu do celular com os mesmos 6 itens, todos os links internos com destino e sem ids duplicados, 5 serviços com o BPO, seção "Entenda seus números" sem estatísticas inventadas (o painel ilustrativo continua marcado como exemplo), FAQ removida com as 6 perguntas respondidas pela Lupi, rodapé sem CNPJ/CRC/endereço/horário e **comparação com a versão publicada** (`origin/main`): nenhum título, parágrafo ou item de lista sumiu, exceto o que foi movido para a Lupi, renomeado ou que era marcador "a inserir".
+- **Layout no navegador** (`tests/ui/site-layout.test.mjs`, 15): 320, 375, 768, 1024 e 1440 px, cada um nos temas escuro e claro (10 combinações): sem rolagem lateral, nenhum elemento além da largura, seções sem sobreposição, os 4 planos com todos os benefícios visíveis e botão próprio, planos em 1/1/2/2/4 colunas, contraste WCAG AA dos textos da página. Navegação: cada item da barra lateral leva à seção e fica ativo; subseções mantêm o item do grupo ativo; no celular (320 e 375) o menu leva a cada seção sem o título ficar escondido atrás da barra fixa e marca o item ativo.
+- **Repertório** (`tests/unit/knowledge.test.mjs`, 10): 8 categorias, campos obrigatórios de cada intenção, ações apontando para intenções/fluxos/âncoras que existem, metadados de revisão, conteúdo sujeito a mudança legal marcado, nenhum preço/percentual/horário/valor, BPO sem atividades inventadas, planos com herança, prompt do Worker (guardado) lendo o formato novo.
+- **Planos e contexto** (`tests/unit/plans-context.test.mjs`, 6) e **fluxos** (`tests/unit/flow-engine.test.mjs`, 17): herança Start → Plus → Prime, "inclui?", comparação, público; regras da indicação de plano; primeiro atendimento; respostas digitadas curtas.
+- **Conversa** (`tests/integration/conversation.test.mjs`, 37): menu, os 4 fluxos pedidos, voltar/cancelar/recomeçar, mudança de assunto com retomada, contexto, "não sei" com no máximo 3 sugestões e escalada, ressalva, privacidade, mensagens de WhatsApp exatas e codificadas, histórico.
+- **Interface do chat** (`tests/ui/chat.test.mjs`, 29): além dos anteriores, "digitando…" curto (0 com movimento reduzido), ressalva visível e com contraste AA, acompanhamento pela interface, "recomeçar" digitado, botões "A Lupi explica" abrindo o chat com a pergunta, link da Lupi rolando até a seção e fechando o chat no celular, e o site sem API **não baixa** o cliente de IA.
+
+### Teste de mutação (os testes pegam defeitos de verdade?)
+
+| Defeito introduzido de propósito | Testes que falharam |
+|---|---|
+| Desambiguação desligada | 2 |
+| Link do WhatsApp sem codificar | 5 |
+| Ressalva de conteúdo legal desligada | 5 |
+| Texto livre do visitante entrando na mensagem do WhatsApp | 2 |
+| Seção com grupo de navegação errado | 2 |
+| Número digitado não escolhe a sugestão | 1 |
+| Planos sem herança de benefícios | 0 na primeira rodada → criado `plans-context.test.mjs` → 2 |
+
+Depois de cada mutação o código foi restaurado e a bateria voltou a 0 falhas.
+
+### Problemas que os testes encontraram e foram corrigidos
+
+1. "O que tem no Lup MEI?" respondia "não encontrei esse item": pergunta geral sobre o plano agora mostra o plano.
+2. "Vocês fazem alteração de contrato social?" caía em condições comerciais (por causa de "contrato").
+3. "tenho empresa" e "regularizar" não eram aceitos como resposta das etapas (os botões são "Tenho empresa (ME, EPP ou outra)" e "Regularizar a situação"); "tenho" sozinho, que serve para duas opções, continua pedindo para escolher.
+4. "Esse plano inclui folha?" com o Lup MEI em discussão respondia sobre folha em geral.
+5. "trocar de contador e abrir empresa" respondia só um dos assuntos: agora pergunta qual.
+6. Palavra única com erro ("balansete") não era reconhecida.
+7. "quero falar com um atendente" não abria o encaminhamento.
+8. "Analisa o meu caso: vale a pena sair do MEI?" pedia para escolher entre dois assuntos: agora explica o assunto com a ressalva.
+9. Ao começar um fluxo pelo botão logo depois da resposta, a mesma explicação aparecia duas vezes.
+10. A indicação de um único plano dizia "estes planos podem combinar".
+11. Leitor de tela: a saudação deixou de ser anunciada com o atraso de "digitando…"; corrigido.
+
+### Limitações conhecidas desta bateria
+
+- Erros de digitação dentro de expressões que viram sinônimo antes da comparação (ex.: "pro labori") não são reconhecidos.
+- Perguntas de acompanhamento sobre assuntos que não são planos, sem repetir o assunto ("o que é o DAS?" → "e se eu atrasar?"), não são entendidas; com o assunto ("e se eu atrasar o DAS?"), são.
+- Testes em aparelhos físicos e com leitor de tela real não foram feitos (só emulação no Chromium e atributos ARIA).
+
+---
+
 ## Atualização de 23/10/2026: Planos, BPO Financeiro e WhatsApp comercial
 
 | Bateria | Executados | Aprovados | Falhas | Pulados |
