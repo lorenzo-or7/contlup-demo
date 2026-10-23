@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { knowledge, flows } from '../support/helpers.mjs';
 import { buildSystemPrompt } from '../../worker/src/prompt.js';
+import { BPO, BPO_FORBIDDEN, CNPJ, stripOfficial } from '../support/official.mjs';
 
 const CATEGORIES = ['contlup', 'servicos', 'planos', 'mei', 'empresas', 'regimes', 'rotinas', 'duvidas'];
 const STATUSES = new Set(['draft', 'pending_review', 'approved', 'outdated']);
@@ -64,16 +65,41 @@ test('[revisão] conteúdo sujeito a mudança legal está marcado (MEI, regimes,
 
 test('[comercial inexistente] nenhuma resposta traz preço, percentual, horário ou valor de limite inventado', () => {
   for (const e of intents) {
-    assert.doesNotMatch(e.answer, /R\$\s*\d/, `${e.id}: preço`);
-    assert.doesNotMatch(e.answer, /\b\d{1,2}h\b|\b\d{1,2}:\d{2}\b/, `${e.id}: horário`);
-    assert.doesNotMatch(e.answer, /\b\d+([.,]\d+)?\s?%/, `${e.id}: percentual`);
-    assert.doesNotMatch(e.answer, /\b\d{2,3}\.\d{3}\b|\bmil reais\b/i, `${e.id}: valor monetário`);
+    const answer = stripOfficial(e.answer); // CNPJ e "100% online" são dados oficiais
+    assert.doesNotMatch(answer, /R\$\s*\d/, `${e.id}: preço`);
+    assert.doesNotMatch(answer, /\b\d{1,2}h\b|\b\d{1,2}:\d{2}\b/, `${e.id}: horário`);
+    assert.doesNotMatch(answer, /\b\d+([.,]\d+)?\s?%/, `${e.id}: percentual`);
+    assert.doesNotMatch(answer, /\b\d{2,3}\.\d{3}\b|\bmil reais\b/i, `${e.id}: valor monetário`);
   }
 });
 
-test('[comercial inexistente] BPO Financeiro sem atividades inventadas', () => {
-  const bpo = intents.find(e => e.id === 'serv-bpo');
-  assert.doesNotMatch(bpo.answer, /contas a pagar|contas a receber|conciliação|emissão de boletos/i);
+test('[BPO] repertório com exatamente o conteúdo confirmado: atividades, benefícios, público e aprovação dos pagamentos', () => {
+  const get = (id) => intents.find(e => e.id === id);
+  for (const id of ['serv-bpo', 'bpo-atividades', 'bpo-beneficios', 'bpo-publico', 'bpo-proposta', 'bpo-aprovacao']) {
+    const e = get(id);
+    assert.equal(e.status, 'approved', id);
+    assert.match(e.review.approvedBy, /dados institucionais oficiais/, id);
+    assert.doesNotMatch(e.answer, BPO_FORBIDDEN, `${id}: preço, prazo, integração ou movimentação sem aprovação`);
+  }
+  const acts = get('bpo-atividades').answer;
+  for (const [name, desc] of BPO.activities) assert.ok(acts.includes(`**${name}**: ${desc[0].toLowerCase()}${desc.slice(1)}`), name);
+  assert.equal(acts.split('\n').filter(l => l.startsWith('- ')).length, 7, 'só as 7 atividades confirmadas');
+  const bens = get('bpo-beneficios').answer.split('\n').filter(l => l.startsWith('- ')).map(l => l.slice(2));
+  assert.deepEqual(bens, BPO.benefits);
+  assert.match(get('bpo-publico').answer, /pequenas e médias empresas, prestadores de serviços, comércios e empresários que desejam profissionalizar a gestão financeira/);
+  for (const id of ['serv-bpo', 'bpo-atividades', 'bpo-aprovacao']) assert.match(get(id).answer, /sujeitos à (sua )?aprovação/, `${id}: aprovação dos pagamentos`);
+  assert.equal(get('bpo-proposta').actions.find(a => a.type === 'whatsapp').message, BPO.message);
+});
+
+test('[institucional] CNPJ, atendimento 100% online e ausência de endereço físico', () => {
+  const get = (id) => intents.find(e => e.id === id);
+  assert.match(get('inst-cnpj').answer, new RegExp(CNPJ.replace(/[./]/g, '\\$&')));
+  assert.match(get('inst-atendimento').answer, /100% online/);
+  assert.match(get('inst-localizacao').answer, /não tem endereço físico/);
+  for (const e of intents.filter(x => x.status === 'approved')) {
+    assert.doesNotMatch(e.answer, /\b(rua|avenida|av\.|sala \d|cep)\b|o escritório fica|endereço completo/i, `${e.id}: endereço`);
+    assert.doesNotMatch(e.answer, /\bCRC\b/, `${e.id}: CRC`);
+  }
 });
 
 test('[planos] quatro planos, com benefícios por chave e herança Start → Plus → Prime', () => {

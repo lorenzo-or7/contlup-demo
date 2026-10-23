@@ -7,7 +7,7 @@ let env;
 before(async () => { env = await startEnv(); });
 after(async () => { await env?.close(); });
 
-const ORDER = ['inicio', 'contlup', 'priscila', 'jeito', 'servicos', 'planos', 'numeros', 'historia', 'situacoes', 'lupi-explica', 'contato', 'fale-conosco'];
+const ORDER = ['inicio', 'servicos', 'planos', 'contlup', 'priscila', 'jeito', 'numeros', 'historia', 'situacoes', 'lupi-explica', 'contato', 'fale-conosco'];
 const WIDTHS = [320, 375, 768, 1024, 1440];
 const COLUMNS = { 320: 1, 375: 1, 768: 2, 1024: 2, 1440: 4 };
 const lightTheme = () => localStorage.setItem('cl-theme', 'light');
@@ -26,7 +26,7 @@ const CONTRAST = () => {
     return parse(getComputedStyle(document.body).backgroundColor);
   };
   const out = [];
-  for (const el of document.querySelectorAll('main section h2, main section h3, main section p, main section li, footer p, footer a')) {
+  for (const el of document.querySelectorAll('main section h2, main section h3, main section p, main section li, footer p, footer a, footer .legal .cnpj')) {
     if (!el.offsetParent || !el.textContent.trim() || el.closest('#lupi-chat, .dash, [aria-hidden="true"]')) continue;
     const cs = getComputedStyle(el);
     if (Number(cs.opacity) < 1 || cs.visibility !== 'visible') continue;
@@ -82,7 +82,7 @@ for (const width of WIDTHS) {
 
 test('[navegação] desktop: cada item da barra lateral leva à seção, abaixo do topo, e fica ativo', async () => {
   const { page, ctx } = await openPage(env, { reducedMotion: 'reduce' });
-  for (const id of ['contlup', 'servicos', 'planos', 'numeros', 'contato', 'inicio']) {
+  for (const id of ['servicos', 'planos', 'contlup', 'numeros', 'contato', 'inicio']) {
     await page.click(`.sb-nav a[href="#${id}"]`);
     await page.waitForFunction((i) => document.querySelector(`.sb-nav a[href="#${i}"]`).getAttribute('aria-current') === 'true', id, { timeout: 4000 });
     const top = await page.evaluate((i) => document.getElementById(i).getBoundingClientRect().top, id);
@@ -104,7 +104,7 @@ test('[navegação] desktop: rolar até subseções mantém o item do grupo ativ
 for (const width of [320, 375]) {
   test(`[navegação] celular ${width}px: menu leva a cada seção sem ficar escondida atrás da barra fixa`, async () => {
     const { page, ctx, errors } = await openPage(env, { viewport: { width, height: 740 }, isMobile: true, reducedMotion: 'reduce' });
-    for (const id of ['contlup', 'servicos', 'planos', 'numeros', 'contato']) {
+    for (const id of ['servicos', 'planos', 'contlup', 'numeros', 'contato']) {
       await page.tap('.mbar-btn');
       assert.equal(await page.isVisible('#mmenu'), true);
       await page.tap(`#mmenu a[href="#${id}"]`);

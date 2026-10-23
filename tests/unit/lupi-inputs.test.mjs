@@ -9,6 +9,7 @@ import assert from 'node:assert/strict';
 import { newConversation, knowledge, flows, lastBot } from '../support/helpers.mjs';
 import { buildIndex, detect } from '../../js/lupi/nlu.js';
 import { TEXT } from '../../js/lupi/conversation.js';
+import { BPO_FORBIDDEN } from '../support/official.mjs';
 
 const NO_PRICE = /R\$\s*\d|\d+\s?%|\d+,\d{2}/;
 
@@ -30,7 +31,7 @@ export const CASES = [
   { q: 'Vocês fazem a parte fiscal?', intent: 'serv-fiscal' },
   { q: 'Vocês cuidam da folha de pagamento dos funcionários?', intent: 'serv-trabalhista' },
   { q: 'Vocês fazem alteração de contrato social?', intent: ['emp-alteracao', 'serv-societario'] },
-  { q: 'O que é o BPO financeiro?', intent: 'serv-bpo', no: /contas a pagar|conciliação/i },
+  { q: 'O que é o BPO financeiro?', intent: 'serv-bpo', re: /terceirização das rotinas financeiras/, no: BPO_FORBIDDEN },
   { q: 'Quais são os planos?', intent: 'planos' },
   { q: 'Qual a diferença entre os planos?', intent: 'planos-diferencas' },
   { q: 'Qual plano devo escolher?', intent: 'planos-qual-escolher' },
@@ -68,6 +69,25 @@ export const CASES = [
   { q: 'Quando preciso emitir nota fiscal?', intent: 'duv-emitir-nota' },
   { q: 'Posso ter CLT e empresa ao mesmo tempo?', intent: 'duv-clt-empresa' },
   { q: 'Como organizar as finanças da empresa?', intent: 'duv-organizar-financas' },
+
+  // ---- BPO Financeiro e dados institucionais oficiais (23/10/2026) ----
+  { q: 'Quais atividades o BPO financeiro inclui?', intent: 'bpo-atividades', re: /Gestão de contas a pagar[\s\S]*Acompanhamento financeiro/, no: BPO_FORBIDDEN },
+  { q: 'o BPO faz conciliação bancária?', intent: 'bpo-atividades' },
+  { q: 'quais as vantagens do BPO?', intent: 'bpo-beneficios', re: /Menor dependência de planilhas/ },
+  { q: 'para quem é o BPO financeiro?', intent: 'bpo-publico', re: /pequenas e médias empresas/ },
+  { q: 'quero uma proposta de BPO', intent: 'bpo-proposta', re: /\(19\) 97131-0182/, no: NO_PRICE },
+  { q: 'quanto custa o BPO?', intent: 'bpo-proposta', no: NO_PRICE },
+  { q: 'vocês fazem os pagamentos da minha empresa?', intent: 'bpo-aprovacao', re: /sujeitos à aprovação do cliente/ },
+  { q: 'a ContLup mexe na minha conta?', intent: 'bpo-aprovacao', re: /nenhum pagamento é feito sem a sua aprovação/ },
+  { q: 'A ContLup atende online?', intent: 'inst-atendimento', re: /100% online/ },
+  { q: 'o atendimento é presencial?', intent: 'inst-atendimento', re: /100% online/ },
+  { q: 'vocês têm endereço físico?', intent: 'inst-localizacao', re: /não tem endereço físico/ },
+  { q: 'posso ir até o escritório?', intent: 'inst-localizacao', re: /não tem endereço físico/ },
+  { q: 'Qual é o CNPJ da ContLup?', intent: 'inst-cnpj', re: /68\.970\.978\/0001-10/ },
+  { setup: ['o que é BPO financeiro?'], q: 'e quais atividades?', intent: 'bpo-atividades' },
+  { setup: ['o que é BPO financeiro?'], q: 'e os pagamentos?', intent: 'bpo-aprovacao' },
+  { setup: ['o que é BPO financeiro?'], q: 'e quanto custa?', intent: 'bpo-proposta', no: NO_PRICE },
+  { q: 'quero abrir um cnpj', flow: 'abrir_empresa' },
 
   // ---- sinônimos e outras formas de dizer ----
   { q: 'qual o zap de vocês?', intent: 'inst-contato' },

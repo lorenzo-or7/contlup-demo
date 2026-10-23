@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import { newConversation, mockAI, memoryStorage, lastBot, botTexts, chipLabels } from '../support/helpers.mjs';
 import { createSessionStore } from '../../js/lupi/session-store.js';
 import { TEXT, MENU } from '../../js/lupi/conversation.js';
+import { BPO, BPO_FORBIDDEN, stripOfficial } from '../support/official.mjs';
 
 const WA = 'https://wa.me/5519971310182?text=';
 
@@ -207,12 +208,13 @@ test('[desconhecidas] não inventa, sugere no máximo 3 assuntos e escala para o
   assert.notEqual(texts[0], texts[1], 'não repete a mesma frase');
 });
 
-test('[comercial] preço, desconto e detalhes do BPO não são inventados', async () => {
+test('[comercial] preço, desconto e prazos não são inventados; BPO só com o que foi confirmado', async () => {
   const c = newConversation();
-  for (const q of ['quanto custa o plano prime por mês?', 'o que exatamente o BPO financeiro faz?', 'tem desconto no lup plus?', 'quanto custa a contabilidade?', 'qual o horário de atendimento?']) {
+  for (const q of ['quanto custa o plano prime por mês?', 'o que exatamente o BPO financeiro faz?', 'quanto custa o BPO?', 'tem desconto no lup plus?', 'quanto custa a contabilidade?', 'qual o horário de atendimento?']) {
     await c.send(q);
-    const t = botTexts(c).slice(-2).join('\n');
-    assert.doesNotMatch(t, /R\$|\d+\s?%|contas a pagar|conciliação bancária|\d{1,2}h/, q);
+    const t = stripOfficial(botTexts(c).slice(-2).join('\n'));
+    assert.doesNotMatch(t, /R\$|\d+\s?%|\d{1,2}h/, q);
+    assert.doesNotMatch(t, BPO_FORBIDDEN, q);
   }
 });
 
@@ -273,7 +275,7 @@ test('[whatsapp] mensagem do assunto: BPO e abertura de empresa', async () => {
   const c = newConversation();
   await c.send('vocês fazem BPO financeiro?');
   await c.act({ kind: 'handoff' });
-  assert.equal(c.messages.at(-1).text, 'Olá! Tenho interesse no BPO Financeiro da ContLup.');
+  assert.equal(c.messages.at(-1).text, BPO.message);
   const d = newConversation();
   await d.send('como abrir uma empresa?');
   await d.act({ kind: 'handoff' });

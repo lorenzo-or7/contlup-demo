@@ -604,6 +604,14 @@
       "reg-diferencas",
       "reg-orientacao"
     ],
+    "bpo": [
+      "serv-bpo",
+      "bpo-atividades",
+      "bpo-beneficios",
+      "bpo-publico",
+      "bpo-proposta",
+      "bpo-aprovacao"
+    ],
     "servicos": [
       "serv-areas",
       "serv-contabil",
@@ -632,6 +640,88 @@
     ]
   },
   "followUps": [
+    {
+      "group": "bpo",
+      "match": [
+        "atividades",
+        "o que inclui",
+        "inclui",
+        "o que faz",
+        "o que voces fazem",
+        "contas a pagar",
+        "contas a receber",
+        "conciliacao"
+      ],
+      "targets": [
+        "bpo-atividades"
+      ]
+    },
+    {
+      "group": "bpo",
+      "match": [
+        "beneficios",
+        "beneficio",
+        "vantagens",
+        "vantagem",
+        "vale a pena",
+        "por que contratar"
+      ],
+      "targets": [
+        "bpo-beneficios"
+      ]
+    },
+    {
+      "group": "bpo",
+      "match": [
+        "para quem",
+        "pra quem",
+        "indicado",
+        "serve para",
+        "serve pra",
+        "minha empresa"
+      ],
+      "targets": [
+        "bpo-publico"
+      ]
+    },
+    {
+      "group": "bpo",
+      "match": [
+        "proposta",
+        "contratar",
+        "como contrato",
+        "planos",
+        "plano",
+        "quanto custa",
+        "quanto e",
+        "qual o valor",
+        "qual valor",
+        "valor",
+        "quanto pago",
+        "quanto vou pagar",
+        "preco"
+      ],
+      "targets": [
+        "bpo-proposta"
+      ]
+    },
+    {
+      "group": "bpo",
+      "match": [
+        "pagamentos",
+        "pagamento",
+        "aprovacao",
+        "aprovar",
+        "aprova",
+        "autorizar",
+        "movimentar",
+        "minha conta",
+        "banco"
+      ],
+      "targets": [
+        "bpo-aprovacao"
+      ]
+    },
     {
       "group": "das",
       "match": [
@@ -1082,7 +1172,7 @@
         "sobre voces",
         "fala sobre o escritorio"
       ],
-      "answer": "A ContLup Studio Contábil é um escritório de contabilidade em Pedreira/SP. A ideia é ir além das obrigações: organizar as informações, explicar o que os números mostram e acompanhar o negócio de perto, com atendimento próximo e personalizado.",
+      "answer": "A ContLup Studio Contábil é uma contabilidade de Pedreira/SP com atendimento **100% online**. A ideia é ir além das obrigações: organizar as informações, explicar o que os números mostram e acompanhar o negócio de perto, com atendimento próximo e personalizado.",
       "actions": [
         {
           "type": "intent",
@@ -1105,8 +1195,8 @@
       "review": {
         "legalSensitive": false,
         "professionalReview": "pendente",
-        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
-        "source": "index.html (Sobre a ContLup)",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "index.html (Sobre a ContLup) e dados oficiais de 23/10/2026",
         "updatedAt": "2026-10-23"
       }
     },
@@ -1254,14 +1344,19 @@
     {
       "id": "inst-localizacao",
       "category": "contlup",
-      "title": "Onde fica a ContLup",
+      "title": "Endereço e localização",
       "examples": [
+        "A ContLup tem endereço físico?",
         "Onde fica o escritório?",
-        "vocês atendem minha cidade?",
-        "qual o endereço"
+        "qual o endereço",
+        "vocês atendem minha cidade?"
       ],
       "keywords": [
         "endereco",
+        "endereco fisico",
+        "tem endereco",
+        "tem escritorio",
+        "escritorio fisico",
         "onde fica",
         "onde voces ficam",
         "localizacao",
@@ -1271,10 +1366,26 @@
         "atendem outras cidades",
         "atende outras cidades",
         "atendem fora",
-        "regiao"
+        "regiao",
+        "posso ir ate voces",
+        "visitar o escritorio",
+        "ir ao escritorio",
+        "ir ate o escritorio",
+        "posso ir ate",
+        "posso visitar",
+        "passar no escritorio",
+        "passar ai",
+        "ir pessoalmente",
+        "conhecer o escritorio"
       ],
-      "answer": "O escritório fica em **Pedreira/SP**. O endereço completo ainda não foi publicado aqui no site. Para saber se a ContLup atende a sua cidade, o melhor é perguntar direto para a equipe.",
+      "group": "atendimento-local",
+      "answer": "A ContLup **não tem endereço físico** no momento: o atendimento é **100% online**, pelo WhatsApp e por e-mail. A ContLup é de Pedreira/SP. Para confirmar o atendimento para a sua cidade, fale com a equipe.",
       "actions": [
+        {
+          "type": "intent",
+          "id": "inst-atendimento",
+          "label": "Como funciona o atendimento"
+        },
         {
           "type": "whatsapp",
           "label": "Falar com a ContLup",
@@ -1286,18 +1397,59 @@
       "review": {
         "legalSensitive": false,
         "professionalReview": "pendente",
-        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
-        "source": "index.html (Contato)",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais de 23/10/2026 (sem endereço físico; atendimento 100% online)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "inst-cnpj",
+      "category": "contlup",
+      "title": "CNPJ da ContLup",
+      "examples": [
+        "Qual é o CNPJ da ContLup?",
+        "qual o CNPJ de vocês?",
+        "CNPJ da empresa de vocês"
+      ],
+      "keywords": [
+        "cnpj da contlup",
+        "qual o cnpj",
+        "qual e o cnpj",
+        "cnpj de voces",
+        "cnpj do escritorio",
+        "cnpj da empresa de voces",
+        "numero do cnpj",
+        "cnpj da contabilidade",
+        "dados da empresa",
+        "razao social"
+      ],
+      "priority": true,
+      "answer": "O CNPJ da ContLup Studio Contábil é **68.970.978/0001-10**.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "inst-contato",
+          "label": "Contatos"
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais de 23/10/2026",
         "updatedAt": "2026-10-23"
       }
     },
     {
       "id": "inst-atendimento",
       "category": "contlup",
-      "title": "Como funciona o atendimento",
+      "title": "Atendimento 100% online",
       "examples": [
         "Como funciona o atendimento?",
-        "o atendimento é online?",
+        "A ContLup atende online?",
+        "o atendimento é presencial?",
         "como vocês atendem no dia a dia"
       ],
       "keywords": [
@@ -1306,13 +1458,21 @@
         "como funciona o atendimento",
         "atendimento no dia a dia",
         "atendimento online",
+        "atende online",
+        "atendem online",
+        "e online",
+        "tudo online",
+        "100 online",
         "a distancia",
         "remoto",
         "presencial",
+        "presencialmente",
+        "atendimento presencial",
         "suporte",
         "como voces atendem"
       ],
-      "answer": "O atendimento é próximo e personalizado, pelo **WhatsApp** e por **e-mail**, com explicações em linguagem simples, sem \"contabilês\". Você conversa com quem acompanha a sua empresa de perto.\n\nAinda não há informação publicada sobre atendimento presencial.",
+      "group": "atendimento-local",
+      "answer": "O atendimento da ContLup é **100% online**, pelo **WhatsApp** e por **e-mail**: próximo e personalizado, com explicações em linguagem simples, sem \"contabilês\". Você conversa com quem acompanha a sua empresa de perto.",
       "actions": [
         {
           "type": "intent",
@@ -1321,8 +1481,8 @@
         },
         {
           "type": "intent",
-          "id": "inst-horario",
-          "label": "Horário"
+          "id": "inst-localizacao",
+          "label": "Endereço"
         }
       ],
       "expression": "explaining",
@@ -1330,8 +1490,8 @@
       "review": {
         "legalSensitive": false,
         "professionalReview": "pendente",
-        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
-        "source": "index.html (antigo FAQ: Como é o atendimento no dia a dia?)",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais de 23/10/2026 (atendimento 100% online)",
         "updatedAt": "2026-10-23"
       }
     },
@@ -1771,7 +1931,7 @@
       ],
       "group": "servicos",
       "flow": "servicos",
-      "answer": "A ContLup tem cinco serviços:\n- **Contábil**: escrituração, balanço, DRE e relatórios gerenciais.\n- **Fiscal e Tributário**: impostos, obrigações acessórias e regime tributário.\n- **Trabalhista**: folha, pró-labore, admissões, férias e rescisões.\n- **Societário**: abertura, alterações contratuais e encerramento.\n- **BPO Financeiro**: apoio à organização e ao acompanhamento das rotinas financeiras da empresa.",
+      "answer": "A ContLup tem cinco serviços:\n- **Contábil**: escrituração, balanço, DRE e relatórios gerenciais.\n- **Fiscal e Tributário**: impostos, obrigações acessórias e regime tributário.\n- **Trabalhista**: folha, pró-labore, admissões, férias e rescisões.\n- **Societário**: abertura, alterações contratuais e encerramento.\n- **BPO Financeiro**: terceirização das rotinas financeiras, como contas a pagar e a receber, conciliação bancária e fluxo de caixa.",
       "actions": [
         {
           "type": "flow",
@@ -1984,29 +2144,46 @@
       "examples": [
         "Vocês fazem BPO financeiro?",
         "o que é o BPO da ContLup?",
+        "o que é BPO financeiro?",
         "terceirização financeira"
       ],
       "keywords": [
         "bpo",
         "bpo financeiro",
         "fazem bpo",
+        "o que e bpo",
+        "o que e o bpo",
+        "o que e bpo financeiro",
+        "bpo da contlup",
         "terceirizacao financeira",
+        "terceirizar o financeiro",
         "financeiro terceirizado",
         "rotinas financeiras",
         "rotina financeira"
       ],
+      "group": "bpo",
       "priority": true,
-      "answer": "O **BPO Financeiro** é um serviço novo da ContLup: apoio à organização e ao acompanhamento das rotinas financeiras da sua empresa.\n\nOs detalhes do que está incluído ainda vão ser publicados, então eu não consigo listar atividades específicas por aqui.",
+      "answer": "O **BPO Financeiro** é a terceirização das rotinas financeiras da empresa. A ContLup organiza e acompanha as atividades financeiras do dia a dia, para você ter mais controle, previsibilidade e tempo para focar no crescimento do negócio.\n\nInclui contas a pagar e a receber, conciliação bancária, controle do fluxo de caixa, organização financeira, relatórios gerenciais e acompanhamento financeiro. Os pagamentos permanecem sujeitos à sua aprovação.",
       "actions": [
         {
-          "type": "whatsapp",
-          "label": "Tenho interesse",
-          "message": "Olá! Tenho interesse no BPO Financeiro da ContLup."
+          "type": "intent",
+          "id": "bpo-atividades",
+          "label": "O que está incluído"
         },
         {
           "type": "intent",
-          "id": "duv-organizar-financas",
-          "label": "Organizar as finanças"
+          "id": "bpo-beneficios",
+          "label": "Benefícios"
+        },
+        {
+          "type": "intent",
+          "id": "bpo-aprovacao",
+          "label": "Aprovação dos pagamentos"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Solicitar proposta de BPO",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta de BPO Financeiro."
         }
       ],
       "expression": "explaining",
@@ -2014,8 +2191,269 @@
       "review": {
         "legalSensitive": false,
         "professionalReview": "pendente",
-        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
-        "source": "Briefing de 23/10/2026 (descrição provisória)",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais do BPO Financeiro (23/10/2026)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "bpo-atividades",
+      "category": "servicos",
+      "title": "Atividades do BPO Financeiro",
+      "examples": [
+        "O que o BPO financeiro inclui?",
+        "quais atividades vocês fazem no BPO?",
+        "o BPO faz contas a pagar?"
+      ],
+      "keywords": [
+        "atividades do bpo",
+        "o que o bpo inclui",
+        "o que inclui o bpo",
+        "o que o bpo faz",
+        "o que faz o bpo",
+        "bpo inclui",
+        "bpo faz",
+        "servicos do bpo",
+        "contas a pagar",
+        "contas a receber",
+        "conciliacao bancaria",
+        "inadimplencia",
+        "controle do fluxo de caixa",
+        "relatorios financeiros",
+        "organizacao financeira",
+        "acompanhamento financeiro"
+      ],
+      "group": "bpo",
+      "priority": true,
+      "answer": "No **BPO Financeiro**, a ContLup oferece:\n- **Gestão de contas a pagar**: organização de despesas, vencimentos e programação de pagamentos.\n- **Gestão de contas a receber**: controle de recebimentos e acompanhamento de inadimplência.\n- **Conciliação bancária**: conferência das movimentações financeiras.\n- **Controle do fluxo de caixa**: acompanhamento e projeção das entradas e saídas.\n- **Organização financeira**: classificação de receitas, despesas e documentos.\n- **Relatórios financeiros gerenciais**: informações para apoiar decisões.\n- **Acompanhamento financeiro**: análise periódica e identificação de pontos de atenção.\n\nOs pagamentos permanecem sujeitos à sua aprovação.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "bpo-beneficios",
+          "label": "Benefícios"
+        },
+        {
+          "type": "intent",
+          "id": "bpo-aprovacao",
+          "label": "Aprovação dos pagamentos"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Solicitar proposta de BPO",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta de BPO Financeiro."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais do BPO Financeiro (23/10/2026)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "bpo-beneficios",
+      "category": "servicos",
+      "title": "Benefícios do BPO Financeiro",
+      "examples": [
+        "Quais as vantagens do BPO financeiro?",
+        "por que terceirizar o financeiro?",
+        "benefícios do BPO"
+      ],
+      "keywords": [
+        "beneficios do bpo",
+        "vantagens do bpo",
+        "vantagem do bpo",
+        "por que contratar o bpo",
+        "por que terceirizar o financeiro",
+        "vale a pena o bpo",
+        "vale a pena terceirizar",
+        "pra que serve o bpo",
+        "para que serve o bpo"
+      ],
+      "group": "bpo",
+      "priority": true,
+      "answer": "Com o **BPO Financeiro**, a ideia é você ter:\n- Mais tempo para cuidar do negócio.\n- Menos erros e atrasos.\n- Maior controle financeiro.\n- Melhor planejamento do fluxo de caixa.\n- Mais previsibilidade.\n- Informações organizadas para decisões.\n- Menor dependência de planilhas e controles manuais.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "bpo-atividades",
+          "label": "O que está incluído"
+        },
+        {
+          "type": "intent",
+          "id": "bpo-publico",
+          "label": "Para quem é"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Solicitar proposta de BPO",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta de BPO Financeiro."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais do BPO Financeiro (23/10/2026)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "bpo-publico",
+      "category": "servicos",
+      "title": "Para quem é o BPO Financeiro",
+      "examples": [
+        "Para quem é o BPO financeiro?",
+        "o BPO serve para a minha empresa?",
+        "BPO é para empresa pequena?"
+      ],
+      "keywords": [
+        "para quem e o bpo",
+        "pra quem e o bpo",
+        "bpo serve para",
+        "bpo serve pra",
+        "bpo e para",
+        "bpo para pequena empresa",
+        "bpo para comercio",
+        "bpo para prestador de servico",
+        "indicado o bpo",
+        "bpo e indicado"
+      ],
+      "group": "bpo",
+      "priority": true,
+      "answer": "O **BPO Financeiro** é indicado para pequenas e médias empresas, prestadores de serviços, comércios e empresários que desejam profissionalizar a gestão financeira.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "bpo-atividades",
+          "label": "O que está incluído"
+        },
+        {
+          "type": "intent",
+          "id": "bpo-beneficios",
+          "label": "Benefícios"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Solicitar proposta de BPO",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta de BPO Financeiro."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais do BPO Financeiro (23/10/2026)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "bpo-proposta",
+      "category": "servicos",
+      "title": "Planos e proposta de BPO Financeiro",
+      "examples": [
+        "Como contrato o BPO financeiro?",
+        "quero uma proposta de BPO",
+        "quanto custa o BPO?"
+      ],
+      "keywords": [
+        "proposta de bpo",
+        "proposta do bpo",
+        "proposta para bpo",
+        "contratar bpo",
+        "contratar o bpo",
+        "como contrato o bpo",
+        "quero o bpo",
+        "planos de bpo",
+        "planos do bpo",
+        "plano de bpo",
+        "quanto custa o bpo",
+        "preco do bpo",
+        "valor do bpo",
+        "valores do bpo"
+      ],
+      "group": "bpo",
+      "priority": true,
+      "answer": "Para pedir uma proposta de **BPO Financeiro**, fale com a equipe comercial pelo WhatsApp (19) 97131-0182. Os valores são apresentados na proposta, então eu não informo preços por aqui. Se quiser, eu preparo a mensagem e você só envia se quiser.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Solicitar proposta de BPO",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta de BPO Financeiro."
+        },
+        {
+          "type": "intent",
+          "id": "bpo-atividades",
+          "label": "O que está incluído"
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais do BPO Financeiro (23/10/2026)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "bpo-aprovacao",
+      "category": "servicos",
+      "title": "Aprovação dos pagamentos no BPO",
+      "examples": [
+        "Vocês fazem os pagamentos da minha empresa?",
+        "quem aprova os pagamentos no BPO?",
+        "a ContLup mexe na minha conta?"
+      ],
+      "keywords": [
+        "aprovacao dos pagamentos",
+        "aprovacao de pagamentos",
+        "aprovar pagamentos",
+        "aprovar os pagamentos",
+        "aprova os pagamentos",
+        "quem aprova",
+        "autorizar pagamento",
+        "autorizar os pagamentos",
+        "voces pagam as contas",
+        "voces fazem os pagamentos",
+        "fazem os pagamentos",
+        "quem paga as contas",
+        "movimentar minha conta",
+        "mexe na minha conta",
+        "mexer na minha conta",
+        "acesso a minha conta",
+        "acesso a conta bancaria"
+      ],
+      "group": "bpo",
+      "priority": true,
+      "answer": "No **BPO Financeiro**, a ContLup organiza as contas, os vencimentos e a programação de pagamentos, mas **todos os pagamentos permanecem sujeitos à aprovação do cliente**: nenhum pagamento é feito sem a sua aprovação.\n\nOs detalhes de como essa aprovação é organizada no dia a dia são combinados com a equipe. Por aqui, não compartilhe senhas nem dados bancários.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "bpo-atividades",
+          "label": "O que está incluído"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Solicitar proposta de BPO",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta de BPO Financeiro."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (BPO Financeiro e dados institucionais oficiais)",
+        "source": "Dados oficiais do BPO Financeiro (23/10/2026)",
         "updatedAt": "2026-10-23"
       }
     },

@@ -228,7 +228,7 @@
         "info_fiscal": { "type": "info", "kbRef": "serv-fiscal", "fallbackText": "", "next": "fim" },
         "info_trabalhista": { "type": "info", "kbRef": "serv-trabalhista", "fallbackText": "", "next": "fim" },
         "info_societario": { "type": "info", "kbRef": "serv-societario", "fallbackText": "", "next": "fim" },
-        "info_bpo": { "type": "info", "kbRef": "serv-bpo", "fallbackText": "O BPO Financeiro é um serviço novo de apoio à organização e ao acompanhamento das rotinas financeiras da empresa.", "next": "fim" },
+        "info_bpo": { "type": "info", "kbRef": "serv-bpo", "fallbackText": "O BPO Financeiro é a terceirização das rotinas financeiras da empresa: contas a pagar e a receber, conciliação bancária, fluxo de caixa e relatórios gerenciais, com os pagamentos sempre sujeitos à aprovação do cliente.", "next": "fim" },
         "fim": {
           "type": "end",
           "expression": "success",
