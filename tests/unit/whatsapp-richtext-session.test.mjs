@@ -12,14 +12,25 @@ test('[whatsapp] resumo de fluxo concluído é usado como está (limpo)', () => 
   assert.equal(s, 'Olá, Priscila! Quero abrir uma empresa. Podemos conversar?');
 });
 
-test('[whatsapp] conversa livre usa o tema, sem dados pessoais', () => {
-  const s = buildHandoffSummary({ topic: 'regime tributário para clínica, cpf 123.456.789-09' });
-  assert.match(s, /^Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi\. Gostaria de orientação sobre: regime tributário para clínica/);
+test('[whatsapp] assunto do repertório vira a mensagem, sem dados pessoais', () => {
+  const s = buildHandoffSummary({ topic: 'Regime tributário, cpf 123.456.789-09' });
+  assert.match(s, /^Olá! Vim pelo site da ContLup e conversei com a Lupi\. Gostaria de conversar sobre regime tributário/);
   assert.doesNotMatch(s, /123|dado removido/);
 });
 
-test('[whatsapp] sem contexto gera mensagem genérica', () => {
-  assert.match(buildHandoffSummary(), /contabilidade do meu negócio/);
+test('[whatsapp] prioridade: resumo do fluxo > mensagem da intenção > assunto > genérica', () => {
+  assert.equal(buildHandoffSummary({ flowSummary: 'Olá! A.', intentMessage: 'Olá! B.', topic: 'C' }), 'Olá! A.');
+  assert.equal(buildHandoffSummary({ intentMessage: 'Olá! Tenho interesse no BPO Financeiro da ContLup.', topic: 'C' }), 'Olá! Tenho interesse no BPO Financeiro da ContLup.');
+  assert.equal(buildHandoffSummary(), 'Olá! Vim pelo site da ContLup e conversei com a Lupi. Gostaria de conversar com a equipe.');
+});
+
+test('[whatsapp] mensagens de exemplo pedidas são codificadas corretamente', () => {
+  for (const msg of ['Olá! Gostaria de saber mais sobre o plano Lup MEI.', 'Olá! Tenho interesse no BPO Financeiro da ContLup.', 'Olá! Gostaria de conversar sobre a abertura de uma empresa.']) {
+    const l = buildWhatsAppLink(msg);
+    assert.ok(l.startsWith('https://wa.me/5519971310182?text='));
+    assert.equal(decodeURIComponent(l.split('?text=')[1]), msg);
+    assert.doesNotMatch(l.split('?text=')[1], /[ áçã]/, 'sem caracteres crus no link');
+  }
 });
 
 test('[whatsapp] link usa só o número oficial e codifica o texto', () => {

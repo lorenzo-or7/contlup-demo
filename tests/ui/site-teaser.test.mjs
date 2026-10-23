@@ -54,7 +54,7 @@ test('[convite] clicar no convite abre o chat', async () => {
 
 test('[regressão] restante do site continua funcionando (tema, menu, formulário, animação, seções)', async () => {
   const { page, ctx, errors } = await openPage(env);
-  for (const id of ['inicio', 'contlup', 'servicos', 'svc-bpo', 'planos', 'comecar', 'numeros', 'priscila', 'duvidas', 'contato']) {
+  for (const id of ['inicio', 'contlup', 'priscila', 'servicos', 'svc-bpo', 'planos', 'numeros', 'historia', 'situacoes', 'assuntos', 'lupi-explica', 'contato', 'fale-conosco', 'proposta']) {
     assert.equal(await page.locator('#' + id).count(), 1, `seção #${id}`);
   }
   await page.click('.sb-btn.theme');
@@ -62,7 +62,7 @@ test('[regressão] restante do site continua funcionando (tema, menu, formulári
   await page.click('.sb-btn.theme');
   assert.equal(await page.getAttribute('html', 'data-cl'), null);
   // animação controlada pelo scroll da seção "Seus números contam uma história"
-  await page.evaluate(() => { const s = document.getElementById('numeros'); window.scrollTo({ top: s.getBoundingClientRect().top + scrollY + 600, behavior: 'instant' }); });
+  await page.evaluate(() => { const s = document.getElementById('historia'); window.scrollTo({ top: s.getBoundingClientRect().top + scrollY + 600, behavior: 'instant' }); });
   await page.waitForTimeout(600);
   const t = await page.evaluate(() => getComputedStyle(document.querySelector('.js-story')).getPropertyValue('--t'));
   assert.ok(Number(t) > 0, `--t = ${t}`);
@@ -78,7 +78,7 @@ test('[regressão] restante do site continua funcionando (tema, menu, formulári
   await ctx.close();
 });
 
-test('[regressão] celular: menu abre e cobre a Lupi; FAQ continua acessível', async () => {
+test('[regressão] celular: menu abre e cobre a Lupi; perguntas prontas da seção "A Lupi explica" funcionam', async () => {
   const { page, ctx, errors } = await openPage(env, { viewport: { width: 390, height: 844 }, isMobile: true });
   await page.tap('.mbar-btn');
   assert.equal(await page.isVisible('#mmenu'), true);
@@ -89,9 +89,10 @@ test('[regressão] celular: menu abre e cobre a Lupi; FAQ continua acessível', 
   });
   assert.equal(covered, true, 'menu fica por cima do botão da Lupi');
   await page.tap('.mbar-btn');
-  await page.evaluate(() => document.getElementById('duvidas').scrollIntoView());
-  await page.tap('.faq details:nth-child(2) summary');
-  assert.equal(await page.evaluate(() => document.querySelectorAll('.faq details')[1].open), true);
+  await page.evaluate(() => document.getElementById('lupi-explica').scrollIntoView());
+  await page.tap('[data-lupi-ask="Quando preciso emitir nota fiscal?"]');
+  await page.waitForSelector('#lupi-chat.is-open');
+  await page.waitForFunction(() => document.querySelectorAll('.lc-bot').length >= 2);
   assert.deepEqual(errors, []);
   await ctx.close();
 });

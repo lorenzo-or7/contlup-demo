@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  Demo de site para um escritório de contabilidade real de Pedreira/SP, com tema escuro e claro, áreas de atuação, painel de números ilustrativo, dúvidas frequentes e pedido de proposta.
+  Demo de site para um escritório de contabilidade real de Pedreira/SP, com tema escuro e claro, serviços, planos, uma seção editorial sobre os números da empresa, a assistente virtual Lupi e pedido de proposta.
 </p>
 
 <p align="center">
@@ -37,16 +37,15 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 
 ## ✨ Funcionalidades
 
-- 🧭 Barra lateral que expande ao passar o mouse, com opção de fixar aberta (desktop)
+Seções, na ordem: **Início → Sobre a ContLup → Serviços → Planos → Entenda seus números → Contato**.
+
+- 🧭 Barra lateral que expande ao passar o mouse, com opção de fixar aberta (desktop), e menu de tela cheia no celular, ambos com o item da seção atual destacado
 - 🌗 Tema escuro e claro
-- 🗂️ Áreas de atuação: contábil, fiscal, trabalhista e societário
-- 🏢 "Para quem é": do MEI à empresa em crescimento
+- 👩‍💼 Sobre a ContLup: a empresa, a contadora responsável e o jeito de trabalhar
+- 🗂️ Cinco serviços: contábil, fiscal e tributário, trabalhista, societário e BPO Financeiro (descrição provisória)
 - 💳 Planos ContLup (Lup MEI, Start, Plus e Prime) com contato direto pelo WhatsApp comercial
-- 💼 BPO Financeiro na seção de serviços (descrição provisória)
-- 📈 Painel "Visão do mês" com números ilustrativos
-- 👩‍💼 Apresentação da contadora responsável
-- 💬 "A Lupi explica" e perguntas frequentes
-- 🤖 **Lupi 2.0**, assistente virtual: fluxos guiados, respostas aprovadas pela ContLup, histórico da sessão, expressões da personagem e resumo revisável para o WhatsApp (backend com IA preparado em `worker/`, desligado por enquanto)
+- 📈 Entenda seus números: números que fazem sentido (painel ilustrativo), problemas reais, assuntos do dia a dia e "A Lupi explica"
+- 🤖 **Lupi 2.0**, assistente virtual **sem IA**: entende perguntas por regras (sinônimos, erros leves de digitação, desambiguação), lembra o contexto da conversa ("E quanto custa?", "Esse plano inclui folha?"), tem 35 respostas aprovadas no ar (outras 39 aguardam revisão profissional e ficam fora do ar), fluxos guiados (incluindo "Encontrar um plano") e prepara a mensagem para o WhatsApp comercial, que o visitante revisa antes de enviar
 - 📝 Formulário de pedido de proposta
 - 📲 Contatos com botão de copiar e WhatsApp
 
@@ -59,7 +58,7 @@ Azul-marinho profundo com **violeta** e lilás, tipografia condensada em caixa a
 - **JavaScript** puro para as interações
 - **GitHub Pages** para hospedagem
 
-- **Cloudflare Workers** para o backend da IA (as chaves nunca vão para o site)
+- **Cloudflare Workers** para um backend de IA opcional, guardado e desligado (as chaves nunca iriam para o site)
 - **Node.js test runner** e **Playwright** para os testes
 
 Estrutura: `css/style.css` e `js/main.js` (site), `css/lupi.css` e `js/lupi/` (assistente), `data/` (base de conhecimento e fluxos editáveis), `worker/` (backend), `eval/` (comparação Gemini x OpenAI) e `tests/`.
@@ -75,11 +74,11 @@ npm run serve        # http://localhost:8080
 ```
 
 O chat da Lupi usa módulos JavaScript, que precisam de um servidor (não abra o `index.html` direto do disco).
-A Lupi funciona sem IA (fluxos e respostas aprovadas). O backend com IA está pronto em `worker/`, mas desligado.
+A Lupi funciona sem IA e sem servidor. O backend com IA em `worker/` está desligado e o site não baixa esse código.
 
 ## 🤖 Lupi 2.0
 
-- Guia completo (arquitetura, publicação do backend, chaves, conexão com o GitHub Pages, comparação de provedores): [`docs/LUPI-2.md`](docs/LUPI-2.md)
+- Guia (como ela entende as perguntas, contexto, fluxos, como manter o repertório e, para o futuro, como ligar a IA): [`docs/LUPI-2.md`](docs/LUPI-2.md)
 - Relatório de testes: [`docs/RELATORIO-TESTES.md`](docs/RELATORIO-TESTES.md)
 - Pendências para revisão da Priscila: [`docs/PENDENCIAS-PRISCILA.md`](docs/PENDENCIAS-PRISCILA.md)
 

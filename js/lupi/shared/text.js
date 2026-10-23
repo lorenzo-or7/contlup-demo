@@ -43,6 +43,8 @@ export function typoBudget(word) {
 
 export function wordsMatch(a, b) {
   if (a === b) return true;
+  // erros de digitação raramente estão na primeira letra ("caixa" não vira "baixa"); a exceção é o "h" mudo ("orario")
+  if (a[0] !== b[0]) return a.replace(/^h/, '') === b.replace(/^h/, '');
   const max = Math.min(typoBudget(a), typoBudget(b));
   return max > 0 && levenshtein(a, b, max) <= max;
 }

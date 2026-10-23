@@ -4,8 +4,9 @@ import assert from 'node:assert/strict';
 import { FlowEngine, matchOption, renderSummary } from '../../js/lupi/flow-engine.js';
 import { knowledge, flows } from '../support/helpers.mjs';
 
-const approved = new Map(knowledge.entries.filter(e => e.status === 'approved').map(e => [e.id, e]));
-const engine = () => new FlowEngine(flows, id => approved.get(id) || null);
+const approved = new Map(knowledge.intents.filter(e => e.status === 'approved').map(e => [e.id, e]));
+const plans = new Map(knowledge.plans.map(p => [p.id, p]));
+const engine = () => new FlowEngine(flows, id => approved.get(id) || null, id => plans.get(id) || null);
 
 test('[fluxos] A — abrir empresa: caminho completo gera resumo sem promessas', () => {
   const e = engine();
@@ -33,16 +34,79 @@ test('[fluxos] B — trocar de contador: conclusão avisa que não precisa envia
   assert.match(out.summary, /trocar de contador/);
 });
 
-test('[fluxos] C — MEI: conteúdo regulatório pendente usa o texto neutro (fallback)', () => {
+test('[fluxos] C — MEI: resposta em revisão nunca aparece no fluxo; entra o texto neutro (fallbackText)', () => {
   const e = engine();
   e.start('mei');
   e.choose(0);
-  const out = e.choose(0); // faturamento -> info com kbRef pendente
+  const out = e.choose(0); // faturamento -> info (mei-limite, em revisão)
   const texts = out.messages.map(m => m.text).join('\n');
-  assert.match(texts, /dependem dos valores e das regras em vigor/);
+  const pending = knowledge.intents.find(x => x.id === 'mei-limite');
+  assert.equal(pending.status, 'pending_review');
+  assert.ok(!texts.includes(pending.answer.slice(0, 50)), 'texto pendente não aparece');
+  const step = flows.flows.find(f => f.id === 'mei').steps.info_faturamento;
+  assert.ok(texts.includes(step.fallbackText));
   assert.doesNotMatch(texts, /R\$|\d{2,} mil/);
   assert.equal(out.done, true);
-  assert.match(out.messages.at(-1).text, /análise profissional/);
+});
+
+test('[fluxos] E — encontrar plano: regras de indicação por respostas', () => {
+  const run = (...idx) => { const e = engine(); e.start('encontrar_plano'); let out; for (const i of idx) out = e.choose(i); return { e, out }; };
+  const cases = [
+    [[0], ['lup-mei'], 'o plano Lup MEI'],
+    [[1, 0, 0], ['lup-start'], 'o plano Lup Start'],
+    [[1, 0, 1], ['lup-plus'], 'o plano Lup Plus'],
+    [[1, 1, 2], ['lup-prime'], 'o plano Lup Prime'],
+    [[1, 2, 0], ['lup-prime'], 'o plano Lup Prime'],
+    [[1, 3, 3], ['lup-start', 'lup-plus', 'lup-prime'], 'os planos Lup Start, Lup Plus e Lup Prime'],
+  ];
+  for (const [idx, rec, field] of cases) {
+    const { e, out } = run(...idx);
+    assert.equal(out.done, true, idx.join());
+    assert.deepEqual(e.lastCompleted.recommended, rec, idx.join());
+    assert.equal(e.lastCompleted.answers.plano, field, idx.join());
+    assert.equal(out.summary, `Olá! Gostaria de saber mais sobre ${field}.`);
+    for (const id of rec) assert.ok(out.chips.some(c => c.action.kind === 'kb' && c.action.id === plans.get(id).intent), `chip ${id}`);
+  }
+  const { e, out } = run(2); // ainda não tenho empresa
+  assert.deepEqual(e.lastCompleted.recommended, []);
+  assert.equal(out.summary, 'Olá! Gostaria de saber mais sobre a abertura de uma empresa.');
+});
+
+test('[fluxos] E — encontrar plano: a indicação é apresentada como preliminar', () => {
+  const e = engine();
+  e.start('encontrar_plano');
+  e.choose(1); e.choose(0);
+  const out = e.choose(0);
+  const texts = out.messages.map(m => m.text).join('\n');
+  assert.match(texts, /preliminar/i);
+  assert.doesNotMatch(texts, /R\$/);
+});
+
+test('[fluxos] G — primeiro atendimento: cada objetivo mostra a explicação e gera a mensagem', () => {
+  const expected = ['a abertura de uma empresa', 'a troca de contador', 'a regularização da minha empresa', 'os serviços da ContLup'];
+  flows.flows.find(f => f.id === 'primeiro_atendimento').steps.objetivo.options.forEach((o, i) => {
+    const e = engine();
+    e.start('primeiro_atendimento');
+    const out = e.choose(i);
+    assert.equal(out.done, true);
+    assert.ok(out.messages.length >= 2, 'explicação + conclusão');
+    assert.match(out.summary, /^Olá! Gostaria de conversar sobre /);
+    assert.equal(out.summary, `Olá! Gostaria de conversar sobre ${e.lastCompleted.answers.objetivo}.`);
+    assert.ok(expected.includes(e.lastCompleted.answers.objetivo), e.lastCompleted.answers.objetivo);
+  });
+});
+
+test('[fluxos] resposta digitada curta casa com o rótulo, sem confundir sim/não nem empatar', () => {
+  const tipo = flows.flows.find(f => f.id === 'encontrar_plano').steps.tipo.options;
+  assert.equal(matchOption(tipo, 'tenho empresa'), 1);
+  assert.equal(matchOption(tipo, 'não tenho empresa'), 2);
+  assert.equal(matchOption(tipo, 'mei'), 0);
+  const form = flows.flows.find(f => f.id === 'abrir_empresa').steps.formalizacao.options;
+  assert.equal(matchOption(form, 'tenho'), -1, 'serve para duas opções');
+  assert.equal(matchOption(form, 'não'), -1);
+  assert.equal(matchOption(form, 'tenho mei'), 1);
+  const obj = flows.flows.find(f => f.id === 'primeiro_atendimento').steps.objetivo.options;
+  assert.equal(matchOption(obj, 'regularizar'), 2);
 });
 
 test('[fluxos] D — serviços: mostra só áreas confirmadas e oferece proposta', () => {
@@ -141,7 +205,11 @@ test('[fluxos] todos os fluxos têm etapas válidas, alcançáveis e um fim', ()
       assert.ok(s, `${f.id}: passo ${id} não existe`);
       const nexts = [s.next, s.textNext, ...(s.options || []).map(o => o.next)].filter(Boolean);
       for (const n of nexts) { assert.ok(f.steps[n], `${f.id}.${id} -> ${n} inexistente`); queue.push(n); }
-      if (s.kbRef) assert.ok(knowledge.entries.some(k => k.id === s.kbRef), `${f.id}.${id}: kbRef ${s.kbRef} inexistente`);
+      if (s.kbRef) {
+        assert.ok(knowledge.intents.some(k => k.id === s.kbRef), `${f.id}.${id}: kbRef ${s.kbRef} inexistente`);
+        if (!approved.has(s.kbRef)) assert.ok(s.fallbackText, `${f.id}.${id}: ${s.kbRef} não está aprovada e o passo não tem fallbackText`);
+      }
+      if (s.type === 'info' && !s.kbRef) assert.ok(s.fallbackText, `${f.id}.${id}: info sem conteúdo`);
     }
     assert.ok([...seen].some(id => f.steps[id].type === 'end'), `${f.id}: sem fim`);
     assert.equal(seen.size, Object.keys(f.steps).length, `${f.id}: há passos inalcançáveis`);

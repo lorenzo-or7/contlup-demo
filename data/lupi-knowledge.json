@@ -1,7 +1,7 @@
 {
-  "version": 2,
+  "version": 3,
   "updatedAt": "2026-10-23",
-  "_leia-me": "Base de conhecimento da Lupi. Só entradas com status \"approved\" são usadas pelo chat e enviadas à IA. Status possíveis: draft, pending_review, approved, outdated. Para aprovar um conteúdo, revise o texto, troque o status para approved e preencha approvedBy e updatedAt. Campos: answer = texto mostrado ao visitante; content = fato resumido que a IA pode usar; keywords = palavras que ativam a resposta pronta; related = sugestões que aparecem depois; expression = expressão da Lupi (idle, welcome, thinking, explaining, success); flow = fluxo guiado relacionado; priority = true faz qualquer palavra-chave valer como resposta certa (usado em temas comerciais, para nunca deixar a IA improvisar).",
+  "_leia-me": "Repertório da Lupi (sem IA). Cada intenção tem: id (estável, não mude), category, title, examples (perguntas de exemplo; também são usadas nos testes automáticos), keywords (palavras e expressões que ativam a resposta), exclude (expressões que impedem a intenção, para desambiguar), answer (texto mostrado), actions (botões: intent, flow, whatsapp, link), group (intenções do mesmo assunto não são tratadas como ambíguas entre si), flow, priority (ganha de correspondências fracas), forMei (intenção alternativa para \"e para MEI?\"), status (draft, pending_review, approved, outdated; só approved aparece) e review (legalSensitive = sujeito a mudança legal; professionalReview = pendente ou revisado; approvedBy; source; updatedAt). Para desativar um conteúdo, troque status para outdated. Intenções pending_review nunca são mostradas: se a pergunta for sobre elas, a Lupi só avisa que o assunto está em revisão e oferece o contato. Para publicar uma, troque status para approved e preencha review.approvedBy. Sinônimos ficam em synonyms; os benefícios dos planos em plans. contextGroups e followUps definem as perguntas de acompanhamento (\"e se eu atrasar?\" logo depois do DAS): cada regra vale para um grupo de assuntos, com as expressões que a ativam (match) e os destinos (targets); mais de um destino = a Lupi pergunta qual.",
   "contact": {
     "company": "ContLup Studio Contábil",
     "responsible": "Priscila Petean",
@@ -13,497 +13,4380 @@
     "instagramHandle": "@contlupstudiocontabil",
     "city": "Pedreira/SP"
   },
-  "entries": [
+  "categories": [
     {
-      "id": "inst-contlup",
-      "category": "institucional",
-      "title": "O que é a ContLup",
-      "keywords": ["contlup", "o que e a contlup", "quem sao voces", "sobre a empresa", "escritorio de contabilidade", "sobre voces"],
-      "answer": "A ContLup Studio Contábil é um escritório de contabilidade em Pedreira/SP. A ideia é ir além das obrigações: organizar as informações, explicar o que os números mostram e acompanhar o negócio de perto, com atendimento próximo e personalizado.",
-      "content": "ContLup Studio Contábil é um escritório de contabilidade em Pedreira/SP. Proposta: ir além das obrigações, organizar informações, explicar o que os números mostram e acompanhar o negócio de perto. Atendimento próximo e personalizado. Atende MEIs, pequenas empresas (ME e EPP), empresas em crescimento, negócios B2B e quem está começando.",
-      "related": ["serv-areas", "inst-priscila", "inst-contato"],
-      "expression": "welcome",
-      "source": "index.html (seções Quem somos e Para quem é)",
-      "updatedAt": "2026-10-19",
-      "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "id": "contlup",
+      "label": "ContLup e atendimento"
     },
     {
-      "id": "inst-publico",
-      "category": "institucional",
-      "title": "Para quem é a ContLup",
-      "keywords": ["para quem", "quem voces atendem", "que tipo de empresa atendem", "atendem pequena empresa", "atendem empresa pequena", "me e epp", "b2b", "empresa em crescimento"],
-      "answer": "A ContLup atende do MEI à empresa em crescimento:\n- **MEI**: rotina simples, mas com obrigações que não podem passar.\n- **Pequenas empresas** (ME e EPP) que precisam de organização e acompanhamento.\n- **Empresas em crescimento** que precisam de números claros para o próximo passo.\n- **Negócios B2B**, que lidam com notas e contratos.\n- **Quem está começando** e quer formalizar o negócio do jeito certo.",
-      "content": "Públicos atendidos: MEI; pequenas empresas (ME e EPP); empresas em crescimento; negócios B2B; empreendedores que querem formalizar o negócio.",
-      "related": ["serv-areas", "com-preco"],
-      "expression": "explaining",
-      "source": "index.html (seção Para quem é a ContLup)",
-      "updatedAt": "2026-10-19",
+      "id": "servicos",
+      "label": "Serviços"
+    },
+    {
+      "id": "planos",
+      "label": "Planos"
+    },
+    {
+      "id": "mei",
+      "label": "MEI"
+    },
+    {
+      "id": "empresas",
+      "label": "Empresas"
+    },
+    {
+      "id": "regimes",
+      "label": "Regimes tributários"
+    },
+    {
+      "id": "rotinas",
+      "label": "Rotinas contábeis e financeiras"
+    },
+    {
+      "id": "duvidas",
+      "label": "Dúvidas recorrentes"
+    }
+  ],
+  "synonyms": [
+    {
+      "canonical": "mei",
+      "variants": [
+        "microempreendedor individual",
+        "micro empreendedor individual",
+        "microempreendedora",
+        "microempreendedor",
+        "micro empreendedor",
+        "micro empreendedora"
+      ]
+    },
+    {
+      "canonical": "contador",
+      "variants": [
+        "contadora",
+        "contabilista",
+        "escritorio de contabilidade",
+        "escritorio contabil"
+      ]
+    },
+    {
+      "canonical": "nota fiscal",
+      "variants": [
+        "nota fiscal",
+        "notas fiscais",
+        "nota fiscal eletronica",
+        "nf e",
+        "nfs e",
+        "notinha",
+        "cupom fiscal"
+      ]
+    },
+    {
+      "canonical": "pro labore",
+      "variants": [
+        "prolabore",
+        "pro labore"
+      ]
+    },
+    {
+      "canonical": "funcionario",
+      "variants": [
+        "funcionarios",
+        "funcionaria",
+        "funcionarias",
+        "empregado",
+        "empregados",
+        "empregada",
+        "colaborador",
+        "colaboradores"
+      ]
+    },
+    {
+      "canonical": "imposto",
+      "variants": [
+        "impostos",
+        "tributo",
+        "tributos"
+      ]
+    },
+    {
+      "canonical": "whatsapp",
+      "variants": [
+        "zap",
+        "zapzap",
+        "wpp",
+        "whats",
+        "whatsap",
+        "watsapp",
+        "wats"
+      ]
+    },
+    {
+      "canonical": "trocar de contador",
+      "variants": [
+        "mudar de contador",
+        "trocar contador",
+        "trocar o contador",
+        "mudar o contador",
+        "trocar de contabilidade",
+        "mudar de contabilidade",
+        "trocar de escritorio"
+      ]
+    },
+    {
+      "canonical": "abrir empresa",
+      "variants": [
+        "abrir uma empresa",
+        "abrir minha empresa",
+        "abrir a empresa",
+        "montar uma empresa",
+        "montar empresa",
+        "criar uma empresa",
+        "criar empresa",
+        "abrir um negocio",
+        "abrir meu negocio"
+      ]
+    },
+    {
+      "canonical": "dasn simei",
+      "variants": [
+        "dasn simei",
+        "dasnsimei",
+        "declaracao anual do mei",
+        "declaracao anual de faturamento"
+      ]
+    },
+    {
+      "canonical": "fluxo de caixa",
+      "variants": [
+        "fluxo do caixa",
+        "fluxo caixa"
+      ]
+    },
+    {
+      "canonical": "balanco patrimonial",
+      "variants": [
+        "balanco patrimonial",
+        "balancos"
+      ]
+    },
+    {
+      "canonical": "regime tributario",
+      "variants": [
+        "regime de tributacao",
+        "enquadramento tributario",
+        "regime fiscal"
+      ]
+    },
+    {
+      "canonical": "quanto custa",
+      "variants": [
+        "quanto custa",
+        "quanto custaria",
+        "quanto fica",
+        "quanto sai",
+        "qual o valor",
+        "qual valor",
+        "qual o preco",
+        "quanto voces cobram",
+        "quanto cobram"
+      ]
+    },
+    {
+      "canonical": "lup mei",
+      "variants": [
+        "lupmei",
+        "lup-mei"
+      ]
+    },
+    {
+      "canonical": "quanto",
+      "variants": [
+        "qnto",
+        "qto",
+        "qnt",
+        "quantoo"
+      ]
+    },
+    {
+      "canonical": "que",
+      "variants": [
+        "q",
+        "oq"
+      ]
+    },
+    {
+      "canonical": "o que",
+      "variants": [
+        "oque",
+        "o q"
+      ]
+    },
+    {
+      "canonical": "voce",
+      "variants": [
+        "vc",
+        "vcs",
+        "voces"
+      ]
+    },
+    {
+      "canonical": "para",
+      "variants": [
+        "p",
+        "pra",
+        "pro"
+      ]
+    },
+    {
+      "canonical": "tambem",
+      "variants": [
+        "tb",
+        "tbm"
+      ]
+    },
+    {
+      "canonical": "abrir",
+      "variants": [
+        "abro",
+        "abrindo",
+        "abriria"
+      ]
+    },
+    {
+      "canonical": "fechar",
+      "variants": [
+        "fecho",
+        "fechando",
+        "fecharia"
+      ]
+    },
+    {
+      "canonical": "declarar",
+      "variants": [
+        "declaro",
+        "declarando"
+      ]
+    },
+    {
+      "canonical": "emitir",
+      "variants": [
+        "emito",
+        "emitindo",
+        "emite"
+      ]
+    },
+    {
+      "canonical": "trocar",
+      "variants": [
+        "troco",
+        "trocando"
+      ]
+    },
+    {
+      "canonical": "lup start",
+      "variants": [
+        "lupstart"
+      ]
+    },
+    {
+      "canonical": "lup plus",
+      "variants": [
+        "lupplus"
+      ]
+    },
+    {
+      "canonical": "lup prime",
+      "variants": [
+        "lupprime"
+      ]
+    }
+  ],
+  "plans": [
+    {
+      "id": "lup-mei",
+      "name": "Lup MEI",
+      "intent": "plano-lup-mei",
+      "tagline": "Simples e sem complicação",
+      "audience": [
+        "mei"
+      ],
+      "audienceText": "Para Microempreendedores Individuais.",
+      "inherits": null,
+      "features": [
+        {
+          "key": "abertura",
+          "text": "Orientação para abertura e regularização do MEI"
+        },
+        {
+          "key": "das",
+          "text": "Emissão e controle do DAS"
+        },
+        {
+          "key": "dasn",
+          "text": "Declaração Anual do MEI (DASN-SIMEI)"
+        },
+        {
+          "key": "notas",
+          "text": "Orientações sobre notas fiscais"
+        },
+        {
+          "key": "pendencias",
+          "text": "Acompanhamento de pendências e obrigações"
+        },
+        {
+          "key": "atendimento",
+          "text": "Atendimento por WhatsApp e e-mail"
+        },
+        {
+          "key": "portal",
+          "text": "Portal para documentos e guias"
+        }
+      ]
+    },
+    {
+      "id": "lup-start",
+      "name": "Lup Start",
+      "intent": "plano-lup-start",
+      "tagline": "Organização e segurança",
+      "audience": [
+        "simples"
+      ],
+      "audienceText": "Para empresas do Simples Nacional.",
+      "inherits": null,
+      "features": [
+        {
+          "key": "contabilidade",
+          "text": "Contabilidade e escrituração fiscal"
+        },
+        {
+          "key": "impostos",
+          "text": "Apuração de impostos e obrigações acessórias"
+        },
+        {
+          "key": "folha",
+          "text": "Folha de pagamento, pró-labore e encargos"
+        },
+        {
+          "key": "demonstracoes",
+          "text": "Demonstrações contábeis obrigatórias"
+        },
+        {
+          "key": "orientacoes",
+          "text": "Orientações contábeis, fiscais e trabalhistas"
+        },
+        {
+          "key": "atendimento",
+          "text": "Atendimento por WhatsApp e e-mail"
+        },
+        {
+          "key": "portal",
+          "text": "Portal para documentos e guias"
+        }
+      ]
+    },
+    {
+      "id": "lup-plus",
+      "name": "Lup Plus",
+      "intent": "plano-lup-plus",
+      "tagline": "Mais controle para crescer",
+      "audience": [
+        "simples",
+        "presumido"
+      ],
+      "audienceText": "Para empresas do Simples Nacional e Lucro Presumido.",
+      "inherits": "lup-start",
+      "features": [
+        {
+          "key": "balancete_dre",
+          "text": "Balancete e DRE trimestrais"
+        },
+        {
+          "key": "balanco",
+          "text": "Balanço Patrimonial anual"
+        },
+        {
+          "key": "analise",
+          "text": "Análise dos resultados contábeis e orientações"
+        },
+        {
+          "key": "reunioes",
+          "text": "Reuniões trimestrais de acompanhamento"
+        },
+        {
+          "key": "distribuicao",
+          "text": "Orientações sobre distribuição de lucros"
+        },
+        {
+          "key": "reforma",
+          "text": "Suporte sobre impactos da reforma tributária"
+        }
+      ]
+    },
+    {
+      "id": "lup-prime",
+      "name": "Lup Prime",
+      "intent": "plano-lup-prime",
+      "tagline": "Estratégia para ir além",
+      "audience": [
+        "presumido",
+        "real"
+      ],
+      "audienceText": "Para empresas do Lucro Presumido e Lucro Real.",
+      "inherits": "lup-plus",
+      "features": [
+        {
+          "key": "balancete_dre",
+          "text": "Balancete e DRE mensais"
+        },
+        {
+          "key": "balanco",
+          "text": "Balanço Patrimonial anual"
+        },
+        {
+          "key": "analise",
+          "text": "Análise dos resultados com orientação contínua"
+        },
+        {
+          "key": "reunioes",
+          "text": "Reuniões mensais de acompanhamento"
+        },
+        {
+          "key": "tributaria",
+          "text": "Orientação tributária personalizada"
+        },
+        {
+          "key": "reforma",
+          "text": "Acompanhamento da reforma tributária"
+        },
+        {
+          "key": "estrategico",
+          "text": "Suporte estratégico e atendimento prioritário"
+        }
+      ]
+    }
+  ],
+  "featureTerms": {
+    "abertura": [
+      "abertura",
+      "abrir",
+      "regularizacao",
+      "regularizar"
+    ],
+    "das": [
+      "das",
+      "guia mensal"
+    ],
+    "dasn": [
+      "dasn simei",
+      "dasn",
+      "declaracao anual"
+    ],
+    "notas": [
+      "nota fiscal",
+      "notas fiscais",
+      "nota",
+      "notas"
+    ],
+    "pendencias": [
+      "pendencia",
+      "pendencias",
+      "obrigacoes do mei"
+    ],
+    "atendimento": [
+      "whatsapp",
+      "e mail",
+      "email",
+      "atendimento"
+    ],
+    "portal": [
+      "portal",
+      "documentos e guias"
+    ],
+    "contabilidade": [
+      "contabilidade",
+      "escrituracao"
+    ],
+    "impostos": [
+      "imposto",
+      "impostos",
+      "apuracao",
+      "guias",
+      "obrigacoes acessorias"
+    ],
+    "folha": [
+      "folha",
+      "folha de pagamento",
+      "pro labore",
+      "funcionario",
+      "funcionarios",
+      "empregado",
+      "salario"
+    ],
+    "demonstracoes": [
+      "demonstracoes",
+      "demonstracoes contabeis"
+    ],
+    "orientacoes": [
+      "orientacao contabil",
+      "orientacoes contabeis",
+      "orientacao trabalhista",
+      "orientacao fiscal"
+    ],
+    "balancete_dre": [
+      "balancete",
+      "dre"
+    ],
+    "balanco": [
+      "balanco",
+      "balanco patrimonial"
+    ],
+    "analise": [
+      "analise",
+      "analise dos resultados",
+      "resultados"
+    ],
+    "reunioes": [
+      "reuniao",
+      "reunioes",
+      "acompanhamento"
+    ],
+    "distribuicao": [
+      "distribuicao de lucros",
+      "distribuicao"
+    ],
+    "reforma": [
+      "reforma tributaria",
+      "reforma"
+    ],
+    "tributaria": [
+      "orientacao tributaria",
+      "planejamento tributario"
+    ],
+    "estrategico": [
+      "estrategico",
+      "estrategia",
+      "prioritario",
+      "prioridade"
+    ]
+  },
+  "contextGroups": {
+    "das": [
+      "mei-das",
+      "mei-pendencias",
+      "mei-dasn"
+    ],
+    "mei": [
+      "mei-o-que-e",
+      "mei-abrir",
+      "mei-das",
+      "mei-dasn",
+      "mei-notas",
+      "mei-pendencias",
+      "mei-regularizacao",
+      "mei-baixa",
+      "mei-empregado",
+      "mei-desenquadramento",
+      "mei-limite",
+      "mei-obrigacoes",
+      "mei-atende",
+      "duv-contador-mei",
+      "plano-lup-mei"
+    ],
+    "notas": [
+      "mei-notas",
+      "rot-nota-fiscal",
+      "duv-emitir-nota"
+    ],
+    "regimes": [
+      "reg-simples",
+      "reg-presumido",
+      "reg-real",
+      "reg-diferencas",
+      "reg-orientacao"
+    ],
+    "servicos": [
+      "serv-areas",
+      "serv-contabil",
+      "serv-fiscal",
+      "serv-trabalhista",
+      "serv-societario",
+      "serv-bpo"
+    ],
+    "mei-de:emp-abertura": [
+      "emp-abertura"
+    ],
+    "mei-de:emp-encerramento": [
+      "emp-encerramento"
+    ],
+    "mei-de:emp-regularizacao": [
+      "emp-regularizacao"
+    ],
+    "mei-de:rot-nota-fiscal": [
+      "rot-nota-fiscal"
+    ],
+    "mei-de:duv-atraso-impostos": [
+      "duv-atraso-impostos"
+    ],
+    "mei-de:duv-emitir-nota": [
+      "duv-emitir-nota"
+    ]
+  },
+  "followUps": [
+    {
+      "group": "das",
+      "match": [
+        "atrasar",
+        "atrasei",
+        "atraso",
+        "atrasado",
+        "vencer",
+        "venceu",
+        "vencido",
+        "nao pagar",
+        "nao paguei",
+        "esquecer de pagar",
+        "esqueci de pagar"
+      ],
+      "targets": [
+        "mei-pendencias"
+      ]
+    },
+    {
+      "group": "das",
+      "match": [
+        "declarar",
+        "declaracao",
+        "anual",
+        "dasn"
+      ],
+      "targets": [
+        "mei-dasn"
+      ]
+    },
+    {
+      "group": "das",
+      "match": [
+        "quanto custa",
+        "quanto e",
+        "qual o valor",
+        "qual valor",
+        "valor",
+        "quanto pago",
+        "quanto vou pagar",
+        "preco"
+      ],
+      "targets": [
+        "mei-das",
+        {
+          "label": "Preço do plano Lup MEI",
+          "ask": "quanto custa o lup mei?"
+        }
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "atrasar",
+        "atrasei",
+        "atraso",
+        "atrasado",
+        "vencer",
+        "venceu",
+        "vencido",
+        "nao pagar",
+        "nao paguei",
+        "esquecer de pagar",
+        "esqueci de pagar"
+      ],
+      "targets": [
+        "mei-pendencias"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "abrir",
+        "abro",
+        "formalizar",
+        "virar mei",
+        "me tornar"
+      ],
+      "targets": [
+        "mei-abrir"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "fechar",
+        "baixa",
+        "encerrar",
+        "cancelar o mei",
+        "cancelar meu mei"
+      ],
+      "targets": [
+        "mei-baixa"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "funcionario",
+        "contratar alguem",
+        "contratar um",
+        "empregado"
+      ],
+      "targets": [
+        "mei-empregado"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "limite",
+        "faturar",
+        "faturamento",
+        "teto"
+      ],
+      "targets": [
+        "mei-limite"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "nota",
+        "notas"
+      ],
+      "targets": [
+        "mei-notas"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "das",
+        "guia",
+        "boleto"
+      ],
+      "targets": [
+        "mei-das"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "declarar",
+        "declaracao",
+        "anual",
+        "dasn"
+      ],
+      "targets": [
+        "mei-dasn"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "crescer",
+        "sair do mei",
+        "deixar de ser",
+        "mudar de porte",
+        "passar para me"
+      ],
+      "targets": [
+        "mei-desenquadramento"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "contador",
+        "contabilidade"
+      ],
+      "targets": [
+        "duv-contador-mei",
+        "mei-atende"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "plano",
+        "planos"
+      ],
+      "targets": [
+        "plano-lup-mei"
+      ]
+    },
+    {
+      "group": "mei",
+      "match": [
+        "quanto custa",
+        "quanto e",
+        "qual o valor",
+        "qual valor",
+        "valor",
+        "quanto pago",
+        "quanto vou pagar",
+        "preco"
+      ],
+      "targets": [
+        "mei-das",
+        "mei-abrir",
+        {
+          "label": "Preço do plano Lup MEI",
+          "ask": "quanto custa o lup mei?"
+        }
+      ]
+    },
+    {
+      "group": "notas",
+      "match": [
+        "quando",
+        "preciso",
+        "obrigado",
+        "obrigatorio",
+        "obrigatoria",
+        "sou obrigado"
+      ],
+      "targets": [
+        "duv-emitir-nota"
+      ]
+    },
+    {
+      "group": "notas",
+      "match": [
+        "como emitir",
+        "como emito",
+        "onde emito",
+        "onde emitir",
+        "como faco",
+        "sistema"
+      ],
+      "targets": [
+        "rot-nota-fiscal"
+      ]
+    },
+    {
+      "group": "notas",
+      "match": [
+        "mei"
+      ],
+      "targets": [
+        "mei-notas"
+      ]
+    },
+    {
+      "group": "notas",
+      "match": [
+        "servico",
+        "produto",
+        "venda",
+        "vender"
+      ],
+      "targets": [
+        "duv-emitir-nota",
+        "rot-nota-fiscal"
+      ]
+    },
+    {
+      "group": "regimes",
+      "match": [
+        "qual o melhor",
+        "qual e melhor",
+        "qual escolher",
+        "melhor para mim",
+        "meu caso",
+        "vale a pena",
+        "qual devo"
+      ],
+      "targets": [
+        "reg-orientacao"
+      ]
+    },
+    {
+      "group": "regimes",
+      "match": [
+        "diferenca",
+        "diferencas",
+        "comparar",
+        "compara"
+      ],
+      "targets": [
+        "reg-diferencas"
+      ]
+    },
+    {
+      "group": "regimes",
+      "match": [
+        "mudar",
+        "trocar",
+        "troca"
+      ],
+      "targets": [
+        "reg-orientacao"
+      ]
+    },
+    {
+      "group": "regimes",
+      "match": [
+        "plano",
+        "planos"
+      ],
+      "targets": [
+        "planos-qual-escolher"
+      ]
+    },
+    {
+      "group": "regimes",
+      "match": [
+        "imposto",
+        "impostos",
+        "quanto custa",
+        "quanto e",
+        "qual o valor",
+        "qual valor",
+        "valor",
+        "quanto pago",
+        "quanto vou pagar",
+        "preco"
+      ],
+      "targets": [
+        "reg-orientacao",
+        "com-preco"
+      ]
+    },
+    {
+      "group": "servicos",
+      "match": [
+        "contratar",
+        "contrato",
+        "como contrato"
+      ],
+      "targets": [
+        "atd-contratacao"
+      ]
+    },
+    {
+      "group": "servicos",
+      "match": [
+        "proposta",
+        "orcamento"
+      ],
+      "targets": [
+        "atd-proposta"
+      ]
+    },
+    {
+      "group": "servicos",
+      "match": [
+        "plano",
+        "planos"
+      ],
+      "targets": [
+        "planos"
+      ]
+    },
+    {
+      "group": "servicos",
+      "match": [
+        "outros",
+        "outras areas",
+        "quais servicos",
+        "o que mais"
+      ],
+      "targets": [
+        "serv-areas"
+      ]
+    },
+    {
+      "group": "mei-de:emp-abertura",
+      "match": [
+        "mei",
+        "microempreendedor"
+      ],
+      "targets": [
+        "mei-abrir"
+      ]
+    },
+    {
+      "group": "mei-de:emp-encerramento",
+      "match": [
+        "mei",
+        "microempreendedor"
+      ],
+      "targets": [
+        "mei-baixa"
+      ]
+    },
+    {
+      "group": "mei-de:emp-regularizacao",
+      "match": [
+        "mei",
+        "microempreendedor"
+      ],
+      "targets": [
+        "mei-regularizacao"
+      ]
+    },
+    {
+      "group": "mei-de:rot-nota-fiscal",
+      "match": [
+        "mei",
+        "microempreendedor"
+      ],
+      "targets": [
+        "mei-notas"
+      ]
+    },
+    {
+      "group": "mei-de:duv-atraso-impostos",
+      "match": [
+        "mei",
+        "microempreendedor"
+      ],
+      "targets": [
+        "mei-pendencias"
+      ]
+    },
+    {
+      "group": "mei-de:duv-emitir-nota",
+      "match": [
+        "mei",
+        "microempreendedor"
+      ],
+      "targets": [
+        "mei-notas"
+      ]
+    }
+  ],
+  "intents": [
+    {
+      "id": "inst-contlup",
+      "category": "contlup",
+      "title": "Quem é a ContLup",
+      "examples": [
+        "Quem é a ContLup?",
+        "O que é a ContLup?",
+        "me fala sobre o escritório"
+      ],
+      "keywords": [
+        "contlup",
+        "quem e a contlup",
+        "o que e a contlup",
+        "quem sao voces",
+        "sobre a empresa",
+        "sobre o escritorio",
+        "escritorio de contabilidade",
+        "sobre voces",
+        "fala sobre o escritorio"
+      ],
+      "answer": "A ContLup Studio Contábil é um escritório de contabilidade em Pedreira/SP. A ideia é ir além das obrigações: organizar as informações, explicar o que os números mostram e acompanhar o negócio de perto, com atendimento próximo e personalizado.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "inst-priscila",
+          "label": "Quem é a Priscila"
+        },
+        {
+          "type": "intent",
+          "id": "serv-areas",
+          "label": "Serviços"
+        },
+        {
+          "type": "intent",
+          "id": "planos",
+          "label": "Planos"
+        }
+      ],
+      "expression": "welcome",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Sobre a ContLup)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "inst-priscila",
-      "category": "institucional",
-      "title": "Priscila Petean",
-      "keywords": ["priscila", "priscila petean", "quem e a priscila", "contadora", "responsavel tecnica", "quem atende", "experiencia", "quantos anos de experiencia"],
+      "category": "contlup",
+      "title": "Quem é a Priscila",
+      "examples": [
+        "Quem é a Priscila?",
+        "quem é a contadora responsável",
+        "quantos anos de experiência ela tem"
+      ],
+      "keywords": [
+        "priscila",
+        "priscila petean",
+        "quem e a priscila",
+        "contadora responsavel",
+        "responsavel tecnica",
+        "quem atende",
+        "anos de experiencia",
+        "quantos anos de experiencia",
+        "experiencia da contadora",
+        "quem e a contadora"
+      ],
       "answer": "A **Priscila Petean** é a contadora responsável pela ContLup, com mais de 20 anos de experiência. Ela acompanha cada empresa de perto e transforma números em informação que o empresário consegue usar no dia a dia: o que entrou, o que saiu, o que sobrou e o que dá para planejar.",
-      "content": "Priscila Petean é a contadora responsável pela ContLup, com mais de 20 anos de experiência em contabilidade. Acompanha cada empresa de perto e explica os números em linguagem simples. O número de registro no CRC ainda não foi publicado no site.",
-      "related": ["inst-contato", "inst-atendimento"],
+      "actions": [
+        {
+          "type": "intent",
+          "id": "inst-atendimento",
+          "label": "Como é o atendimento"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Falar com a ContLup",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de conversar com a equipe."
+        }
+      ],
       "expression": "idle",
-      "source": "index.html (seção Priscila)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Sobre · Priscila)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "inst-publico",
+      "category": "contlup",
+      "title": "Para quem é a ContLup",
+      "examples": [
+        "Vocês atendem pequenas empresas?",
+        "para quem é a ContLup",
+        "que tipo de empresa vocês atendem"
+      ],
+      "keywords": [
+        "para quem e a contlup",
+        "quem voces atendem",
+        "que tipo de empresa voces atendem",
+        "atendem pequena empresa",
+        "atendem pequenas empresas",
+        "atendem empresa pequena",
+        "me e epp",
+        "negocios b2b",
+        "empresa em crescimento",
+        "atende empresa",
+        "atendem quem",
+        "voces atendem quem",
+        "quem a contlup atende"
+      ],
+      "answer": "A ContLup atende do MEI à empresa em crescimento:\n- **MEI**: rotina simples, mas com obrigações que não podem passar.\n- **Pequenas empresas** (ME e EPP) que precisam de organização e acompanhamento.\n- **Empresas em crescimento** que precisam de números claros para o próximo passo.\n- **Negócios B2B**, que lidam com notas e contratos.\n- **Quem está começando** e quer formalizar o negócio do jeito certo.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "encontrar_plano",
+          "label": "Encontrar um plano"
+        },
+        {
+          "type": "intent",
+          "id": "serv-areas",
+          "label": "Serviços"
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Serviços · Para quem é)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "inst-contato",
-      "category": "institucional",
-      "title": "Contato",
-      "keywords": ["contato", "whatsapp", "whatsapp comercial", "zap", "telefone", "numero", "email", "e mail", "instagram", "como falo com voces", "como entro em contato", "comercial"],
-      "answer": "Você fala com a ContLup por aqui:\n- WhatsApp comercial: (19) 97131-0182\n- E-mail: [contato@contlup.com.br](mailto:contato@contlup.com.br)\n- Instagram: [@contlupstudiocontabil](https://www.instagram.com/contlupstudiocontabil/)\n\nSe quiser, eu preparo uma mensagem resumida para você enviar à Priscila pelo WhatsApp.",
-      "content": "Contato oficial: WhatsApp comercial (19) 97131-0182; e-mail contato@contlup.com.br; Instagram @contlupstudiocontabil.",
-      "related": ["inst-horario", "inst-localizacao"],
+      "category": "contlup",
+      "title": "Como falar com a ContLup",
+      "examples": [
+        "Como falo com vocês?",
+        "qual o whatsapp?",
+        "qual o e-mail de contato",
+        "qual o telefone comercial"
+      ],
+      "keywords": [
+        "contato",
+        "como falo com voces",
+        "como falar com voces",
+        "como entro em contato",
+        "whatsapp",
+        "whatsapp comercial",
+        "telefone",
+        "numero de telefone",
+        "email",
+        "e mail",
+        "instagram",
+        "falar com voces",
+        "comercial",
+        "qual o numero"
+      ],
+      "priority": true,
+      "answer": "Você fala com a ContLup por aqui:\n- WhatsApp comercial: (19) 97131-0182\n- E-mail: [contato@contlup.com.br](mailto:contato@contlup.com.br)\n- Instagram: [@contlupstudiocontabil](https://www.instagram.com/contlupstudiocontabil/)\n\nSe quiser, eu preparo uma mensagem curta para você enviar pelo WhatsApp.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Falar com a ContLup",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de conversar com a equipe."
+        },
+        {
+          "type": "intent",
+          "id": "inst-horario",
+          "label": "Horário de atendimento"
+        }
+      ],
       "expression": "success",
-      "source": "index.html (seção Contato e rodapé)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Contato e rodapé)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "inst-localizacao",
-      "category": "institucional",
-      "title": "Localização",
-      "keywords": ["endereco", "onde fica", "onde voces ficam", "localizacao", "pedreira", "cidade", "atendem minha cidade", "atendem fora", "outras cidades", "regiao"],
-      "answer": "O escritório fica em **Pedreira/SP**. O endereço completo ainda não foi publicado aqui no site. Para saber se a ContLup atende a sua cidade, o melhor é perguntar direto para a Priscila.",
-      "content": "O escritório fica em Pedreira/SP. O endereço completo ainda não foi publicado. Não há informação publicada sobre atendimento a outras cidades: encaminhar para a Priscila.",
-      "related": ["inst-atendimento", "inst-contato"],
+      "category": "contlup",
+      "title": "Onde fica a ContLup",
+      "examples": [
+        "Onde fica o escritório?",
+        "vocês atendem minha cidade?",
+        "qual o endereço"
+      ],
+      "keywords": [
+        "endereco",
+        "onde fica",
+        "onde voces ficam",
+        "localizacao",
+        "pedreira",
+        "cidade",
+        "atendem minha cidade",
+        "atendem outras cidades",
+        "atende outras cidades",
+        "atendem fora",
+        "regiao"
+      ],
+      "answer": "O escritório fica em **Pedreira/SP**. O endereço completo ainda não foi publicado aqui no site. Para saber se a ContLup atende a sua cidade, o melhor é perguntar direto para a equipe.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Falar com a ContLup",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de conversar com a equipe."
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (seção Contato: endereço 'a inserir')",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Contato)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "inst-atendimento",
-      "category": "institucional",
-      "title": "Forma de atendimento",
-      "keywords": ["atendimento", "como e o atendimento", "dia a dia", "como funciona o atendimento", "atendimento online", "a distancia", "remoto", "presencial", "suporte"],
-      "answer": "O atendimento é próximo e personalizado, pelo **WhatsApp** e por **e-mail**, com explicações em linguagem simples, sem \"contabilês\". Você conversa com quem acompanha a sua empresa de perto.",
-      "content": "Atendimento próximo e personalizado pelo WhatsApp e por e-mail, com explicações em linguagem simples. Não há informação publicada sobre atendimento presencial.",
-      "related": ["inst-contato", "inst-horario"],
+      "category": "contlup",
+      "title": "Como funciona o atendimento",
+      "examples": [
+        "Como funciona o atendimento?",
+        "o atendimento é online?",
+        "como vocês atendem no dia a dia"
+      ],
+      "keywords": [
+        "atendimento",
+        "como e o atendimento",
+        "como funciona o atendimento",
+        "atendimento no dia a dia",
+        "atendimento online",
+        "a distancia",
+        "remoto",
+        "presencial",
+        "suporte",
+        "como voces atendem"
+      ],
+      "answer": "O atendimento é próximo e personalizado, pelo **WhatsApp** e por **e-mail**, com explicações em linguagem simples, sem \"contabilês\". Você conversa com quem acompanha a sua empresa de perto.\n\nAinda não há informação publicada sobre atendimento presencial.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "inst-contato",
+          "label": "Contatos"
+        },
+        {
+          "type": "intent",
+          "id": "inst-horario",
+          "label": "Horário"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (FAQ: Como é o atendimento no dia a dia?)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (antigo FAQ: Como é o atendimento no dia a dia?)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "inst-horario",
-      "priority": true,
-      "category": "institucional",
+      "category": "contlup",
       "title": "Horário de atendimento",
-      "keywords": ["horario", "horario de atendimento", "que horas", "abre", "fecha", "sabado", "domingo", "feriado", "expediente", "dias de atendimento"],
-      "answer": "Os dias e horários de atendimento ainda não foram publicados no site, então prefiro não chutar. Você pode mandar sua mensagem pelo WhatsApp a qualquer momento e a resposta vem no horário de atendimento.",
-      "content": "Dias e horários de atendimento ainda não foram publicados. Não informar horários.",
-      "related": ["inst-contato"],
+      "examples": [
+        "Qual o horário de atendimento?",
+        "vocês abrem sábado?",
+        "que horas vocês atendem"
+      ],
+      "keywords": [
+        "horario",
+        "horario de atendimento",
+        "que horas",
+        "que horas abre",
+        "que horas fecha",
+        "voces abrem",
+        "abrem sabado",
+        "abrem no sabado",
+        "atendem sabado",
+        "sabado",
+        "domingo",
+        "feriado",
+        "expediente",
+        "dias de atendimento"
+      ],
+      "priority": true,
+      "answer": "Os dias e horários de atendimento ainda não foram publicados, então prefiro não chutar. Você pode mandar sua mensagem pelo WhatsApp comercial a qualquer momento e a resposta vem no horário de atendimento.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Falar com a ContLup",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de conversar com a equipe."
+        }
+      ],
       "expression": "idle",
-      "source": "index.html (seção Contato: 'dias e horários a inserir')",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (horários não publicados)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "inst-lupi",
-      "category": "institucional",
+      "category": "contlup",
       "title": "Quem é a Lupi",
-      "keywords": ["quem e voce", "quem e a lupi", "voce e robo", "voce e humana", "voce e uma pessoa", "e um robo", "voce e a priscila", "lupi", "inteligencia artificial", "voce e uma ia"],
-      "answer": "Eu sou a Lupi, assistente virtual da ContLup. 💜 Não sou uma pessoa e não sou a Priscila: sou uma assistente com respostas automáticas. Para a análise do seu caso, quem atende é a Priscila.",
-      "content": "A Lupi é a personagem da ContLup que explica contabilidade sem complicação. No site, é uma assistente virtual automática (fluxos e, quando disponível, IA). Não é humana e não é a Priscila.",
-      "related": ["inst-priscila", "inst-privacidade"],
+      "examples": [
+        "Quem é você?",
+        "você é um robô?",
+        "você é a Priscila?",
+        "você é uma inteligência artificial?"
+      ],
+      "keywords": [
+        "quem e voce",
+        "quem e a lupi",
+        "voce e robo",
+        "voce e um robo",
+        "voce e humana",
+        "voce e uma pessoa",
+        "voce e a priscila",
+        "lupi",
+        "inteligencia artificial",
+        "voce e uma ia",
+        "chatbot",
+        "voce entende tudo"
+      ],
+      "answer": "Eu sou a Lupi, assistente virtual da ContLup. 💜 Não sou uma pessoa e não sou a Priscila: funciono com um repertório de respostas e atendimentos guiados preparados pela ContLup. Quando uma pergunta sai desse repertório, eu digo isso com sinceridade e te encaminho para a equipe.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "inst-privacidade",
+          "label": "Privacidade"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Falar com a ContLup",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de conversar com a equipe."
+        }
+      ],
       "expression": "success",
-      "source": "index.html (seção A Lupi explica) e regras do projeto",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (A Lupi explica) e regras do projeto",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "inst-privacidade",
-      "category": "institucional",
+      "category": "contlup",
       "title": "Privacidade nesta conversa",
-      "keywords": ["privacidade", "meus dados", "dados pessoais", "lgpd", "seguro", "seguranca", "cookies", "armazena", "guarda a conversa", "salva a conversa"],
+      "examples": [
+        "Vocês guardam meus dados?",
+        "a conversa fica salva?",
+        "é seguro conversar aqui?"
+      ],
+      "keywords": [
+        "privacidade",
+        "meus dados",
+        "dados pessoais",
+        "lgpd",
+        "e seguro",
+        "seguranca dos dados",
+        "cookies",
+        "armazena",
+        "guarda a conversa",
+        "salva a conversa",
+        "conversa fica salva",
+        "guardam meus dados"
+      ],
       "answer": "Esta conversa fica guardada só nesta aba do seu navegador e some quando você fecha a aba ou toca em reiniciar. O site não usa cookies de rastreamento. Mesmo assim, **não compartilhe CPF, senhas ou documentos** por aqui. Veja a [política de privacidade](#privacidade).",
-      "content": "Histórico do chat fica no sessionStorage do navegador. O site não usa cookies de rastreamento. Perguntas abertas podem ser processadas por um provedor de IA. Não pedir dados pessoais.",
-      "related": ["inst-lupi"],
+      "actions": [],
       "expression": "idle",
-      "source": "index.html (Política de privacidade) e funcionamento do chat",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "Política de privacidade do site",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "atd-proposta",
+      "category": "contlup",
+      "title": "Como solicitar uma proposta",
+      "examples": [
+        "Como peço uma proposta?",
+        "quero um orçamento",
+        "como solicitar proposta"
+      ],
+      "keywords": [
+        "solicitar proposta",
+        "pedir proposta",
+        "como peco uma proposta",
+        "como pedir uma proposta",
+        "quero uma proposta",
+        "quero um orcamento",
+        "pedir orcamento",
+        "fazer orcamento",
+        "solicitar orcamento",
+        "mandar proposta"
+      ],
+      "group": "proposta",
+      "answer": "Você pode pedir uma proposta de dois jeitos:\n- pelo **formulário de proposta** aqui no site, que monta a mensagem para o WhatsApp;\n- ou respondendo algumas perguntas rápidas comigo.\n\nA proposta é montada depois de uma conversa inicial, com escopo e valor definidos para o seu caso.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "proposta",
+          "label": "Responder perguntas rápidas"
+        },
+        {
+          "type": "link",
+          "href": "#proposta",
+          "label": "Ir para o formulário"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Pedir pelo WhatsApp",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Contato · formulário)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "atd-primeira-conversa",
+      "category": "contlup",
+      "title": "Como é a primeira conversa",
+      "examples": [
+        "O que preciso para a primeira conversa?",
+        "como funciona o primeiro contato",
+        "preciso levar documentos?"
+      ],
+      "keywords": [
+        "primeira conversa",
+        "primeira reuniao",
+        "primeiro contato",
+        "o que preciso para comecar",
+        "o que preciso levar",
+        "preciso levar documentos",
+        "como comecar com voces"
+      ],
+      "answer": "Para a primeira conversa você não precisa de nada além de contar como está o seu negócio. Se já tem empresa, ter em mãos o CNPJ e uma ideia do faturamento mensal ajuda a montar a proposta (mas não precisa enviar nada por aqui).\n\nO caminho é assim:\n- **Primeira conversa**, sem compromisso\n- **Proposta sob medida**, conforme porte, regime e rotina\n- **Começo organizado**, com a transição e os primeiros ajustes",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "primeiro_atendimento",
+          "label": "Primeiro atendimento"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Falar com a ContLup",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de conversar com a equipe."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (antigo FAQ e Como funciona)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "atd-contratacao",
+      "category": "contlup",
+      "title": "Como contratar a ContLup",
+      "examples": [
+        "Como contrato a ContLup?",
+        "como funciona a contratação",
+        "quero contratar vocês"
+      ],
+      "keywords": [
+        "como contratar",
+        "como contrato",
+        "contratar a contlup",
+        "contratar voces",
+        "quero contratar",
+        "como funciona a contratacao",
+        "contratacao",
+        "fechar contrato"
+      ],
+      "answer": "A contratação segue três passos:\n- **Primeira conversa**, para entender a empresa e o que você precisa;\n- **Proposta sob medida**, com escopo e valor definidos;\n- **Começo organizado**, com a transição e os primeiros ajustes.\n\nDocumentos e dados da empresa são combinados diretamente com a equipe, nunca por aqui.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "encontrar_plano",
+          "label": "Encontrar um plano"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero contratar",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de contratar os serviços."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Como funciona)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "com-preco",
+      "category": "contlup",
+      "title": "Quanto custa",
+      "examples": [
+        "Quanto custa a contabilidade?",
+        "qual o valor da mensalidade?",
+        "quanto vocês cobram"
+      ],
+      "keywords": [
+        "quanto custa",
+        "preco",
+        "precos",
+        "custo da contabilidade",
+        "valor",
+        "valores",
+        "mensalidade",
+        "honorario",
+        "honorarios",
+        "cobram",
+        "quanto voces cobram",
+        "tabela de precos",
+        "quanto sai",
+        "qual o preco",
+        "qual o valor"
+      ],
+      "group": "proposta",
+      "priority": true,
+      "answer": "O valor depende do porte da empresa, do regime tributário, do número de funcionários e do volume de movimento. Depois de uma conversa inicial, a ContLup envia uma proposta com escopo e valor definidos. Isso vale também para os planos Lup MEI, Start, Plus e Prime.\n\nPor isso eu não informo preços por aqui: as dúvidas comerciais são respondidas pelo WhatsApp comercial, (19) 97131-0182.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Pedir informações comerciais",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de informações sobre valores."
+        },
+        {
+          "type": "flow",
+          "id": "encontrar_plano",
+          "label": "Encontrar um plano"
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (antigo FAQ: Quanto custa?)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "com-condicoes",
+      "category": "contlup",
+      "title": "Descontos, prazos e condições",
+      "examples": [
+        "Vocês dão desconto?",
+        "dá para parcelar?",
+        "tem fidelidade?"
+      ],
+      "keywords": [
+        "desconto",
+        "descontos",
+        "promocao",
+        "parcelar",
+        "parcelamento da mensalidade",
+        "forma de pagamento",
+        "formas de pagamento",
+        "pix",
+        "fidelidade",
+        "multa de cancelamento",
+        "contrato minimo",
+        "teste gratis",
+        "gratis",
+        "primeiro mes gratis",
+        "prazo de entrega"
+      ],
+      "priority": true,
+      "answer": "Condições comerciais como descontos, formas de pagamento, fidelidade e prazos não estão publicadas, e eu não quero te passar nada incorreto. Isso é combinado na proposta, pelo WhatsApp comercial.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Perguntar no WhatsApp",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de saber sobre as condições comerciais."
+        }
+      ],
+      "expression": "idle",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "Nenhuma condição comercial publicada",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "aconselhamento",
+      "category": "contlup",
+      "title": "Orientação para o seu caso",
+      "examples": [
+        "Qual regime devo escolher para a minha empresa?",
+        "quanto vou pagar de imposto?",
+        "no meu caso vale a pena abrir empresa?",
+        "como pago menos imposto?"
+      ],
+      "keywords": [
+        "qual regime devo",
+        "qual regime eu devo",
+        "qual o melhor regime para mim",
+        "qual o melhor regime para minha",
+        "melhor regime para minha empresa",
+        "quanto vou pagar",
+        "quanto eu vou pagar",
+        "quanto pago de imposto",
+        "quanto eu pago",
+        "vale a pena abrir",
+        "vale a pena eu",
+        "devo abrir",
+        "devo mudar",
+        "devo trocar",
+        "no meu caso",
+        "meu caso",
+        "minha situacao",
+        "pagar menos imposto",
+        "como pago menos",
+        "reduzir imposto",
+        "diminuir imposto",
+        "me diga se",
+        "analisa minha"
+      ],
+      "priority": true,
+      "answer": "Essa é uma decisão que depende dos dados da sua empresa (atividade, faturamento, despesas, folha e planos), então eu não consigo dar uma orientação individual por aqui sem correr o risco de errar.\n\nO que eu posso fazer é explicar os conceitos gerais e te colocar em contato com a equipe da ContLup, que analisa o seu caso com segurança.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Falar com a ContLup",
+          "message": "Olá! Vim pelo site da ContLup e gostaria de uma orientação para o meu caso."
+        },
+        {
+          "type": "intent",
+          "id": "reg-diferencas",
+          "label": "Entender os regimes"
+        }
+      ],
+      "expression": "thinking",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "serv-areas",
       "category": "servicos",
-      "title": "Áreas de atuação",
+      "title": "Serviços da ContLup",
+      "examples": [
+        "Quais serviços vocês oferecem?",
+        "o que a ContLup faz?",
+        "quais são as áreas de atuação"
+      ],
+      "keywords": [
+        "servicos",
+        "servico",
+        "o que voces fazem",
+        "o que a contlup faz",
+        "areas de atuacao",
+        "area de atuacao",
+        "trabalham com",
+        "quais servicos",
+        "servicos da contlup"
+      ],
+      "group": "servicos",
       "flow": "servicos",
-      "keywords": ["servicos", "servico", "o que voces fazem", "o que a contlup faz", "areas", "area de atuacao", "areas de atuacao", "trabalham com"],
-      "answer": "A ContLup atua em quatro áreas:\n- **Contábil**: escrituração, balanço, DRE e relatórios gerenciais.\n- **Fiscal e Tributário**: impostos, obrigações acessórias e regime tributário.\n- **Trabalhista**: folha, pró-labore, admissões, férias e rescisões.\n- **Societário**: abertura, alterações contratuais e encerramento.\n\nE há um serviço novo: **BPO Financeiro**, de apoio à organização e ao acompanhamento das rotinas financeiras da empresa.",
-      "content": "Quatro áreas de atuação: Contábil; Fiscal e Tributário; Trabalhista; Societário. Serviço novo: BPO Financeiro.",
-      "related": ["serv-contabil", "serv-fiscal", "serv-trabalhista", "serv-societario", "serv-bpo"],
+      "answer": "A ContLup tem cinco serviços:\n- **Contábil**: escrituração, balanço, DRE e relatórios gerenciais.\n- **Fiscal e Tributário**: impostos, obrigações acessórias e regime tributário.\n- **Trabalhista**: folha, pró-labore, admissões, férias e rescisões.\n- **Societário**: abertura, alterações contratuais e encerramento.\n- **BPO Financeiro**: apoio à organização e ao acompanhamento das rotinas financeiras da empresa.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "servicos",
+          "label": "Ver um serviço em detalhe"
+        },
+        {
+          "type": "intent",
+          "id": "planos",
+          "label": "Ver os planos"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (seção Serviços)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Serviços)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "serv-contabil",
       "category": "servicos",
-      "title": "Área contábil",
-      "keywords": ["contabil", "area contabil", "escrituracao", "balanco", "balanco patrimonial", "dre", "demonstracao de resultado", "relatorio gerencial", "relatorios gerenciais", "conciliacao", "conciliacoes"],
-      "answer": "Na área **Contábil**, a ContLup cuida de:\n- Escrituração contábil\n- Balanço patrimonial e DRE\n- Conciliações e relatórios gerenciais\n- Análise de resultados\n\nSão registros e demonstrações organizados para você enxergar a situação real da empresa e acompanhar a evolução do negócio.",
-      "content": "Contábil: escrituração contábil; balanço patrimonial e DRE; conciliações e relatórios gerenciais; análise de resultados.",
-      "related": ["serv-fiscal", "com-preco"],
+      "title": "Serviço contábil",
+      "examples": [
+        "O que inclui a área contábil?",
+        "vocês fazem balanço?",
+        "serviço de contabilidade"
+      ],
+      "keywords": [
+        "area contabil",
+        "servico contabil",
+        "servico de contabilidade",
+        "contabil",
+        "escrituracao contabil",
+        "conciliacoes",
+        "relatorios gerenciais",
+        "voces fazem balanco"
+      ],
+      "answer": "Na área **Contábil**, a ContLup cuida de:\n- Escrituração contábil\n- Balanço patrimonial e DRE\n- Conciliações e relatórios gerenciais\n- Análise de resultados\n\nSão registros organizados para você enxergar a situação real da empresa e acompanhar a evolução do negócio.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Gostaria de saber mais sobre o serviço contábil da ContLup."
+        },
+        {
+          "type": "intent",
+          "id": "serv-fiscal",
+          "label": "Fiscal e Tributário"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (card Contábil)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (card Contábil)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "serv-fiscal",
       "category": "servicos",
-      "title": "Área fiscal e tributária",
-      "keywords": ["fiscal", "tributario", "tributaria", "area fiscal", "fiscal e tributario", "obrigacoes acessorias", "apuracao de impostos", "emissao de guias", "guias de imposto"],
-      "answer": "Na área **Fiscal e Tributária**, a ContLup cuida de:\n- Apuração de impostos e emissão de guias\n- Obrigações acessórias\n- Escolha e revisão do regime tributário\n- Orientação sobre emissão de notas fiscais\n\nObrigações em dia e um olhar atento para os tributos que pesam no seu negócio.",
-      "content": "Fiscal e Tributário: apuração de impostos e emissão de guias; obrigações acessórias; escolha e revisão do regime tributário; orientação sobre emissão de notas fiscais.",
-      "related": ["serv-contabil", "com-preco"],
+      "title": "Serviço fiscal e tributário",
+      "examples": [
+        "O que é o serviço fiscal?",
+        "vocês cuidam dos impostos?",
+        "área fiscal e tributária"
+      ],
+      "keywords": [
+        "area fiscal",
+        "fiscal e tributario",
+        "servico fiscal",
+        "fiscal",
+        "tributario",
+        "cuidam dos impostos",
+        "apuracao de impostos",
+        "obrigacoes acessorias",
+        "emissao de guias",
+        "parte fiscal",
+        "fazem a parte fiscal",
+        "cuidam da parte fiscal"
+      ],
+      "answer": "Na área **Fiscal e Tributária**, a ContLup cuida de:\n- Apuração de impostos e emissão de guias\n- Obrigações acessórias\n- Escolha e revisão do regime tributário\n- Orientação sobre emissão de notas fiscais",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Gostaria de saber mais sobre o serviço fiscal e tributário da ContLup."
+        },
+        {
+          "type": "intent",
+          "id": "reg-diferencas",
+          "label": "Regimes tributários"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (card Fiscal & Tributário)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (card Fiscal)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "serv-trabalhista",
       "category": "servicos",
-      "title": "Área trabalhista",
-      "keywords": ["trabalhista", "area trabalhista", "folha", "folha de pagamento", "pro labore", "prolabore", "admissao", "admissoes", "ferias", "rescisao", "rescisoes", "esocial", "fgts", "departamento pessoal", "funcionario", "funcionarios"],
-      "answer": "Na área **Trabalhista**, a ContLup cuida de:\n- Folha de pagamento e pró-labore\n- Admissões, férias e rescisões\n- eSocial, FGTS e encargos\n- Orientação nas rotinas da equipe\n\nTudo acompanhado com cuidado para que as obrigações do período estejam em ordem sem tomar o seu tempo.",
-      "content": "Trabalhista: folha de pagamento e pró-labore; admissões, férias e rescisões; eSocial, FGTS e encargos; orientação nas rotinas da equipe.",
-      "related": ["serv-societario", "com-preco"],
+      "title": "Serviço trabalhista",
+      "examples": [
+        "Vocês fazem folha de pagamento?",
+        "serviço trabalhista",
+        "cuidam de admissão e férias?"
+      ],
+      "keywords": [
+        "area trabalhista",
+        "servico trabalhista",
+        "trabalhista",
+        "voces fazem folha",
+        "fazem folha de pagamento",
+        "admissoes",
+        "admissao",
+        "ferias",
+        "rescisao",
+        "rescisoes",
+        "esocial",
+        "fgts",
+        "departamento pessoal",
+        "cuidam da folha",
+        "cuidam da folha de pagamento",
+        "fazem a folha",
+        "fazem a folha de pagamento",
+        "voces fazem a folha"
+      ],
+      "answer": "Na área **Trabalhista**, a ContLup cuida de:\n- Folha de pagamento e pró-labore\n- Admissões, férias e rescisões\n- eSocial, FGTS e encargos\n- Orientação nas rotinas da equipe",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Gostaria de saber mais sobre o serviço trabalhista da ContLup."
+        },
+        {
+          "type": "intent",
+          "id": "rot-folha",
+          "label": "O que é folha de pagamento"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (card Trabalhista)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (card Trabalhista)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "serv-societario",
       "category": "servicos",
-      "title": "Área societária",
-      "keywords": ["societario", "societaria", "area societaria", "contrato social", "alteracao contratual", "alteracoes contratuais", "incluir socio", "sair da sociedade", "baixa de empresa", "encerrar empresa", "encerramento", "fechar empresa", "fechar a empresa", "fechar cnpj", "dar baixa"],
-      "answer": "Na área **Societária**, a ContLup apoia em:\n- Abertura de empresas\n- Alterações contratuais\n- Baixa e encerramento\n- Formalização e desenquadramento de MEI\n\nÉ o cuidado com a estrutura, a formalização e as mudanças da empresa ao longo do tempo.",
-      "content": "Societário: abertura de empresas; alterações contratuais; baixa e encerramento; formalização e desenquadramento de MEI.",
-      "related": ["emp-abrir", "mei-atende"],
+      "title": "Serviço societário",
+      "examples": [
+        "O que é o serviço societário?",
+        "vocês fazem alteração contratual?",
+        "cuidam da abertura e do encerramento?"
+      ],
+      "keywords": [
+        "area societaria",
+        "servico societario",
+        "societario",
+        "societaria",
+        "contrato social",
+        "alteracao contratual",
+        "alteracoes contratuais",
+        "incluir socio",
+        "sair da sociedade"
+      ],
+      "answer": "Na área **Societária**, a ContLup apoia em:\n- Abertura de empresas\n- Alterações contratuais\n- Baixa e encerramento\n- Formalização e desenquadramento de MEI",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Gostaria de saber mais sobre o serviço societário da ContLup."
+        },
+        {
+          "type": "intent",
+          "id": "emp-abertura",
+          "label": "Abrir empresa"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (card Societário)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (card Societário)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "emp-abrir",
-      "category": "empreendedorismo",
-      "title": "Abertura de empresa",
-      "flow": "abrir_empresa",
-      "keywords": ["abrir empresa", "abrir minha empresa", "abrir uma empresa", "abertura de empresa", "abrir cnpj", "tirar cnpj", "formalizar", "formalizacao", "montar empresa", "comecar um negocio"],
-      "answer": "A ContLup orienta na escolha do tipo de empresa e do regime tributário e cuida da abertura e dos registros necessários, do primeiro passo ao CNPJ.",
-      "content": "Abertura de empresa: orientação na escolha do tipo de empresa e do regime tributário; a ContLup cuida da abertura e dos registros necessários.",
-      "related": ["emp-primeira-conversa", "com-preco"],
+      "id": "serv-bpo",
+      "category": "servicos",
+      "title": "BPO Financeiro",
+      "examples": [
+        "Vocês fazem BPO financeiro?",
+        "o que é o BPO da ContLup?",
+        "terceirização financeira"
+      ],
+      "keywords": [
+        "bpo",
+        "bpo financeiro",
+        "fazem bpo",
+        "terceirizacao financeira",
+        "financeiro terceirizado",
+        "rotinas financeiras",
+        "rotina financeira"
+      ],
+      "priority": true,
+      "answer": "O **BPO Financeiro** é um serviço novo da ContLup: apoio à organização e ao acompanhamento das rotinas financeiras da sua empresa.\n\nOs detalhes do que está incluído ainda vão ser publicados, então eu não consigo listar atividades específicas por aqui.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Tenho interesse no BPO Financeiro da ContLup."
+        },
+        {
+          "type": "intent",
+          "id": "duv-organizar-financas",
+          "label": "Organizar as finanças"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (FAQ e Como podemos começar)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
+        "source": "Briefing de 23/10/2026 (descrição provisória)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "emp-troca",
-      "category": "empreendedorismo",
-      "title": "Troca de contador",
-      "flow": "troca_contador",
-      "keywords": ["trocar de contador", "troca de contador", "mudar de contador", "mudar de contabilidade", "trocar de contabilidade", "trocar contador", "novo contador", "transicao contabil", "contador atual", "escritorio anterior"],
-      "answer": "Depois que você decide, a ContLup organiza a transição com o escritório anterior, recebe os documentos e confere o que está em andamento, para que nenhuma obrigação fique para trás.",
-      "content": "Troca de contador: a ContLup organiza a transição com o escritório anterior, recebe os documentos e confere o que está em andamento para que nenhuma obrigação fique para trás.",
-      "related": ["emp-primeira-conversa", "com-preco"],
+      "id": "planos",
+      "category": "planos",
+      "title": "Planos ContLup",
+      "examples": [
+        "Quais são os planos?",
+        "quero conhecer os planos",
+        "planos da ContLup"
+      ],
+      "keywords": [
+        "planos",
+        "quais os planos",
+        "quais planos",
+        "quais sao os planos",
+        "planos da contlup",
+        "planos contlup",
+        "tipos de plano",
+        "conhecer os planos",
+        "ver os planos"
+      ],
+      "group": "planos",
+      "flow": "planos",
+      "priority": true,
+      "answer": "A ContLup tem quatro planos:\n- **Lup MEI**: simples e sem complicação, para Microempreendedores Individuais.\n- **Lup Start**: organização e segurança, para empresas do Simples Nacional.\n- **Lup Plus**: mais controle para crescer, para empresas do Simples Nacional e Lucro Presumido.\n- **Lup Prime**: estratégia para ir além, para empresas do Lucro Presumido e Lucro Real.\n\nOs valores são definidos em proposta.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "encontrar_plano",
+          "label": "Encontrar um plano"
+        },
+        {
+          "type": "intent",
+          "id": "planos-diferencas",
+          "label": "Diferenças entre os planos"
+        },
+        {
+          "type": "link",
+          "href": "#planos",
+          "label": "Ver os planos no site"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (FAQ: Como funciona a troca de contador?)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
+        "source": "Briefing de 23/10/2026",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "emp-primeira-conversa",
-      "category": "atendimento",
-      "title": "Como começar / primeira conversa",
-      "keywords": ["primeira conversa", "primeira reuniao", "o que preciso", "como comecar", "como contratar", "contratar a contlup", "documentos para comecar", "como funciona para comecar"],
-      "answer": "Para a primeira conversa você não precisa de nada além de contar como está o seu negócio. Se já tem empresa, ter em mãos o CNPJ e uma ideia do faturamento mensal ajuda a montar a proposta (mas não precisa mandar nada por aqui).\n\nO caminho é assim:\n- **Primeira conversa**, sem compromisso\n- **Proposta sob medida**, conforme porte, regime e rotina\n- **Começo organizado**, com a transição e os primeiros ajustes",
-      "content": "Primeira conversa: basta contar como está o negócio; se já tem empresa, ter em mãos o CNPJ e uma ideia do faturamento mensal ajuda. Etapas: primeira conversa sem compromisso; proposta sob medida; começo organizado com transição e ajustes.",
-      "related": ["com-preco", "inst-contato"],
+      "id": "plano-lup-mei",
+      "category": "planos",
+      "title": "Lup MEI",
+      "examples": [
+        "O que tem no Lup MEI?",
+        "plano para MEI",
+        "me fala do Lup MEI"
+      ],
+      "keywords": [
+        "lup mei",
+        "plano mei",
+        "plano lup mei",
+        "plano para mei",
+        "plano do mei"
+      ],
+      "group": "planos",
+      "priority": true,
+      "answer": "**Lup MEI**: simples e sem complicação. Para Microempreendedores Individuais.\n\n- Orientação para abertura e regularização do MEI\n- Emissão e controle do DAS\n- Declaração Anual do MEI (DASN-SIMEI)\n- Orientações sobre notas fiscais\n- Acompanhamento de pendências e obrigações\n- Atendimento por WhatsApp e e-mail\n- Portal para documentos e guias\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Gostaria de saber mais sobre o plano Lup MEI."
+        },
+        {
+          "type": "intent",
+          "id": "planos-diferencas",
+          "label": "Comparar os planos"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (FAQ e Como funciona)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
+        "source": "Briefing de 23/10/2026",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "plano-lup-start",
+      "category": "planos",
+      "title": "Lup Start",
+      "examples": [
+        "O que inclui o Lup Start?",
+        "me fala do plano Start"
+      ],
+      "keywords": [
+        "lup start",
+        "plano start",
+        "plano lup start"
+      ],
+      "group": "planos",
+      "priority": true,
+      "answer": "**Lup Start**: organização e segurança. Para empresas do Simples Nacional.\n\n- Contabilidade e escrituração fiscal\n- Apuração de impostos e obrigações acessórias\n- Folha de pagamento, pró-labore e encargos\n- Demonstrações contábeis obrigatórias\n- Orientações contábeis, fiscais e trabalhistas\n- Atendimento por WhatsApp e e-mail\n- Portal para documentos e guias\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Gostaria de saber mais sobre o plano Lup Start."
+        },
+        {
+          "type": "intent",
+          "id": "planos-diferencas",
+          "label": "Comparar os planos"
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
+        "source": "Briefing de 23/10/2026",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "plano-lup-plus",
+      "category": "planos",
+      "title": "Lup Plus",
+      "examples": [
+        "O que inclui o Lup Plus?",
+        "me explica o plano Plus"
+      ],
+      "keywords": [
+        "lup plus",
+        "plano plus",
+        "plano lup plus"
+      ],
+      "group": "planos",
+      "priority": true,
+      "answer": "**Lup Plus**: mais controle para crescer. Para empresas do Simples Nacional e Lucro Presumido.\n\nInclui todos os benefícios do **Lup Start**, além de:\n- Balancete e DRE trimestrais\n- Balanço Patrimonial anual\n- Análise dos resultados contábeis e orientações\n- Reuniões trimestrais de acompanhamento\n- Orientações sobre distribuição de lucros\n- Suporte sobre impactos da reforma tributária\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Gostaria de saber mais sobre o plano Lup Plus."
+        },
+        {
+          "type": "intent",
+          "id": "planos-diferencas",
+          "label": "Comparar os planos"
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
+        "source": "Briefing de 23/10/2026",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "plano-lup-prime",
+      "category": "planos",
+      "title": "Lup Prime",
+      "examples": [
+        "O que inclui o Lup Prime?",
+        "como é o plano Prime"
+      ],
+      "keywords": [
+        "lup prime",
+        "plano prime",
+        "plano lup prime"
+      ],
+      "group": "planos",
+      "priority": true,
+      "answer": "**Lup Prime**: estratégia para ir além. Para empresas do Lucro Presumido e Lucro Real.\n\nInclui todos os benefícios do **Lup Plus**, com estas condições:\n- Balancete e DRE mensais\n- Balanço Patrimonial anual\n- Análise dos resultados com orientação contínua\n- Reuniões mensais de acompanhamento\n- Orientação tributária personalizada\n- Acompanhamento da reforma tributária\n- Suporte estratégico e atendimento prioritário\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Tenho interesse",
+          "message": "Olá! Gostaria de saber mais sobre o plano Lup Prime."
+        },
+        {
+          "type": "intent",
+          "id": "planos-diferencas",
+          "label": "Comparar os planos"
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
+        "source": "Briefing de 23/10/2026",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "planos-diferencas",
+      "category": "planos",
+      "title": "Diferenças entre os planos",
+      "examples": [
+        "Qual a diferença entre os planos?",
+        "compara os planos pra mim",
+        "diferença entre Start e Plus"
+      ],
+      "keywords": [
+        "diferenca entre os planos",
+        "diferenca dos planos",
+        "diferenca entre planos",
+        "comparar planos",
+        "compara os planos",
+        "comparacao dos planos",
+        "comparativo dos planos"
+      ],
+      "group": "planos",
+      "priority": true,
+      "answer": "Em resumo:\n- **Lup MEI** é só para MEI: DAS, declaração anual, notas fiscais e pendências.\n- **Lup Start** é a base para empresas do Simples Nacional: contabilidade, impostos, folha e demonstrações obrigatórias.\n- **Lup Plus** traz tudo do Start e acrescenta balancete e DRE **trimestrais**, Balanço Patrimonial anual, análise dos resultados, reuniões **trimestrais**, orientação sobre distribuição de lucros e suporte sobre a reforma tributária. Atende Simples Nacional e Lucro Presumido.\n- **Lup Prime** traz tudo do Plus, mas com balancete e DRE **mensais**, reuniões **mensais**, orientação tributária personalizada, acompanhamento da reforma tributária, suporte estratégico e atendimento prioritário. Atende Lucro Presumido e Lucro Real.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "encontrar_plano",
+          "label": "Qual combina comigo?"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Falar sobre os planos",
+          "message": "Olá! Gostaria de saber mais sobre os planos da ContLup."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
+        "source": "Briefing de 23/10/2026",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "planos-qual-escolher",
+      "category": "planos",
+      "title": "Qual plano combina comigo",
+      "examples": [
+        "Qual plano combina comigo?",
+        "me ajuda a escolher um plano",
+        "qual plano é melhor para mim?"
+      ],
+      "keywords": [
+        "qual plano combina comigo",
+        "qual plano combina",
+        "qual plano escolher",
+        "qual plano e melhor",
+        "qual plano e melhor para mim",
+        "me ajuda a escolher um plano",
+        "escolher um plano",
+        "plano ideal",
+        "qual plano",
+        "encontrar um plano",
+        "qual o melhor plano"
+      ],
+      "group": "planos",
+      "flow": "encontrar_plano",
+      "priority": true,
+      "answer": "Vou te fazer algumas perguntas rápidas para indicar os planos que podem combinar com você.",
+      "actions": [],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)",
+        "source": "Briefing de 23/10/2026 (públicos dos planos)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-o-que-e",
+      "category": "mei",
+      "title": "O que é MEI",
+      "examples": [
+        "O que é MEI?",
+        "o que significa MEI",
+        "o que é microempreendedor individual"
+      ],
+      "keywords": [
+        "o que e mei",
+        "o que significa mei",
+        "o que e o mei",
+        "o que e microempreendedor",
+        "mei e o que",
+        "como funciona o mei"
+      ],
+      "answer": "MEI é a sigla de **Microempreendedor Individual**: um jeito simplificado de formalizar um pequeno negócio, com CNPJ, emissão de notas e uma guia mensal de tributos em valor fixo (o DAS).\n\nExistem regras sobre atividades permitidas, faturamento e contratação, que podem mudar com o tempo. Por isso, antes de decidir, vale conferir se o seu caso se encaixa.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-abrir",
+          "label": "Como abrir um MEI"
+        },
+        {
+          "type": "intent",
+          "id": "mei-das",
+          "label": "O que é o DAS"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-mei",
+          "label": "Plano Lup MEI"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-abrir",
+      "category": "mei",
+      "title": "Como abrir um MEI",
+      "examples": [
+        "Como abrir um MEI?",
+        "quero virar MEI",
+        "como faço para ser MEI",
+        "como formalizar meu MEI"
+      ],
+      "keywords": [
+        "abrir mei",
+        "abrir um mei",
+        "abrir meu mei",
+        "abertura de mei",
+        "abertura do mei",
+        "formalizar mei",
+        "formalizar meu mei",
+        "virar mei",
+        "me tornar mei",
+        "ser mei",
+        "quero ser mei",
+        "criar mei",
+        "fazer mei",
+        "tirar mei",
+        "cadastrar mei",
+        "abro mei",
+        "abro um mei",
+        "formalizar como mei",
+        "formalizar meu negocio como mei",
+        "me formalizar como mei"
+      ],
+      "exclude": [
+        "baixa",
+        "encerrar",
+        "fechar",
+        "cancelar"
+      ],
+      "answer": "A formalização do MEI é feita **online, pelos canais oficiais do governo** (Portal do Empreendedor, no gov.br), e o cadastro em si é gratuito.\n\nAntes de abrir, vale conferir se a sua atividade é permitida para MEI e se o modelo combina com os seus planos de faturamento. A ContLup orienta nessa decisão e na regularização, e o plano **Lup MEI** inclui essa orientação.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-o-que-e",
+          "label": "O que é MEI"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-mei",
+          "label": "Plano Lup MEI"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero abrir meu MEI",
+          "message": "Olá! Gostaria de orientação para abrir meu MEI."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-das",
+      "category": "mei",
+      "title": "DAS do MEI",
+      "examples": [
+        "Como pago o DAS?",
+        "o que é o DAS do MEI?",
+        "onde emito a guia do MEI",
+        "DAS"
+      ],
+      "keywords": [
+        "das",
+        "pagar das",
+        "pagar o das",
+        "pago o das",
+        "pago das",
+        "pagamento do das",
+        "guia das",
+        "guia do das",
+        "das do mei",
+        "das mei",
+        "boleto do mei",
+        "boleto das",
+        "guia do mei",
+        "imposto do mei",
+        "imposto mensal do mei",
+        "emitir das",
+        "emito o das",
+        "gerar das",
+        "valor do das",
+        "o que e o das",
+        "o que e das",
+        "emito a guia do mei"
+      ],
+      "exclude": [
+        "dasn simei"
+      ],
+      "answer": "O **DAS** é a guia mensal do MEI, que reúne em um único pagamento os tributos e a contribuição previdenciária do microempreendedor. O valor é fixo e definido pelas regras do MEI, e a guia é emitida pelos canais oficiais.\n\nEle é devido todo mês, mesmo nos meses sem faturamento. O plano **Lup MEI** inclui a emissão e o controle do DAS.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-pendencias",
+          "label": "DAS atrasado"
+        },
+        {
+          "type": "intent",
+          "id": "mei-dasn",
+          "label": "Declaração anual"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-mei",
+          "label": "Plano Lup MEI"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-dasn",
+      "category": "mei",
+      "title": "Declaração anual do MEI (DASN-SIMEI)",
+      "examples": [
+        "Como faço a declaração anual do MEI?",
+        "o que é DASN-SIMEI?",
+        "preciso declarar meu MEI?"
+      ],
+      "keywords": [
+        "dasn",
+        "dasn simei",
+        "declaracao anual do mei",
+        "declaracao anual",
+        "declarar mei",
+        "declarar o mei",
+        "declarar meu mei",
+        "declaracao do mei",
+        "declaracao de faturamento",
+        "entregar a declaracao do mei"
+      ],
+      "answer": "A **DASN-SIMEI** é a declaração anual do MEI: nela o microempreendedor informa o faturamento do ano anterior. Ela é obrigatória, inclusive para quem não faturou, e tem prazo definido pelas regras vigentes.\n\nO plano **Lup MEI** inclui a declaração anual.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-das",
+          "label": "O que é o DAS"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-mei",
+          "label": "Plano Lup MEI"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-notas",
+      "category": "mei",
+      "title": "Nota fiscal no MEI",
+      "examples": [
+        "MEI precisa emitir nota fiscal?",
+        "como o MEI emite nota?",
+        "nota fiscal do MEI"
+      ],
+      "keywords": [
+        "mei emitir nota fiscal",
+        "mei precisa emitir nota fiscal",
+        "nota fiscal do mei",
+        "nota fiscal mei",
+        "mei emite nota fiscal",
+        "emitir nota fiscal sendo mei",
+        "nota fiscal para mei",
+        "mei nota fiscal"
+      ],
+      "group": "notas",
+      "answer": "De forma geral, o MEI precisa emitir nota fiscal quando vende ou presta serviço para **outras empresas (CNPJ)**. Para pessoa física, as regras costumam ser diferentes. A forma de emitir depende da atividade (comércio ou serviço) e dos sistemas em vigor.\n\nComo as regras mudam e dependem da atividade, vale confirmar o seu caso. O plano **Lup MEI** inclui orientações sobre notas fiscais.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "duv-emitir-nota",
+          "label": "Quando emitir nota (geral)"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-mei",
+          "label": "Plano Lup MEI"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-pendencias",
+      "category": "mei",
+      "title": "Pendências e DAS atrasado no MEI",
+      "examples": [
+        "Estou com DAS atrasado, e agora?",
+        "como sei se meu MEI tem pendências?",
+        "MEI com débitos"
+      ],
+      "keywords": [
+        "das atrasado",
+        "das em atraso",
+        "das venceu",
+        "venceu o das",
+        "nao paguei o das",
+        "nao paguei das",
+        "esqueci de pagar o das",
+        "atrasei o das",
+        "pendencias do mei",
+        "pendencia no mei",
+        "mei com pendencia",
+        "mei com pendencias",
+        "debitos do mei",
+        "mei com debito",
+        "mei com debitos",
+        "meu mei tem pendencias",
+        "mei irregular",
+        "atrasar o das",
+        "atrasar das",
+        "atrasei o das do mei"
+      ],
+      "answer": "DAS em atraso gera **multa e juros** e pode deixar o MEI com pendências, o que atrapalha, por exemplo, a emissão de certidões. Em geral, é possível regularizar pagando os valores em aberto ou, em alguns casos, parcelando, conforme as regras vigentes.\n\nCada situação tem detalhes próprios. A ContLup acompanha pendências e obrigações no plano **Lup MEI**.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-regularizacao",
+          "label": "Como regularizar"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero regularizar meu MEI",
+          "message": "Olá! Gostaria de ajuda para regularizar meu MEI."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-regularizacao",
+      "category": "mei",
+      "title": "Regularizar o MEI",
+      "examples": [
+        "Como regularizar meu MEI?",
+        "meu MEI está irregular",
+        "regularização do MEI"
+      ],
+      "keywords": [
+        "regularizar mei",
+        "regularizar o mei",
+        "regularizar meu mei",
+        "regularizacao do mei",
+        "regularizacao de mei",
+        "mei irregular",
+        "colocar o mei em dia",
+        "deixar o mei em dia"
+      ],
+      "answer": "Regularizar o MEI normalmente envolve três frentes: **pagar os DAS em aberto** (à vista ou parcelado, quando permitido), **entregar as declarações anuais pendentes** e conferir se o cadastro está correto.\n\nA ordem e o que vale para você dependem da situação do CNPJ. A ContLup orienta na regularização, e isso faz parte do plano **Lup MEI**.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-pendencias",
+          "label": "DAS atrasado"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero regularizar meu MEI",
+          "message": "Olá! Gostaria de ajuda para regularizar meu MEI."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-baixa",
+      "category": "mei",
+      "title": "Dar baixa no MEI",
+      "examples": [
+        "Como dar baixa no MEI?",
+        "quero fechar meu MEI",
+        "como cancelar o MEI"
+      ],
+      "keywords": [
+        "baixa no mei",
+        "baixa do mei",
+        "baixa de mei",
+        "dar baixa no mei",
+        "dar baixa mei",
+        "dar baixa no meu mei",
+        "encerrar mei",
+        "encerrar o mei",
+        "encerrar meu mei",
+        "fechar mei",
+        "fechar o mei",
+        "fechar meu mei",
+        "cancelar mei",
+        "cancelar o mei",
+        "cancelar meu mei",
+        "baixar mei",
+        "baixar o mei",
+        "extinguir mei",
+        "cancelar meu cnpj de mei",
+        "cancelar o cnpj do mei",
+        "cancelar cnpj mei",
+        "fechar meu cnpj de mei"
+      ],
+      "exclude": [
+        "abrir"
+      ],
+      "answer": "A baixa do MEI é feita pelos **canais oficiais** e, em geral, envolve também entregar a declaração de encerramento.\n\nUm ponto importante: dar baixa **não apaga débitos**. Os valores em aberto continuam existindo e passam a ficar vinculados ao titular. Por isso, vale conferir as pendências antes. A ContLup apoia na baixa e no encerramento.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-pendencias",
+          "label": "Pendências"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero dar baixa no MEI",
+          "message": "Olá! Gostaria de ajuda para dar baixa no meu MEI."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-empregado",
+      "category": "mei",
+      "title": "MEI pode contratar empregado?",
+      "examples": [
+        "MEI pode ter funcionário?",
+        "posso contratar alguém sendo MEI?",
+        "MEI pode registrar empregado?"
+      ],
+      "keywords": [
+        "mei pode ter funcionario",
+        "mei pode contratar",
+        "mei contratar funcionario",
+        "contratar funcionario sendo mei",
+        "contratar alguem sendo mei",
+        "funcionario no mei",
+        "funcionario do mei",
+        "mei pode registrar",
+        "mei com funcionario",
+        "mei ter empregado"
+      ],
+      "answer": "Pelas regras gerais do MEI, é permitido ter **um empregado**, com limite de remuneração definido nas regras vigentes. Contratar envolve registro, encargos e obrigações trabalhistas.\n\nComo os limites e as condições podem mudar, confirme antes de contratar. A ContLup pode orientar nesse passo.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-encargos",
+          "label": "Encargos trabalhistas"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero contratar sendo MEI",
+          "message": "Olá! Sou MEI e gostaria de orientação para contratar um funcionário."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-desenquadramento",
+      "category": "mei",
+      "title": "Desenquadramento do MEI",
+      "examples": [
+        "O que é desenquadramento do MEI?",
+        "quando preciso sair do MEI?",
+        "como deixar de ser MEI"
+      ],
+      "keywords": [
+        "desenquadramento",
+        "desenquadrar",
+        "desenquadrar do mei",
+        "sair do mei",
+        "deixar de ser mei",
+        "virar me",
+        "passar para me",
+        "mudar de porte",
+        "crescer de porte",
+        "mei para me",
+        "mudar de mei para",
+        "estourei o limite",
+        "estourei o limite do mei",
+        "ultrapassei o limite",
+        "faturei mais que o limite"
+      ],
+      "answer": "Desenquadramento é a saída do MEI para outro tipo de empresa. Pode acontecer por opção ou por obrigação, por exemplo ao ultrapassar o limite de faturamento, ao exercer uma atividade não permitida ou ao mudar a estrutura do negócio.\n\nOs efeitos (impostos, data de início, obrigações) dependem do motivo e do momento, então esse passo pede análise profissional. A ContLup apoia na formalização e no desenquadramento do MEI.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-limite",
+          "label": "Limite de faturamento"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-start",
+          "label": "Plano Lup Start"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero sair do MEI",
+          "message": "Olá! Sou MEI e gostaria de orientação sobre o desenquadramento."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-limite",
+      "category": "mei",
+      "title": "Limite de faturamento do MEI",
+      "examples": [
+        "Qual o limite de faturamento do MEI?",
+        "passei do limite do MEI",
+        "estourei o faturamento do MEI"
+      ],
+      "keywords": [
+        "limite do mei",
+        "limite de faturamento",
+        "limite de faturamento do mei",
+        "faturamento do mei",
+        "passei do limite",
+        "ultrapassei o limite",
+        "estourei o limite",
+        "estourei o faturamento",
+        "quanto o mei pode faturar",
+        "teto do mei"
+      ],
+      "answer": "O MEI tem um **limite anual de faturamento** definido em lei. Ultrapassar esse limite traz consequências que variam conforme o quanto foi excedido e pode levar ao desenquadramento.\n\nComo o valor do limite e as regras podem mudar, eu prefiro não informar números por aqui. Confira a sua situação com a ContLup antes de tomar qualquer decisão.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-desenquadramento",
+          "label": "Desenquadramento"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Falar sobre o limite do MEI",
+          "message": "Olá! Sou MEI e gostaria de orientação sobre o limite de faturamento."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "mei-obrigacoes",
+      "category": "mei",
+      "title": "Obrigações do MEI",
+      "examples": [
+        "Quais são as obrigações do MEI?",
+        "o que o MEI precisa fazer todo mês?",
+        "obrigações mensais do MEI"
+      ],
+      "keywords": [
+        "obrigacoes do mei",
+        "obrigacao do mei",
+        "o que o mei precisa fazer",
+        "o que o mei precisa pagar",
+        "rotina do mei",
+        "obrigacoes mensais do mei",
+        "deveres do mei"
+      ],
+      "answer": "De forma geral, a rotina do MEI tem três pontos: **pagar o DAS** todo mês, **entregar a declaração anual** (DASN-SIMEI) e **emitir nota fiscal** quando a venda ou o serviço exigir. Também vale manter o cadastro atualizado e guardar as notas de compra.\n\nOs detalhes dependem da atividade e das regras vigentes. O plano **Lup MEI** acompanha essas obrigações.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "mei-das",
+          "label": "DAS"
+        },
+        {
+          "type": "intent",
+          "id": "mei-dasn",
+          "label": "Declaração anual"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-mei",
+          "label": "Plano Lup MEI"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
       "id": "mei-atende",
       "category": "mei",
       "title": "A ContLup atende MEI",
+      "examples": [
+        "Vocês atendem MEI?",
+        "sou MEI",
+        "tenho um MEI"
+      ],
+      "keywords": [
+        "atende mei",
+        "atendem mei",
+        "voces atendem mei",
+        "sou mei",
+        "tenho mei",
+        "tenho um mei",
+        "meu mei",
+        "mei"
+      ],
+      "group": "mei",
       "flow": "mei",
-      "keywords": ["mei", "sou mei", "atende mei", "atendem mei", "microempreendedor", "micro empreendedor", "microempreendedor individual"],
-      "answer": "Sim, a ContLup atende MEI! Ajuda com a rotina e as dúvidas do dia a dia e orienta quando chega a hora de mudar de porte.",
-      "content": "A ContLup atende MEI: ajuda com a rotina e as dúvidas do dia a dia e orienta quando chega a hora de mudar de porte, incluindo formalização e desenquadramento.",
-      "related": ["com-preco"],
+      "answer": "Sim, a ContLup atende MEI! Ajuda com a rotina e as dúvidas do dia a dia e orienta quando chega a hora de mudar de porte. O plano indicado é o **Lup MEI**.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "mei",
+          "label": "Tirar uma dúvida de MEI"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-mei",
+          "label": "Plano Lup MEI"
+        }
+      ],
       "expression": "success",
-      "source": "index.html (FAQ: A ContLup atende MEI?)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (antigo FAQ: A ContLup atende MEI?)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "mei-nota",
-      "category": "mei",
-      "title": "Quando emitir nota",
-      "keywords": ["quando emitir nota", "preciso emitir nota", "emitir nota fiscal", "emissao de nota", "nota fiscal", "notas fiscais"],
-      "answer": "Depende da atividade e do tipo de empresa. Vale conversar antes de vender, para emitir do jeito certo desde a primeira nota. A orientação sobre emissão de notas faz parte da área fiscal da ContLup.",
-      "content": "Emissão de nota: depende da atividade e do tipo de empresa; vale conversar antes de vender. Orientação sobre emissão de notas faz parte da área fiscal.",
-      "related": ["serv-fiscal", "mei-atende"],
+      "id": "emp-abertura",
+      "category": "empresas",
+      "title": "Abrir uma empresa",
+      "examples": [
+        "Quero abrir uma empresa",
+        "como abrir uma empresa?",
+        "vocês ajudam a abrir empresa?"
+      ],
+      "keywords": [
+        "abrir empresa",
+        "abrir uma empresa",
+        "abrir minha empresa",
+        "abertura de empresa",
+        "abertura da empresa",
+        "abertura de empresas",
+        "como abrir",
+        "montar empresa",
+        "montar uma empresa",
+        "criar uma empresa",
+        "criar empresa",
+        "abrir cnpj",
+        "tirar cnpj",
+        "formalizar meu negocio",
+        "formalizar o negocio",
+        "registrar empresa"
+      ],
+      "exclude": [
+        "mei"
+      ],
+      "group": "abertura",
+      "flow": "abrir_empresa",
+      "forMei": "mei-abrir",
+      "answer": "A ContLup orienta na escolha do tipo de empresa e do regime tributário e cuida da abertura e dos registros necessários, do primeiro passo ao CNPJ.\n\nDe forma geral, a abertura passa por definir a atividade, o tipo de empresa e o regime tributário, fazer os registros nos órgãos competentes e obter as inscrições e licenças que a atividade exigir.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "abrir_empresa",
+          "label": "Responder 4 perguntas rápidas"
+        },
+        {
+          "type": "intent",
+          "id": "emp-documentacao",
+          "label": "Documentos iniciais"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero abrir uma empresa",
+          "message": "Olá! Gostaria de conversar sobre a abertura de uma empresa."
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (seção A Lupi explica)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (antigo FAQ: Posso abrir minha empresa?)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "com-preco",
-      "priority": true,
-      "category": "atendimento",
-      "title": "Quanto custa",
-      "flow": "proposta",
-      "keywords": ["quanto custa", "preco", "precos", "custo da contabilidade", "valor", "valores", "mensalidade", "honorario", "honorarios", "orcamento", "proposta", "cobram", "tabela de precos", "preco dos planos", "valor do plano", "quanto custa o plano"],
-      "answer": "O valor depende do porte da empresa, do regime tributário, do número de funcionários e do volume de movimento. Depois de uma conversa inicial, a ContLup envia uma proposta com escopo e valor definidos. Isso vale também para os planos Lup MEI, Start, Plus e Prime. Por isso eu não informo preços por aqui: as dúvidas comerciais são respondidas pelo WhatsApp comercial, (19) 97131-0182.",
-      "content": "Preço: depende do porte, regime tributário, número de funcionários e volume de movimento. Depois de uma conversa inicial, a ContLup envia proposta com escopo e valor definidos. Não há tabela de preços publicada; nunca informar valores.",
-      "related": ["emp-primeira-conversa"],
+      "id": "emp-alteracao",
+      "category": "empresas",
+      "title": "Alteração cadastral ou contratual",
+      "examples": [
+        "Como mudar o endereço da empresa?",
+        "quero incluir um sócio",
+        "preciso alterar o contrato social"
+      ],
+      "keywords": [
+        "alteracao cadastral",
+        "alterar cadastro",
+        "alterar o contrato social",
+        "alterar contrato social",
+        "alteracao contratual",
+        "mudar o endereco da empresa",
+        "mudar endereco da empresa",
+        "trocar endereco da empresa",
+        "incluir socio",
+        "incluir um socio",
+        "tirar socio",
+        "retirar socio",
+        "mudar atividade",
+        "alterar atividade",
+        "mudar a razao social",
+        "alterar capital social"
+      ],
+      "answer": "Mudanças como endereço, atividade, sócios, nome ou capital social são feitas por uma **alteração contratual** e atualizadas nos órgãos e cadastros da empresa. Algumas mudanças também afetam impostos, licenças ou inscrições.\n\nA área **Societária** da ContLup cuida das alterações contratuais.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "serv-societario",
+          "label": "Serviço societário"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero fazer uma alteração",
+          "message": "Olá! Gostaria de ajuda com uma alteração na minha empresa."
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (FAQ: Quanto custa a contabilidade da minha empresa?)",
-      "updatedAt": "2026-10-19",
-      "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "com-condicoes",
-      "priority": true,
-      "category": "atendimento",
-      "title": "Descontos, prazos e condições",
-      "keywords": ["desconto", "descontos", "promocao", "parcelar", "parcelamento", "forma de pagamento", "formas de pagamento", "pix", "boleto da mensalidade", "prazo de entrega", "quanto tempo demora", "prazo para abrir", "fidelidade", "multa de cancelamento", "contrato minimo", "teste gratis", "gratis", "primeiro mes gratis"],
-      "answer": "Condições comerciais como valores, descontos, formas de pagamento e prazos não estão publicadas, e eu não quero te passar nada incorreto. Isso é combinado na proposta, depois da conversa inicial com a Priscila.",
-      "content": "Não há condições comerciais publicadas (descontos, prazos, formas de pagamento, fidelidade, gratuidade). Nunca informar ou prometer; encaminhar para a proposta.",
-      "related": ["com-preco", "inst-contato"],
-      "expression": "idle",
-      "source": "Derivado do site (proposta após conversa inicial); nenhuma condição comercial publicada",
-      "updatedAt": "2026-10-19",
-      "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "id": "emp-encerramento",
+      "category": "empresas",
+      "title": "Encerrar uma empresa",
+      "examples": [
+        "Como fechar minha empresa?",
+        "quero encerrar o CNPJ",
+        "como dar baixa na empresa"
+      ],
+      "keywords": [
+        "fechar empresa",
+        "fechar a empresa",
+        "fechar minha empresa",
+        "encerrar empresa",
+        "encerrar a empresa",
+        "encerrar minha empresa",
+        "encerramento da empresa",
+        "encerramento de empresa",
+        "baixa da empresa",
+        "baixa na empresa",
+        "dar baixa na empresa",
+        "encerrar cnpj",
+        "fechar cnpj",
+        "encerrar o cnpj"
+      ],
+      "exclude": [
+        "mei"
+      ],
+      "forMei": "mei-baixa",
+      "answer": "Encerrar uma empresa envolve dar **baixa nos registros**, entregar as declarações de encerramento e regularizar as pendências fiscais, trabalhistas e financeiras que existirem.\n\nCada caso tem detalhes próprios. A área **Societária** da ContLup apoia na baixa e no encerramento.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "serv-societario",
+          "label": "Serviço societário"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero encerrar a empresa",
+          "message": "Olá! Gostaria de ajuda para encerrar minha empresa."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "gestao-lucro-saldo",
-      "category": "gestao",
+      "id": "emp-troca",
+      "category": "empresas",
+      "title": "Trocar de contador",
+      "examples": [
+        "Quero trocar de contador",
+        "como funciona a troca de contador?",
+        "quero mudar de contabilidade"
+      ],
+      "keywords": [
+        "trocar de contador",
+        "troca de contador",
+        "mudar de contador",
+        "trocar contador",
+        "mudar de contabilidade",
+        "trocar de contabilidade",
+        "trocar de escritorio",
+        "novo contador",
+        "transicao contabil",
+        "contador atual",
+        "escritorio anterior"
+      ],
+      "group": "troca",
+      "flow": "troca_contador",
+      "answer": "Depois que você decide, a ContLup organiza a transição com o escritório anterior, recebe os documentos e confere o que está em andamento, para que nenhuma obrigação fique para trás.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "troca_contador",
+          "label": "Responder 3 perguntas rápidas"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero trocar de contador",
+          "message": "Olá! Gostaria de conversar sobre a troca de contador."
+        }
+      ],
+      "expression": "explaining",
+      "status": "approved",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (antigo FAQ: Como funciona a troca de contador?)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "emp-documentacao",
+      "category": "empresas",
+      "title": "Documentação inicial",
+      "examples": [
+        "Quais documentos preciso para abrir empresa?",
+        "que documentos a ContLup pede?",
+        "documentação inicial"
+      ],
+      "keywords": [
+        "quais documentos",
+        "que documentos",
+        "documentos para abrir",
+        "documentos preciso",
+        "documentacao inicial",
+        "documentacao para abrir",
+        "documentos necessarios",
+        "lista de documentos"
+      ],
+      "answer": "De forma geral, a abertura pede **documentos pessoais dos sócios**, comprovante de endereço e informações sobre a atividade, o capital e o local da empresa. Para trocar de contador, entram também documentos e registros da empresa que já existe.\n\nA lista exata depende do tipo de empresa e da cidade, e é combinada diretamente com a equipe da ContLup. Não envie documentos por aqui.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "emp-abertura",
+          "label": "Abrir uma empresa"
+        },
+        {
+          "type": "intent",
+          "id": "emp-troca",
+          "label": "Trocar de contador"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "emp-contabilidade-mensal",
+      "category": "empresas",
+      "title": "Contabilidade mensal",
+      "examples": [
+        "O que é contabilidade mensal?",
+        "o que o contador faz todo mês?",
+        "rotina contábil mensal"
+      ],
+      "keywords": [
+        "contabilidade mensal",
+        "o que o contador faz",
+        "o que um contador faz",
+        "rotina contabil",
+        "rotina mensal",
+        "servico mensal",
+        "todo mes o contador"
+      ],
+      "answer": "A contabilidade mensal é a rotina que mantém a empresa em dia: **registrar** as movimentações, **apurar impostos e emitir guias**, cuidar da **folha** quando há funcionários, entregar as **obrigações** do período e produzir **relatórios** que mostram como o negócio está.\n\nNa ContLup, isso aparece nos planos **Lup Start**, **Lup Plus** e **Lup Prime**, cada um com um nível de acompanhamento.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "emp-obrigacoes",
+          "label": "Obrigações fiscais e contábeis"
+        },
+        {
+          "type": "intent",
+          "id": "planos-diferencas",
+          "label": "Comparar os planos"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "emp-obrigacoes",
+      "category": "empresas",
+      "title": "Obrigações fiscais e contábeis",
+      "examples": [
+        "Quais são as obrigações de uma empresa?",
+        "o que são obrigações acessórias?",
+        "que declarações a empresa entrega?"
+      ],
+      "keywords": [
+        "obrigacoes fiscais",
+        "obrigacoes contabeis",
+        "obrigacoes da empresa",
+        "obrigacoes acessorias",
+        "o que sao obrigacoes acessorias",
+        "declaracoes da empresa",
+        "quais declaracoes",
+        "obrigacoes de uma empresa"
+      ],
+      "answer": "Toda empresa tem dois tipos de obrigação: a **principal**, que é pagar os tributos, e as **acessórias**, que são declarações e informações enviadas aos órgãos, mensais ou anuais, mesmo quando não há imposto a pagar.\n\nQuais se aplicam depende do regime tributário, da atividade e de haver ou não funcionários, e a lista muda com a legislação. Manter tudo em dia é parte da rotina contábil mensal.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "emp-contabilidade-mensal",
+          "label": "Contabilidade mensal"
+        },
+        {
+          "type": "intent",
+          "id": "duv-atraso-impostos",
+          "label": "Se atrasar impostos"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "emp-regularizacao",
+      "category": "empresas",
+      "title": "Regularizar a empresa",
+      "examples": [
+        "Minha empresa está com pendências, o que faço?",
+        "como regularizar minha empresa?",
+        "empresa com débitos"
+      ],
+      "keywords": [
+        "regularizar empresa",
+        "regularizar a empresa",
+        "regularizar minha empresa",
+        "regularizacao da empresa",
+        "empresa irregular",
+        "empresa com pendencias",
+        "empresa com debitos",
+        "pendencias da empresa",
+        "pendencias fiscais",
+        "regularizar situacao",
+        "colocar a empresa em dia"
+      ],
+      "forMei": "mei-regularizacao",
+      "answer": "Regularizar a empresa costuma envolver **levantar as pendências** (tributos, declarações e cadastro), **priorizar** o que gera mais risco e **acertar** os valores, à vista ou por parcelamento quando permitido.\n\nComo cada caso é diferente, o primeiro passo é um diagnóstico. A ContLup pode te ajudar nisso.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Quero regularizar a empresa",
+          "message": "Olá! Gostaria de ajuda para regularizar a situação da minha empresa."
+        },
+        {
+          "type": "intent",
+          "id": "duv-atraso-impostos",
+          "label": "Se atrasar impostos"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "reg-simples",
+      "category": "regimes",
+      "title": "Simples Nacional",
+      "examples": [
+        "O que é o Simples Nacional?",
+        "como funciona o Simples?",
+        "minha empresa pode ser do Simples?"
+      ],
+      "keywords": [
+        "simples nacional",
+        "o que e o simples",
+        "como funciona o simples",
+        "empresa do simples",
+        "regime simples"
+      ],
+      "answer": "O **Simples Nacional** é um regime tributário simplificado para micro e pequenas empresas: vários tributos são pagos em uma guia única, com cálculo sobre o faturamento e alíquotas que variam conforme a atividade e a faixa de receita.\n\nNem toda empresa pode optar: há limites de faturamento e restrições de atividade, definidos em lei. Na ContLup, o **Lup Start** e o **Lup Plus** atendem empresas do Simples.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "reg-diferencas",
+          "label": "Comparar os regimes"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-start",
+          "label": "Plano Lup Start"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "reg-presumido",
+      "category": "regimes",
+      "title": "Lucro Presumido",
+      "examples": [
+        "O que é Lucro Presumido?",
+        "como funciona o lucro presumido?"
+      ],
+      "keywords": [
+        "lucro presumido",
+        "presumido",
+        "o que e lucro presumido",
+        "como funciona o lucro presumido"
+      ],
+      "answer": "No **Lucro Presumido**, alguns tributos são calculados sobre um lucro estimado a partir do faturamento, com percentuais definidos em lei conforme a atividade, e não sobre o lucro efetivamente apurado.\n\nPode ser vantajoso quando a margem real da empresa é maior que a presumida, mas isso só uma análise mostra. Na ContLup, o **Lup Plus** e o **Lup Prime** atendem empresas do Lucro Presumido.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "reg-diferencas",
+          "label": "Comparar os regimes"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-plus",
+          "label": "Plano Lup Plus"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "reg-real",
+      "category": "regimes",
+      "title": "Lucro Real",
+      "examples": [
+        "O que é Lucro Real?",
+        "como funciona o lucro real?",
+        "quem é obrigado ao lucro real"
+      ],
+      "keywords": [
+        "lucro real",
+        "o que e lucro real",
+        "como funciona o lucro real",
+        "obrigado ao lucro real",
+        "obrigada ao lucro real"
+      ],
+      "answer": "No **Lucro Real**, os tributos sobre o lucro são calculados a partir do **lucro efetivamente apurado** pela contabilidade (receitas menos custos e despesas, com os ajustes previstos em lei). Exige um controle contábil mais detalhado.\n\nAlgumas empresas são obrigadas a esse regime por faturamento ou atividade, e outras podem escolher. Na ContLup, o **Lup Prime** atende empresas do Lucro Real.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "reg-diferencas",
+          "label": "Comparar os regimes"
+        },
+        {
+          "type": "intent",
+          "id": "plano-lup-prime",
+          "label": "Plano Lup Prime"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "reg-diferencas",
+      "category": "regimes",
+      "title": "Diferença entre os regimes",
+      "examples": [
+        "Qual a diferença entre Simples, Presumido e Real?",
+        "quais são os regimes tributários?",
+        "regime tributário"
+      ],
+      "keywords": [
+        "regime tributario",
+        "regimes tributarios",
+        "real ou presumido",
+        "presumido ou real",
+        "simples ou lucro presumido",
+        "quais os regimes",
+        "quais sao os regimes",
+        "diferenca entre os regimes",
+        "diferenca entre simples e presumido",
+        "diferenca entre presumido e real",
+        "simples ou presumido",
+        "presumido ou real",
+        "comparar regimes",
+        "tipos de regime"
+      ],
+      "answer": "Em linhas gerais:\n- **Simples Nacional**: guia única e cálculo simplificado sobre o faturamento, para micro e pequenas empresas dentro dos limites da lei.\n- **Lucro Presumido**: tributos sobre o lucro calculados sobre uma margem presumida do faturamento.\n- **Lucro Real**: tributos sobre o lucro calculados pelo lucro efetivamente apurado, com controle contábil mais detalhado.\n\nQual compensa depende da atividade, do faturamento, da margem e da folha. Essa escolha pede análise do seu caso.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "reg-orientacao",
+          "label": "Como escolher o regime"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero ajuda com o regime",
+          "message": "Olá! Gostaria de orientação sobre o regime tributário da minha empresa."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "reg-orientacao",
+      "category": "regimes",
+      "title": "Quando procurar orientação sobre o regime",
+      "examples": [
+        "Como escolher o regime tributário?",
+        "quando devo rever meu regime?",
+        "quando procurar um contador sobre regime"
+      ],
+      "keywords": [
+        "escolher o regime",
+        "escolha do regime",
+        "como escolher o regime",
+        "rever o regime",
+        "revisar o regime",
+        "mudar de regime",
+        "trocar de regime",
+        "quando mudar de regime",
+        "orientacao sobre regime",
+        "qual regime e melhor"
+      ],
+      "answer": "Vale procurar orientação profissional **antes de abrir a empresa**, **quando o faturamento muda bastante**, **quando a atividade ou a folha mudam** e na **virada do ano**, que é quando costuma ser possível trocar de regime.\n\nA escolha e a revisão do regime tributário fazem parte da área Fiscal da ContLup.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "aconselhamento",
+          "label": "Orientação para o meu caso"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero revisar meu regime",
+          "message": "Olá! Gostaria de orientação para escolher ou revisar o regime tributário."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-nota-fiscal",
+      "category": "rotinas",
+      "title": "O que é nota fiscal",
+      "examples": [
+        "O que é nota fiscal?",
+        "para que serve a nota fiscal",
+        "diferença entre nota de produto e de serviço"
+      ],
+      "keywords": [
+        "o que e nota fiscal",
+        "o que e uma nota fiscal",
+        "para que serve a nota fiscal",
+        "nota fiscal de servico",
+        "nota fiscal de produto",
+        "nfe",
+        "nfse",
+        "tipos de nota fiscal"
+      ],
+      "group": "notas",
+      "forMei": "mei-notas",
+      "answer": "A **nota fiscal** é o documento que registra oficialmente uma venda ou prestação de serviço. Ela comprova a operação para quem compra e serve de base para os impostos de quem vende.\n\nExistem modelos diferentes para **produtos** e para **serviços**, e cada empresa emite conforme a atividade e as regras da cidade e do estado.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "duv-emitir-nota",
+          "label": "Quando emitir nota"
+        },
+        {
+          "type": "intent",
+          "id": "mei-notas",
+          "label": "Nota fiscal no MEI"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-faturamento-lucro",
+      "category": "rotinas",
+      "title": "Faturamento e lucro",
+      "examples": [
+        "Qual a diferença entre faturamento e lucro?",
+        "faturamento é lucro?",
+        "o que é lucro?"
+      ],
+      "keywords": [
+        "faturamento e lucro",
+        "diferenca entre faturamento e lucro",
+        "faturamento e o mesmo que lucro",
+        "faturamento nao e lucro",
+        "o que e lucro",
+        "o que e faturamento",
+        "lucro e faturamento",
+        "faturamento x lucro",
+        "faturamento e a mesma coisa que lucro",
+        "mesma coisa que lucro"
+      ],
+      "answer": "**Faturamento** é tudo o que a empresa vendeu no período. **Lucro** é o que sobra depois de tirar custos, despesas e impostos.\n\nUma empresa pode faturar muito e ter pouco lucro (ou prejuízo) se os custos estiverem altos. Por isso acompanhar os dois é essencial.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-receita-despesa",
+          "label": "Receita e despesa"
+        },
+        {
+          "type": "intent",
+          "id": "rot-dre",
+          "label": "O que é DRE"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-receita-despesa",
+      "category": "rotinas",
+      "title": "Receita, custo e despesa",
+      "examples": [
+        "Qual a diferença entre receita e despesa?",
+        "custo e despesa são a mesma coisa?",
+        "o que é despesa fixa?"
+      ],
+      "keywords": [
+        "receita e despesa",
+        "diferenca entre receita e despesa",
+        "o que e receita",
+        "o que e despesa",
+        "custo e despesa",
+        "custos e despesas",
+        "diferenca entre custo e despesa",
+        "despesa fixa",
+        "despesas fixas",
+        "despesa variavel",
+        "custo fixo",
+        "custo variavel"
+      ],
+      "answer": "**Receita** é o dinheiro que entra pelas vendas e serviços. **Despesa** é o gasto para manter a empresa funcionando (aluguel, internet, marketing). **Custo** é o gasto ligado diretamente ao que você produz ou vende (matéria-prima, mercadoria).\n\nSeparar custos e despesas, fixos e variáveis, ajuda a calcular a margem e o preço certo.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-precificacao",
+          "label": "Precificação"
+        },
+        {
+          "type": "intent",
+          "id": "rot-faturamento-lucro",
+          "label": "Faturamento e lucro"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-fluxo-caixa",
+      "category": "rotinas",
+      "title": "Fluxo de caixa",
+      "examples": [
+        "O que é fluxo de caixa?",
+        "como faço o controle de caixa?",
+        "como controlar o caixa da empresa"
+      ],
+      "keywords": [
+        "fluxo de caixa",
+        "o que e fluxo de caixa",
+        "controle de caixa",
+        "controlar o caixa",
+        "como fazer fluxo de caixa",
+        "fluxo do caixa"
+      ],
+      "answer": "**Fluxo de caixa** é o registro de tudo o que entra e sai de dinheiro da empresa ao longo do tempo, incluindo o que **ainda vai** entrar e sair. Ele mostra com antecedência se vai faltar ou sobrar dinheiro, o que ajuda a planejar pagamentos e investimentos.\n\nUm controle simples, atualizado com frequência e separado das contas pessoais, já faz muita diferença.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-sobra-caixa",
+          "label": "Por que o dinheiro não sobra"
+        },
+        {
+          "type": "intent",
+          "id": "serv-bpo",
+          "label": "BPO Financeiro"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-pro-labore",
+      "category": "rotinas",
+      "title": "Pró-labore",
+      "examples": [
+        "O que é pró-labore?",
+        "pró-labore é salário?",
+        "como o sócio recebe da empresa?"
+      ],
+      "keywords": [
+        "pro labore",
+        "o que e pro labore",
+        "pro labore e salario",
+        "retirada do socio",
+        "salario do socio",
+        "como o socio recebe",
+        "remuneracao do socio"
+      ],
+      "answer": "**Pró-labore** é a remuneração do sócio pelo trabalho que ele faz na empresa. É diferente da **distribuição de lucros**, que é a parte do resultado repassada aos sócios.\n\nO pró-labore tem encargos próprios e o valor deve ser definido com orientação contábil.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-encargos",
+          "label": "Encargos"
+        },
+        {
+          "type": "intent",
+          "id": "serv-trabalhista",
+          "label": "Serviço trabalhista"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-folha",
+      "category": "rotinas",
+      "title": "Folha de pagamento",
+      "examples": [
+        "O que é folha de pagamento?",
+        "como funciona a folha?",
+        "o que entra na folha de pagamento"
+      ],
+      "keywords": [
+        "folha de pagamento",
+        "o que e folha de pagamento",
+        "como funciona a folha",
+        "folha",
+        "o que entra na folha",
+        "calculo da folha"
+      ],
+      "answer": "A **folha de pagamento** é o cálculo mensal do que a empresa paga a quem trabalha nela: salários, horas extras, adicionais, férias e 13º, além dos descontos e dos **encargos** devidos.\n\nEla também gera obrigações e informações para os sistemas do governo. Na ContLup, a folha faz parte da área **Trabalhista** e dos planos **Lup Start**, **Lup Plus** e **Lup Prime**.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-encargos",
+          "label": "Encargos trabalhistas"
+        },
+        {
+          "type": "intent",
+          "id": "serv-trabalhista",
+          "label": "Serviço trabalhista"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-encargos",
+      "category": "rotinas",
+      "title": "Encargos trabalhistas",
+      "examples": [
+        "O que são encargos trabalhistas?",
+        "quanto custa um funcionário além do salário?",
+        "o que é FGTS e INSS"
+      ],
+      "keywords": [
+        "encargos",
+        "encargos trabalhistas",
+        "o que sao encargos",
+        "custo de um funcionario",
+        "quanto custa um funcionario",
+        "fgts e inss",
+        "custo da folha",
+        "custo do funcionario",
+        "encargos de um funcionario",
+        "encargos do funcionario",
+        "encargos de funcionario"
+      ],
+      "answer": "**Encargos trabalhistas** são os valores que a empresa paga além do salário, como contribuições previdenciárias, FGTS e provisões de férias e 13º. O custo total de um funcionário costuma ser bem maior que o salário registrado.\n\nOs percentuais dependem do regime tributário e das regras vigentes, então eu não informo valores por aqui. A ContLup calcula isso no seu caso.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-folha",
+          "label": "Folha de pagamento"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero saber o custo de contratar",
+          "message": "Olá! Gostaria de entender o custo de contratar um funcionário."
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-balancete",
+      "category": "rotinas",
+      "title": "Balancete",
+      "examples": [
+        "O que é balancete?",
+        "para que serve o balancete?"
+      ],
+      "keywords": [
+        "balancete",
+        "o que e balancete",
+        "para que serve o balancete",
+        "balancete mensal",
+        "balancete trimestral"
+      ],
+      "answer": "O **balancete** é um resumo dos saldos das contas da empresa em um período. Ele mostra se os registros estão fechando e dá uma visão rápida de como estão receitas, despesas, dívidas e bens.\n\nNa ContLup, o **Lup Plus** traz balancete **trimestral** e o **Lup Prime**, **mensal**.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-balanco",
+          "label": "Balanço Patrimonial"
+        },
+        {
+          "type": "intent",
+          "id": "rot-dre",
+          "label": "DRE"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-balanco",
+      "category": "rotinas",
+      "title": "Balanço Patrimonial",
+      "examples": [
+        "O que é Balanço Patrimonial?",
+        "para que serve o balanço?"
+      ],
+      "keywords": [
+        "balanco patrimonial",
+        "o que e balanco",
+        "o que e o balanco patrimonial",
+        "para que serve o balanco",
+        "balanco anual",
+        "balanco"
+      ],
+      "answer": "O **Balanço Patrimonial** é uma fotografia da empresa em uma data: o que ela **tem** (bens e direitos), o que ela **deve** (obrigações) e o que pertence aos sócios (**patrimônio líquido**).\n\nEle é usado em decisões, pedidos de crédito e análises de saúde financeira. O **Lup Plus** e o **Lup Prime** incluem o Balanço Patrimonial anual.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-dre",
+          "label": "DRE"
+        },
+        {
+          "type": "intent",
+          "id": "rot-balancete",
+          "label": "Balancete"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-dre",
+      "category": "rotinas",
+      "title": "DRE",
+      "examples": [
+        "O que é DRE?",
+        "para que serve a DRE?",
+        "o que é demonstração do resultado"
+      ],
+      "keywords": [
+        "dre",
+        "o que e dre",
+        "o que e a dre",
+        "para que serve a dre",
+        "demonstracao do resultado",
+        "demonstracao de resultado"
+      ],
+      "answer": "A **DRE** (Demonstração do Resultado do Exercício) mostra, em um período, quanto a empresa faturou, quanto gastou e se teve **lucro ou prejuízo**. É uma das principais ferramentas para entender o resultado do negócio.\n\nNa ContLup, o **Lup Plus** traz DRE **trimestral** e o **Lup Prime**, **mensal**.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-balanco",
+          "label": "Balanço Patrimonial"
+        },
+        {
+          "type": "intent",
+          "id": "rot-faturamento-lucro",
+          "label": "Faturamento e lucro"
+        }
+      ],
+      "expression": "explaining",
+      "status": "pending_review",
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    },
+    {
+      "id": "rot-saldo-lucro",
+      "category": "rotinas",
       "title": "Saldo em conta é lucro?",
-      "keywords": ["saldo e lucro", "saldo em conta", "extrato bancario", "extrato", "tive lucro", "saldo da conta", "lucro e saldo", "diferenca entre lucro e saldo"],
-      "answer": "Nem sempre! O saldo em conta mostra o dinheiro disponível hoje. O lucro depende de tudo o que entrou, do que saiu e do que ainda vai sair no período. São leituras diferentes, e confundir as duas pesa nas decisões.",
-      "content": "Saldo em conta mostra o dinheiro disponível hoje; lucro depende de tudo que entrou, saiu e ainda vai sair no período.",
-      "related": ["gestao-sobra-caixa", "gestao-precificacao"],
+      "examples": [
+        "Saldo em conta é lucro?",
+        "tenho dinheiro na conta, então tive lucro?"
+      ],
+      "keywords": [
+        "saldo em conta",
+        "saldo e lucro",
+        "saldo na conta",
+        "dinheiro na conta",
+        "extrato bancario",
+        "tive lucro",
+        "lucro e saldo"
+      ],
+      "answer": "Nem sempre! O saldo em conta mostra o dinheiro disponível **hoje**. O lucro depende de tudo o que entrou, do que saiu e do que ainda vai sair no período. São leituras diferentes, e confundir as duas pesa nas decisões.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-fluxo-caixa",
+          "label": "Fluxo de caixa"
+        },
+        {
+          "type": "intent",
+          "id": "rot-faturamento-lucro",
+          "label": "Faturamento e lucro"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (Problemas reais P.01 e A Lupi explica)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Situações reais P.01)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "gestao-sobra-caixa",
-      "category": "gestao",
+      "id": "rot-sobra-caixa",
+      "category": "rotinas",
       "title": "Vende bem, mas o dinheiro não sobra",
-      "keywords": ["dinheiro nao sobra", "nao sobra dinheiro", "vendo bem", "vende bem", "faturamento alto", "fluxo de caixa", "caixa apertado", "falta dinheiro no caixa"],
+      "examples": [
+        "Vendo bem, mas o dinheiro não sobra",
+        "por que falta dinheiro no caixa?"
+      ],
+      "keywords": [
+        "dinheiro nao sobra",
+        "nao sobra dinheiro",
+        "falta dinheiro no caixa",
+        "caixa apertado",
+        "vendo bem mas",
+        "vende bem mas",
+        "sempre falta dinheiro"
+      ],
       "answer": "Faturamento alto não garante sobra no caixa. Prazos de recebimento, custos e despesas contam a outra parte da história. Organizar o fluxo de caixa ajuda a ver para onde o dinheiro está indo.",
-      "content": "Faturamento alto não garante sobra no caixa; prazos de recebimento, custos e despesas contam a outra parte da história.",
-      "related": ["gestao-lucro-saldo", "gestao-produto-margem"],
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-fluxo-caixa",
+          "label": "Fluxo de caixa"
+        },
+        {
+          "type": "intent",
+          "id": "serv-bpo",
+          "label": "BPO Financeiro"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (Problemas reais P.03)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Situações reais P.03)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "gestao-produto-margem",
-      "category": "gestao",
-      "title": "Produto mais vendido x resultado",
-      "keywords": ["produto mais vendido", "mais vendido", "qual produto da mais lucro", "margem por produto", "margem", "margem de contribuicao"],
-      "answer": "Volume de vendas e margem nem sempre andam juntos. Quando você entende o custo de cada produto, muda a forma de olhar para o que vende.",
-      "content": "Volume de vendas e margem nem sempre andam juntos; entender o custo de cada produto muda a análise.",
-      "related": ["gestao-precificacao", "gestao-sobra-caixa"],
+      "id": "rot-margem",
+      "category": "rotinas",
+      "title": "Margem e produto mais vendido",
+      "examples": [
+        "O que é margem?",
+        "meu produto mais vendido é o que mais dá lucro?"
+      ],
+      "keywords": [
+        "margem",
+        "o que e margem",
+        "margem de lucro",
+        "margem de contribuicao",
+        "produto mais vendido",
+        "qual produto da mais lucro"
+      ],
+      "answer": "Margem é quanto sobra de cada venda depois de pagar o que foi gasto para vendê-la. Volume de vendas e margem nem sempre andam juntos: quando você entende o custo de cada produto, muda a forma de olhar para o que vende.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-precificacao",
+          "label": "Precificação"
+        },
+        {
+          "type": "intent",
+          "id": "rot-receita-despesa",
+          "label": "Custo e despesa"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (Problemas reais P.02)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Situações reais P.02)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "gestao-precificacao",
-      "category": "gestao",
+      "id": "rot-precificacao",
+      "category": "rotinas",
       "title": "Precificação",
-      "keywords": ["precificar", "precificacao", "formar preco", "formacao de preco", "preco de venda", "preco do produto", "preco do meu produto", "meu preco", "preco certo", "preco correto", "achismo"],
-      "answer": "O ponto de partida é conhecer seus custos, suas despesas e a margem de que você precisa. Um preço sustentável considera tudo isso, além dos tributos, para o negócio seguir crescendo.",
-      "content": "Precificação: considerar custos, despesas, tributos e a margem que o negócio precisa.",
-      "related": ["gestao-produto-margem", "gestao-lucro-saldo"],
+      "examples": [
+        "Como precificar meu produto?",
+        "como sei se meu preço está certo?"
+      ],
+      "keywords": [
+        "precificar",
+        "precificacao",
+        "formar preco",
+        "formacao de preco",
+        "preco de venda",
+        "preco do meu produto",
+        "meu preco",
+        "preco certo",
+        "preco esta certo",
+        "preco correto",
+        "achismo"
+      ],
+      "answer": "O ponto de partida é conhecer seus **custos**, suas **despesas** e a **margem** de que você precisa. Um preço sustentável considera tudo isso, além dos tributos, para o negócio seguir crescendo.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-margem",
+          "label": "Margem"
+        },
+        {
+          "type": "intent",
+          "id": "rot-receita-despesa",
+          "label": "Custo e despesa"
+        }
+      ],
       "expression": "explaining",
-      "source": "index.html (Problemas reais P.04 e A Lupi explica)",
-      "updatedAt": "2026-10-19",
       "status": "approved",
-      "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)"
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (Situações reais P.04)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "edu-fluxo-caixa",
-      "category": "gestao",
-      "title": "O que é fluxo de caixa",
-      "keywords": ["o que e fluxo de caixa", "como fazer fluxo de caixa", "controle de caixa"],
-      "answer": "Fluxo de caixa é o registro de tudo o que entra e sai de dinheiro da empresa ao longo do tempo, incluindo o que ainda vai entrar e sair. Ele mostra se vai faltar ou sobrar dinheiro nas próximas semanas, o que ajuda a planejar pagamentos e investimentos.",
-      "content": "Fluxo de caixa: registro de entradas e saídas de dinheiro ao longo do tempo, inclusive previstas; mostra se vai faltar ou sobrar dinheiro e ajuda a planejar.",
-      "related": ["gestao-sobra-caixa"],
+      "id": "duv-contador-mei",
+      "category": "duvidas",
+      "title": "Preciso de contador sendo MEI?",
+      "examples": [
+        "Preciso de contador sendo MEI?",
+        "MEI é obrigado a ter contador?",
+        "vale a pena MEI ter contabilidade?"
+      ],
+      "keywords": [
+        "preciso de contador sendo mei",
+        "mei precisa de contador",
+        "mei e obrigado a ter contador",
+        "mei precisa de contabilidade",
+        "contador para mei",
+        "mei ter contador",
+        "mei tem que ter contador"
+      ],
+      "answer": "Em geral, **o MEI não é obrigado a ter contador**: a rotina foi pensada para ser simples. Mesmo assim, muita gente procura ajuda para não perder prazos (DAS e declaração anual), emitir notas do jeito certo, resolver pendências e saber a hora de crescer.\n\nÉ para isso que existe o plano **Lup MEI**.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "plano-lup-mei",
+          "label": "Plano Lup MEI"
+        },
+        {
+          "type": "intent",
+          "id": "mei-das",
+          "label": "DAS do MEI"
+        }
+      ],
       "expression": "explaining",
-      "source": "Conteúdo educativo escrito para a Lupi 2.0",
-      "updatedAt": "2026-10-19",
       "status": "pending_review",
-      "approvedBy": null
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "edu-custos-despesas",
-      "category": "gestao",
-      "title": "Diferença entre custo e despesa",
-      "keywords": ["diferenca entre custo e despesa", "custo e despesa", "custos e despesas", "o que e custo", "o que e despesa"],
-      "answer": "De forma geral, **custo** é o que está ligado diretamente à produção do produto ou à prestação do serviço (matéria-prima, por exemplo). **Despesa** é o que mantém a empresa funcionando, mesmo sem vender (aluguel do escritório, marketing). Separar os dois ajuda a calcular a margem e o preço.",
-      "content": "Custo: ligado diretamente à produção ou prestação do serviço. Despesa: mantém a empresa funcionando. Separar ajuda no cálculo de margem e preço.",
-      "related": ["gestao-precificacao"],
+      "id": "duv-clt-empresa",
+      "category": "duvidas",
+      "title": "Ter empresa e trabalhar com carteira assinada",
+      "examples": [
+        "Posso ter empresa e trabalhar com carteira assinada?",
+        "posso ser MEI e CLT ao mesmo tempo?"
+      ],
+      "keywords": [
+        "carteira assinada",
+        "clt e mei",
+        "mei e clt",
+        "clt e empresa",
+        "trabalhar registrado",
+        "ser mei e clt",
+        "ter empresa e trabalhar",
+        "emprego e empresa",
+        "registrado e ter empresa",
+        "ser clt e ter empresa"
+      ],
+      "answer": "Na maioria dos casos é possível ter uma empresa (inclusive MEI) e trabalhar com carteira assinada. Há exceções, como algumas carreiras do serviço público e situações previstas em contrato, e ter uma empresa aberta pode influenciar benefícios como o seguro-desemprego.\n\nComo isso depende do seu vínculo e das regras vigentes, vale avaliar o caso antes.",
+      "actions": [
+        {
+          "type": "whatsapp",
+          "label": "Quero avaliar meu caso",
+          "message": "Olá! Gostaria de orientação sobre ter empresa e trabalhar com carteira assinada."
+        }
+      ],
       "expression": "explaining",
-      "source": "Conteúdo educativo escrito para a Lupi 2.0",
-      "updatedAt": "2026-10-19",
       "status": "pending_review",
-      "approvedBy": null
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "edu-dre",
-      "category": "gestao",
-      "title": "O que é DRE",
-      "keywords": ["o que e dre", "para que serve a dre", "demonstracao do resultado"],
-      "answer": "A DRE (Demonstração do Resultado do Exercício) é um relatório que mostra, em um período, quanto a empresa faturou, quanto gastou e se teve lucro ou prejuízo. É uma das principais ferramentas para entender o resultado do negócio.",
-      "content": "DRE: relatório que mostra faturamento, gastos e lucro ou prejuízo de um período.",
-      "related": ["serv-contabil"],
+      "id": "duv-atraso-impostos",
+      "category": "duvidas",
+      "title": "O que acontece se atrasar impostos",
+      "examples": [
+        "O que acontece se eu atrasar os impostos?",
+        "atrasei um imposto, e agora?",
+        "paguei a guia atrasada"
+      ],
+      "keywords": [
+        "atrasar imposto",
+        "atrasar os impostos",
+        "atrasar impostos",
+        "atrasei imposto",
+        "atrasei o imposto",
+        "imposto atrasado",
+        "impostos atrasados",
+        "imposto em atraso",
+        "guia atrasada",
+        "nao paguei o imposto",
+        "multa por atraso"
+      ],
+      "forMei": "mei-pendencias",
+      "answer": "Atrasar impostos gera **multa e juros** e pode deixar a empresa com pendências, o que atrapalha a emissão de certidões, a participação em licitações e o acesso a crédito. Em alguns casos, as pendências podem levar a outras consequências, como cobrança e restrições.\n\nO caminho costuma ser regularizar o quanto antes, à vista ou por parcelamento quando permitido.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "emp-regularizacao",
+          "label": "Regularizar a empresa"
+        },
+        {
+          "type": "intent",
+          "id": "mei-pendencias",
+          "label": "DAS atrasado no MEI"
+        }
+      ],
       "expression": "explaining",
-      "source": "Conteúdo educativo escrito para a Lupi 2.0",
-      "updatedAt": "2026-10-19",
       "status": "pending_review",
-      "approvedBy": null
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "edu-separar-contas",
-      "category": "empreendedorismo",
-      "title": "Separar contas pessoais e da empresa",
-      "keywords": ["separar conta pessoal", "conta pessoal e da empresa", "misturar dinheiro", "conta pj", "conta pessoa juridica"],
-      "answer": "Separar o dinheiro pessoal do dinheiro da empresa é um dos primeiros passos de organização. Com contas separadas fica muito mais fácil saber se o negócio dá lucro, controlar o caixa e manter a contabilidade em ordem.",
-      "content": "Organização financeira: separar contas pessoais e da empresa facilita controlar caixa, lucro e contabilidade.",
-      "related": ["edu-fluxo-caixa"],
+      "id": "duv-emitir-nota",
+      "category": "duvidas",
+      "title": "Quando preciso emitir nota?",
+      "examples": [
+        "Quando preciso emitir nota fiscal?",
+        "sou obrigado a emitir nota?",
+        "preciso emitir nota para pessoa física?"
+      ],
+      "keywords": [
+        "quando emitir nota",
+        "quando emitir nota fiscal",
+        "quando preciso emitir nota",
+        "preciso emitir nota",
+        "preciso emitir nota fiscal",
+        "obrigado a emitir nota",
+        "tenho que emitir nota",
+        "emitir nota fiscal",
+        "emissao de nota",
+        "emissao de nota fiscal",
+        "nota fiscal",
+        "notas fiscais"
+      ],
+      "group": "notas",
+      "forMei": "mei-notas",
+      "answer": "Depende da atividade e do tipo de empresa. De forma geral, empresas emitem nota a cada venda ou prestação de serviço, e as regras de quando e como emitir variam conforme o regime, a atividade e a cidade ou o estado.\n\nVale conversar antes de vender, para emitir do jeito certo desde a primeira nota. A orientação sobre emissão de notas faz parte da área Fiscal da ContLup.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-nota-fiscal",
+          "label": "O que é nota fiscal"
+        },
+        {
+          "type": "intent",
+          "id": "mei-notas",
+          "label": "Nota fiscal no MEI"
+        }
+      ],
       "expression": "explaining",
-      "source": "Conteúdo educativo escrito para a Lupi 2.0",
-      "updatedAt": "2026-10-19",
-      "status": "pending_review",
-      "approvedBy": null
+      "status": "approved",
+      "review": {
+        "legalSensitive": true,
+        "professionalReview": "pendente",
+        "approvedBy": "Conteúdo publicado no site (confirmação da Priscila pendente)",
+        "source": "index.html (A Lupi explica)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "edu-pro-labore",
-      "category": "gestao",
-      "title": "O que é pró-labore",
-      "keywords": ["o que e pro labore", "pro labore e salario", "retirada do socio"],
-      "answer": "Pró-labore é a remuneração que o sócio recebe pelo trabalho que faz na empresa. É diferente da distribuição de lucros e tem regras e encargos próprios, por isso vale definir o valor com orientação contábil.",
-      "content": "Pró-labore: remuneração do sócio pelo trabalho na empresa; diferente da distribuição de lucros; tem encargos próprios.",
-      "related": ["serv-trabalhista"],
+      "id": "duv-mudar-contador",
+      "category": "duvidas",
+      "title": "Posso mudar de contador?",
+      "examples": [
+        "Posso mudar de contador a qualquer momento?",
+        "é possível trocar de contador no meio do ano?"
+      ],
+      "keywords": [
+        "posso mudar de contador",
+        "posso trocar de contador",
+        "e possivel trocar de contador",
+        "da para trocar de contador",
+        "pode trocar de contador",
+        "trocar de contador no meio do ano",
+        "mudar de contador a qualquer momento",
+        "mudar de escritorio",
+        "trocar de escritorio",
+        "mudar de escritorio de contabilidade",
+        "trocar de escritorio de contabilidade",
+        "mudar de contabilidade",
+        "trocar de contabilidade"
+      ],
+      "group": "troca",
+      "answer": "Sim, é possível trocar de contador. O importante é fazer uma **transição organizada**: o escritório anterior entrega os documentos e registros, e o novo confere o que está em andamento para nenhuma obrigação ficar para trás.\n\nNa ContLup, essa transição é organizada junto com o escritório anterior.",
+      "actions": [
+        {
+          "type": "flow",
+          "id": "troca_contador",
+          "label": "Começar a troca"
+        },
+        {
+          "type": "whatsapp",
+          "label": "Quero trocar de contador",
+          "message": "Olá! Gostaria de conversar sobre a troca de contador."
+        }
+      ],
       "expression": "explaining",
-      "source": "Conteúdo educativo escrito para a Lupi 2.0",
-      "updatedAt": "2026-10-19",
       "status": "pending_review",
-      "approvedBy": null
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
     },
     {
-      "id": "mei-faturamento",
-      "category": "mei",
-      "title": "MEI: limite de faturamento",
-      "keywords": ["limite do mei", "limite de faturamento", "faturamento do mei", "ultrapassei o limite", "passei do limite", "estourei o limite"],
-      "answer": "O MEI tem um limite de faturamento anual definido em lei. Ultrapassar esse limite traz consequências diferentes conforme o quanto foi excedido e pode exigir a mudança de enquadramento. Como valores e regras podem mudar, confira sua situação com a Priscila antes de decidir.",
-      "content": "MEI tem limite anual de faturamento definido em lei; ultrapassar traz consequências conforme o excesso e pode exigir desenquadramento. Valores não devem ser informados sem confirmação da legislação vigente.",
-      "related": ["mei-atende"],
-      "expression": "thinking",
-      "source": "Conteúdo regulatório escrito para a Lupi 2.0 (depende de validação profissional)",
-      "updatedAt": "2026-10-19",
-      "status": "pending_review",
-      "approvedBy": null
-    },
-    {
-      "id": "mei-obrigacoes",
-      "category": "mei",
-      "title": "MEI: obrigações gerais",
-      "keywords": ["obrigacoes do mei", "o que o mei precisa pagar", "das do mei", "declaracao anual do mei", "dasn"],
-      "answer": "De forma geral, o MEI tem uma guia mensal para pagar e uma declaração anual de faturamento para entregar, além de cuidar da emissão de notas quando necessário. Os detalhes dependem da atividade e podem mudar, então vale confirmar com a Priscila.",
-      "content": "MEI: guia mensal (DAS), declaração anual de faturamento (DASN-SIMEI) e emissão de notas quando necessário. Detalhes dependem da atividade e da legislação vigente.",
-      "related": ["mei-atende", "mei-nota"],
+      "id": "duv-organizar-financas",
+      "category": "duvidas",
+      "title": "Como organizar as finanças da empresa",
+      "examples": [
+        "Como organizar as finanças da empresa?",
+        "devo separar a conta pessoal da empresa?",
+        "por onde começo a organizar o financeiro"
+      ],
+      "keywords": [
+        "organizar as financas",
+        "organizar financas",
+        "organizar o financeiro",
+        "organizacao financeira",
+        "separar conta pessoal",
+        "separar as contas",
+        "conta pessoal e da empresa",
+        "misturar dinheiro",
+        "misturo dinheiro",
+        "conta pj",
+        "controle financeiro"
+      ],
+      "answer": "Alguns passos simples já mudam muito:\n- **Separe** a conta pessoal da conta da empresa.\n- **Registre** todas as entradas e saídas, inclusive as pequenas.\n- **Acompanhe o fluxo de caixa** semanalmente.\n- **Defina um pró-labore** em vez de fazer retiradas soltas.\n- **Guarde** notas e comprovantes de forma organizada.\n\nA ContLup também tem o **BPO Financeiro**, de apoio às rotinas financeiras.",
+      "actions": [
+        {
+          "type": "intent",
+          "id": "rot-fluxo-caixa",
+          "label": "Fluxo de caixa"
+        },
+        {
+          "type": "intent",
+          "id": "serv-bpo",
+          "label": "BPO Financeiro"
+        }
+      ],
       "expression": "explaining",
-      "source": "Conteúdo regulatório escrito para a Lupi 2.0 (depende de validação profissional)",
-      "updatedAt": "2026-10-19",
       "status": "pending_review",
-      "approvedBy": null
-    },
-    {
-      "id": "mei-crescimento",
-      "category": "mei",
-      "title": "MEI: mudar de porte",
-      "keywords": ["sair do mei", "deixar de ser mei", "virar me", "desenquadramento", "desenquadrar", "mudar de porte", "crescer de porte"],
-      "answer": "Mudar de porte é um passo importante: envolve escolher o novo tipo de empresa e o regime tributário, e os efeitos dependem do faturamento e da atividade. A ContLup ajuda na formalização e no desenquadramento do MEI, mas a decisão precisa de uma análise do seu caso.",
-      "content": "Desenquadramento do MEI: envolve novo tipo de empresa e regime tributário; efeitos dependem do faturamento e da atividade; exige análise profissional.",
-      "related": ["mei-atende", "serv-societario"],
-      "expression": "thinking",
-      "source": "Conteúdo regulatório escrito para a Lupi 2.0 (depende de validação profissional)",
-      "updatedAt": "2026-10-19",
-      "status": "pending_review",
-      "approvedBy": null
-    },
-    {
-      "id": "edu-regime",
-      "category": "empreendedorismo",
-      "title": "Qual regime tributário escolher",
-      "keywords": ["qual regime", "regime tributario", "simples nacional", "lucro presumido", "lucro real", "melhor regime"],
-      "answer": "Não existe um regime \"melhor\" para todo mundo: depende da atividade, do faturamento, da folha e das margens do negócio. A escolha e a revisão do regime tributário fazem parte da área fiscal da ContLup e precisam de uma análise do seu caso.",
-      "content": "Regime tributário depende de atividade, faturamento, folha e margens; exige análise individual.",
-      "related": ["serv-fiscal"],
-      "expression": "thinking",
-      "source": "Conteúdo educativo escrito para a Lupi 2.0",
-      "updatedAt": "2026-10-19",
-      "status": "pending_review",
-      "approvedBy": null
-    },
-    {"id": "planos", "category": "planos", "title": "Planos ContLup", "priority": true, "flow": "planos", "keywords": ["planos", "quais os planos", "quais planos", "planos da contlup", "planos contlup", "tipos de plano", "qual plano", "qual plano escolher", "plano ideal"], "answer": "A ContLup tem quatro planos:\n- **Lup MEI**: simples e sem complicação, para Microempreendedores Individuais.\n- **Lup Start**: organização e segurança, para empresas do Simples Nacional.\n- **Lup Plus**: mais controle para crescer, para empresas do Simples Nacional e Lucro Presumido.\n- **Lup Prime**: estratégia para ir além, para empresas do Lucro Presumido e Lucro Real.\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.", "content": "Planos: Lup MEI (MEI); Lup Start (Simples Nacional); Lup Plus (Simples Nacional e Lucro Presumido; inclui o Lup Start); Lup Prime (Lucro Presumido e Lucro Real; inclui o Lup Plus com condições mensais). Valores sob proposta; dúvidas comerciais no WhatsApp comercial (19) 97131-0182.", "related": ["planos-diferencas", "plano-lup-mei", "plano-lup-start"], "expression": "welcome", "source": "Briefing da primeira atualização oficial do site (23/10/2026)", "updatedAt": "2026-10-23", "status": "approved", "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)"},
-    {"id": "plano-lup-mei", "category": "planos", "title": "Lup MEI", "priority": true, "flow": "planos", "keywords": ["lup mei", "plano mei", "plano lup mei", "plano para mei", "plano do mei"], "answer": "**Lup MEI**: simples e sem complicação. Para Microempreendedores Individuais.\n\n- Orientação para abertura e regularização do MEI\n- Emissão e controle do DAS\n- Declaração Anual do MEI (DASN-SIMEI)\n- Orientações sobre notas fiscais\n- Acompanhamento de pendências e obrigações\n- Atendimento por WhatsApp e e-mail\n- Portal para documentos e guias\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.", "content": "Lup MEI, para MEI: Orientação para abertura e regularização do MEI; Emissão e controle do DAS; Declaração Anual do MEI (DASN-SIMEI); Orientações sobre notas fiscais; Acompanhamento de pendências e obrigações; Atendimento por WhatsApp e e-mail; Portal para documentos e guias.", "related": ["planos-diferencas", "plano-lup-start"], "expression": "explaining", "source": "Briefing da primeira atualização oficial do site (23/10/2026)", "updatedAt": "2026-10-23", "status": "approved", "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)"},
-    {"id": "plano-lup-start", "category": "planos", "title": "Lup Start", "priority": true, "flow": "planos", "keywords": ["lup start", "plano start", "plano lup start"], "answer": "**Lup Start**: organização e segurança. Para empresas do Simples Nacional.\n\n- Contabilidade e escrituração fiscal\n- Apuração de impostos e obrigações acessórias\n- Folha de pagamento, pró-labore e encargos\n- Demonstrações contábeis obrigatórias\n- Orientações contábeis, fiscais e trabalhistas\n- Atendimento por WhatsApp e e-mail\n- Portal para documentos e guias\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.", "content": "Lup Start, para Simples Nacional: Contabilidade e escrituração fiscal; Apuração de impostos e obrigações acessórias; Folha de pagamento, pró-labore e encargos; Demonstrações contábeis obrigatórias; Orientações contábeis, fiscais e trabalhistas; Atendimento por WhatsApp e e-mail; Portal para documentos e guias.", "related": ["plano-lup-plus", "planos-diferencas"], "expression": "explaining", "source": "Briefing da primeira atualização oficial do site (23/10/2026)", "updatedAt": "2026-10-23", "status": "approved", "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)"},
-    {"id": "plano-lup-plus", "category": "planos", "title": "Lup Plus", "priority": true, "flow": "planos", "keywords": ["lup plus", "plano plus", "plano lup plus"], "answer": "**Lup Plus**: mais controle para crescer. Para empresas do Simples Nacional e Lucro Presumido.\n\nInclui todos os benefícios do **Lup Start**, além de:\n- Balancete e DRE trimestrais\n- Balanço Patrimonial anual\n- Análise dos resultados contábeis e orientações\n- Reuniões trimestrais de acompanhamento\n- Orientações sobre distribuição de lucros\n- Suporte sobre impactos da reforma tributária\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.", "content": "Lup Plus, para Simples Nacional e Lucro Presumido: tudo do Lup Start, além de: Balancete e DRE trimestrais; Balanço Patrimonial anual; Análise dos resultados contábeis e orientações; Reuniões trimestrais de acompanhamento; Orientações sobre distribuição de lucros; Suporte sobre impactos da reforma tributária.", "related": ["plano-lup-prime", "planos-diferencas"], "expression": "explaining", "source": "Briefing da primeira atualização oficial do site (23/10/2026)", "updatedAt": "2026-10-23", "status": "approved", "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)"},
-    {"id": "plano-lup-prime", "category": "planos", "title": "Lup Prime", "priority": true, "flow": "planos", "keywords": ["lup prime", "plano prime", "plano lup prime"], "answer": "**Lup Prime**: estratégia para ir além. Para empresas do Lucro Presumido e Lucro Real.\n\nInclui todos os benefícios do **Lup Plus**, com estas condições:\n- Balancete e DRE mensais\n- Balanço Patrimonial anual\n- Análise dos resultados com orientação contínua\n- Reuniões mensais de acompanhamento\n- Orientação tributária personalizada\n- Acompanhamento da reforma tributária\n- Suporte estratégico e atendimento prioritário\n\nValores sob proposta. Para contratar ou tirar dúvidas comerciais, fale com o WhatsApp comercial: (19) 97131-0182.", "content": "Lup Prime, para Lucro Presumido e Lucro Real: tudo do Lup Plus, com estas condições: Balancete e DRE mensais; Balanço Patrimonial anual; Análise dos resultados com orientação contínua; Reuniões mensais de acompanhamento; Orientação tributária personalizada; Acompanhamento da reforma tributária; Suporte estratégico e atendimento prioritário.", "related": ["planos-diferencas", "plano-lup-plus"], "expression": "explaining", "source": "Briefing da primeira atualização oficial do site (23/10/2026)", "updatedAt": "2026-10-23", "status": "approved", "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)"},
-    {"id": "planos-diferencas", "category": "planos", "title": "Diferença entre os planos", "priority": true, "flow": "planos", "keywords": ["diferenca entre os planos", "diferenca dos planos", "diferenca entre planos", "comparar planos", "comparacao dos planos", "start ou plus", "plus ou prime", "mei ou start", "diferenca entre start e plus", "diferenca entre plus e prime"], "answer": "Em resumo:\n- **Lup MEI** é só para MEI: DAS, declaração anual, notas fiscais e pendências.\n- **Lup Start** é a base para empresas do Simples Nacional: contabilidade, impostos, folha e demonstrações obrigatórias.\n- **Lup Plus** traz tudo do Start e acrescenta balancete e DRE **trimestrais**, Balanço Patrimonial anual, análise dos resultados, reuniões **trimestrais**, orientação sobre distribuição de lucros e suporte sobre a reforma tributária. Atende Simples Nacional e Lucro Presumido.\n- **Lup Prime** traz tudo do Plus, mas com balancete e DRE **mensais**, reuniões **mensais**, orientação tributária personalizada, acompanhamento da reforma tributária, suporte estratégico e atendimento prioritário. Atende Lucro Presumido e Lucro Real.\n\nA escolha certa depende do regime e da rotina da sua empresa: o WhatsApp comercial, (19) 97131-0182, ajuda a definir.", "content": "Diferenças: MEI só para MEI; Start base do Simples Nacional; Plus = Start + relatórios e reuniões trimestrais, balanço anual, distribuição de lucros e reforma tributária (Simples e Presumido); Prime = Plus com periodicidade mensal, orientação tributária personalizada, suporte estratégico e atendimento prioritário (Presumido e Real).", "related": ["plano-lup-plus", "plano-lup-prime"], "expression": "explaining", "source": "Briefing da primeira atualização oficial do site (23/10/2026)", "updatedAt": "2026-10-23", "status": "approved", "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)"},
-    {"id": "serv-bpo", "category": "servicos", "title": "BPO Financeiro", "priority": true, "keywords": ["bpo", "bpo financeiro", "terceirizacao financeira", "financeiro terceirizado", "rotinas financeiras", "rotina financeira", "gestao financeira terceirizada"], "answer": "O **BPO Financeiro** é um serviço novo da ContLup: apoio à organização e ao acompanhamento das rotinas financeiras da sua empresa.\n\nOs detalhes do que está incluído ainda vão ser publicados. Para saber mais, fale com o WhatsApp comercial: (19) 97131-0182.", "content": "BPO Financeiro: serviço novo; descrição provisória: apoio à organização e ao acompanhamento das rotinas financeiras da empresa. Atividades incluídas ainda não publicadas: não detalhar nem prometer nada além disso.", "related": ["serv-areas", "inst-contato"], "expression": "explaining", "source": "Briefing da primeira atualização oficial do site (23/10/2026)", "updatedAt": "2026-10-23", "status": "approved", "approvedBy": "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)"}
+      "review": {
+        "legalSensitive": false,
+        "professionalReview": "pendente",
+        "approvedBy": null,
+        "source": "Repertório da Lupi 2.0 (texto conceitual)",
+        "updatedAt": "2026-10-23"
+      }
+    }
   ]
 }

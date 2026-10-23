@@ -1,69 +1,102 @@
 # Pendências para revisão da Priscila
 
-## 0. Primeira atualização oficial (23/10/2026)
+Atualizado em 23/10/2026 (reorganização do site e Lupi 2.0 sem IA).
 
-- [ ] **Planos:** confirmar os textos dos cards (nomes, chamadas, públicos e benefícios) exatamente como estão no site. Na Lupi eles estão como `approved` com `approvedBy: "Informado pela ContLup em 23/10/2026 (aguarda confirmação final da Priscila)"` (`planos`, `plano-lup-mei`, `plano-lup-start`, `plano-lup-plus`, `plano-lup-prime`, `planos-diferencas`).
-- [ ] **Lup Prime:** a lista repete "Balanço Patrimonial anual", que também está no Lup Plus. Mantivemos como foi enviado; confirmar se é intencional.
-- [ ] **"Portal para documentos e guias"** (Lup MEI e Lup Start): confirmar que o portal já está disponível para os clientes antes de divulgar.
-- [ ] **BPO Financeiro:** enviar a descrição definitiva e os serviços incluídos. Hoje o site e a Lupi usam só a frase genérica provisória.
-- [ ] **WhatsApp comercial (19) 97131-0182:** passou a ser o destino dos botões gerais, serviços, planos, FAQ, formulário de proposta, contato, rodapé e da Lupi. Várias dessas mensagens prontas começam com "Olá, Priscila!". Confirmar se quem atende o número comercial é a Priscila ou se o texto deve mudar para "Olá!".
-- [ ] **WhatsApp (19) 99744-7919:** continua só nos dois botões que dizem explicitamente "fale direto com a Priscila" ("Vamos conversar?" no painel de destaques e "Conversar com a Priscila" na seção dela). Confirmar se devem continuar nesse número ou ir para o comercial.
-- [ ] **Botão "Falar com a Priscila" da Lupi:** agora abre o WhatsApp comercial. Confirmar o rótulo (manter ou trocar para "Falar com a ContLup").
+A Lupi só usa o que está com `"status": "approved"` em `data/lupi-knowledge.json`. Para tirar qualquer resposta do ar
+sem apagar, troque o `status` para `outdated`. Cada intenção tem o bloco `review` com a origem do texto.
 
-A Lupi só usa como informação oficial o que está com `"status": "approved"` em `data/lupi-knowledge.json`.
-Nada abaixo foi aprovado pela Priscila: tudo precisa de revisão antes da apresentação ao público.
+## 1. Repertório novo da Lupi: precisa de revisão profissional (39 intenções)
 
-## 1. Conteúdos marcados como aprovados *provisoriamente*
+Estes textos são **explicações gerais novas**, escritas para a Lupi 2.0 (MEI, empresas, regimes, rotinas e dúvidas recorrentes).
+Desde 23/10/2026 estão com `"status": "pending_review"` (`approvedBy: null`, `professionalReview: "pendente"`): **ficam guardados e
+não aparecem para ninguém**. Quando o visitante pergunta sobre um desses assuntos, a Lupi só diz que o assunto está em revisão pela
+equipe e oferece o WhatsApp comercial. Também não aparecem em sugestões, em "Dúvidas gerais", nos fluxos (que usam um texto neutro)
+nem nas perguntas de acompanhamento.
 
-Estes textos vieram **do site já publicado**, por isso estão como `approved` com
-`approvedBy: "Conteúdo publicado no site (confirmação da Priscila pendente)"`. Peça à Priscila para confirmar cada um
-e trocar o `approvedBy` pelo nome dela e a data:
+**Para publicar uma resposta depois da revisão:** troque `"status"` para `"approved"`, preencha `review.approvedBy` (nome e data) e
+`review.professionalReview` (`"revisado"`), e rode `npm test`. O teste `tests/integration/pending-context.test.mjs` tem a lista exata
+das aprovadas e precisa ser atualizado junto (isso evita publicar algo sem querer).
 
-| ID | Assunto |
+| Categoria | IDs |
 |---|---|
-| `inst-contlup` | O que é a ContLup |
-| `inst-publico` | Para quem é (MEI, ME/EPP, crescimento, B2B, quem está começando) |
-| `inst-priscila` | Priscila Petean, mais de 20 anos de experiência |
-| `inst-contato` | WhatsApp, e-mail e Instagram |
-| `inst-localizacao` | Pedreira/SP (endereço completo não publicado) |
-| `inst-atendimento` | Atendimento por WhatsApp e e-mail |
-| `inst-horario` | Informa que os horários ainda não foram publicados |
-| `inst-lupi` | Quem é a Lupi (assistente virtual, não humana) |
-| `inst-privacidade` | Privacidade no chat |
-| `serv-areas`, `serv-contabil`, `serv-fiscal`, `serv-trabalhista`, `serv-societario` | Serviços das 4 áreas |
-| `emp-abrir`, `emp-troca`, `emp-primeira-conversa` | Abertura, troca de contador e primeira conversa |
-| `mei-atende`, `mei-nota` | Atendimento ao MEI e emissão de nota |
-| `com-preco`, `com-condicoes` | Preço sob proposta; sem condições comerciais publicadas |
-| `gestao-lucro-saldo`, `gestao-sobra-caixa`, `gestao-produto-margem`, `gestao-precificacao` | Conteúdos educativos do site |
+| ContLup e atendimento | `aconselhamento` |
+| MEI | `mei-o-que-e`, `mei-abrir`, `mei-das`, `mei-dasn`, `mei-notas`, `mei-pendencias`, `mei-regularizacao`, `mei-baixa`, `mei-empregado`, `mei-desenquadramento`, `mei-limite`, `mei-obrigacoes` |
+| Empresas | `emp-alteracao`, `emp-encerramento`, `emp-documentacao`, `emp-contabilidade-mensal`, `emp-obrigacoes`, `emp-regularizacao` |
+| Regimes tributários | `reg-simples`, `reg-presumido`, `reg-real`, `reg-diferencas`, `reg-orientacao` |
+| Rotinas contábeis e financeiras | `rot-nota-fiscal`, `rot-faturamento-lucro`, `rot-receita-despesa`, `rot-fluxo-caixa`, `rot-pro-labore`, `rot-folha`, `rot-encargos`, `rot-balancete`, `rot-balanco`, `rot-dre` |
+| Dúvidas recorrentes | `duv-contador-mei`, `duv-clt-empresa`, `duv-atraso-impostos`, `duv-mudar-contador`, `duv-organizar-financas` |
 
-## 2. Conteúdos novos aguardando revisão (`pending_review`, NÃO usados pela Lupi)
+### Marcadas como sujeitas a mudança legal (30)
 
-| ID | Assunto | Observação |
-|---|---|---|
-| `edu-fluxo-caixa` | O que é fluxo de caixa | educativo |
-| `edu-custos-despesas` | Custo x despesa | educativo |
-| `edu-dre` | O que é DRE | educativo |
-| `edu-separar-contas` | Separar contas PF e PJ | educativo |
-| `edu-pro-labore` | O que é pró-labore | educativo |
-| `edu-regime` | Qual regime escolher | precisa de validação profissional |
-| `mei-faturamento` | Limite de faturamento do MEI | **regulatório**: sem valores de propósito |
-| `mei-obrigacoes` | Obrigações do MEI | **regulatório** |
-| `mei-crescimento` | Mudar de porte / desenquadramento | **regulatório** |
+Mostram a ressalva "Explicação geral: regras, valores e prazos podem mudar. Para o seu caso, confirme com a ContLup."
+Conferir se a lista está completa:
 
-Enquanto estiverem pendentes, os fluxos usam um texto neutro ("depende da sua situação, confira com a Priscila").
+`aconselhamento`, `mei-o-que-e`, `mei-abrir`, `mei-das`, `mei-dasn`, `mei-notas`, `mei-pendencias`, `mei-regularizacao`, `mei-baixa`, `mei-empregado`, `mei-desenquadramento`, `mei-limite`, `mei-obrigacoes`, `emp-encerramento`, `emp-documentacao`, `emp-obrigacoes`, `emp-regularizacao`, `reg-simples`, `reg-presumido`, `reg-real`, `reg-diferencas`, `reg-orientacao`, `rot-nota-fiscal`, `rot-pro-labore`, `rot-folha`, `rot-encargos`, `duv-contador-mei`, `duv-clt-empresa`, `duv-atraso-impostos`, `duv-emitir-nota`
 
-## 3. Informações que faltam no site (a Lupi diz que não foram publicadas)
+## 2. Conteúdo que veio do site publicado (27 intenções)
 
-- [ ] Número de registro no **CRC** da Priscila e **CNPJ** da ContLup
+`approvedBy: "Conteúdo publicado no site (confirmação da Priscila pendente)"`. Inclui as respostas da antiga seção de
+dúvidas frequentes, que saiu da página e passou para a Lupi.
+
+| Categoria | IDs |
+|---|---|
+| ContLup e atendimento | `inst-contlup`, `inst-priscila`, `inst-publico`, `inst-contato`, `inst-localizacao`, `inst-atendimento`, `inst-horario`, `inst-lupi`, `inst-privacidade`, `atd-proposta`, `atd-primeira-conversa`, `atd-contratacao`, `com-preco`, `com-condicoes` |
+| Serviços | `serv-areas`, `serv-contabil`, `serv-fiscal`, `serv-trabalhista`, `serv-societario` |
+| MEI | `mei-atende` |
+| Empresas | `emp-abertura`, `emp-troca` |
+| Rotinas contábeis e financeiras | `rot-saldo-lucro`, `rot-sobra-caixa`, `rot-margem`, `rot-precificacao` |
+| Dúvidas recorrentes | `duv-emitir-nota` |
+
+## 3. Conteúdo informado pela ContLup em 23/10/2026 (8 intenções)
+
+Planos e BPO: `serv-bpo`, `planos`, `plano-lup-mei`, `plano-lup-start`, `plano-lup-plus`, `plano-lup-prime`, `planos-diferencas`, `planos-qual-escolher`.
+
+- [ ] **Planos:** confirmar nomes, chamadas, públicos e benefícios exatamente como estão no site.
+- [ ] **Lup Prime:** a lista repete "Balanço Patrimonial anual", que também está no Lup Plus. Mantido como enviado.
+- [ ] **"Portal para documentos e guias"** (Lup MEI e Lup Start): confirmar que já está disponível.
+- [ ] **BPO Financeiro:** enviar a descrição definitiva e o que está incluído. Hoje o site e a Lupi usam só a frase provisória e dizem que os detalhes ainda serão publicados.
+
+## 4. Regras da indicação de plano (fluxo "Encontrar um plano")
+
+A Lupi mostra uma **indicação preliminar** e deixa claro que a escolha final é combinada com a ContLup. As regras foram
+montadas só com o público de cada plano publicado no site e **precisam ser validadas**:
+
+| Respostas | Indicação |
+|---|---|
+| Sou MEI | Lup MEI |
+| Ainda não tenho empresa | abertura de empresa (sem plano) |
+| Simples Nacional + rotina e obrigações em dia | Lup Start |
+| Simples Nacional + relatórios e acompanhamento, ou estratégia | Lup Plus |
+| Simples Nacional + não sei | Lup Start e Lup Plus |
+| Lucro Presumido + estratégia | Lup Prime |
+| Lucro Presumido + rotina, ou relatórios | Lup Plus |
+| Lucro Presumido + não sei | Lup Plus e Lup Prime |
+| Lucro Real | Lup Prime |
+| Não sei o regime | Lup Start, Lup Plus e Lup Prime |
+
+(Arquivo: `data/lupi-flows.json`, fluxo `encontrar_plano`, passo `resultado`.)
+
+## 5. WhatsApp
+
+- [x] **Mensagens comerciais padronizadas:** os 3 links comerciais e a mensagem do formulário que diziam "Olá, Priscila!" agora seguem o padrão "Olá! Vim pelo site da ContLup e…". Nenhuma mensagem comercial do site ou da Lupi cita a Priscila.
+- [ ] **(19) 99744-7919:** continua só nos dois botões que dizem "fale direto com a Priscila" (texto e destino **não foram alterados**). Confirmar se ficam nesse número.
+- [ ] **Botão do chat** passou a se chamar "Falar com a ContLup" e abre o WhatsApp comercial. Confirmar o rótulo.
+
+## 6. Informações que não estão no site (a Lupi diz que não foram publicadas)
+
+Foram retirados do rodapé e do contato os campos "a inserir" (sem inventar dados). Se quiser publicá-los, envie:
+
+- [ ] Registro no **CRC** da Priscila e **CNPJ** da ContLup
 - [ ] **Endereço completo** do escritório
 - [ ] **Dias e horários** de atendimento
-- [ ] Se há **atendimento presencial** e em **quais cidades** a ContLup atende
-- [ ] Se existe alguma **condição comercial** que possa ser divulgada (a Lupi hoje nunca fala de valores, descontos ou prazos)
+- [ ] Se há **atendimento presencial** e em **quais cidades**
+- [ ] Alguma **condição comercial** que possa ser divulgada (a Lupi hoje nunca fala de valores, descontos, fidelidade ou prazos)
 
-## 4. Textos e decisões para validar
+## 7. Textos para validar
 
-- [ ] Saudação, aviso de privacidade e mensagens de fallback (`js/lupi/conversation.js`, objeto `TEXT`)
-- [ ] Perguntas e conclusões dos 5 fluxos (`data/lupi-flows.json`), em especial a conclusão do fluxo **Abrir empresa** e a do **MEI**
-- [ ] Personalidade e regras da IA (`worker/src/prompt.js`), só quando a IA for ligada
-- [ ] Trecho da **política de privacidade** sobre o chat (histórico guardado só na aba do navegador). Se a IA for ligada no futuro, a política precisará mencionar o provedor de IA (veja `docs/LUPI-2.md`, seção 8)
-- [ ] Modelo de mensagem para o WhatsApp ("Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi...")
+- [ ] Saudação, aviso, mensagens de "não encontrei" e ressalva (`js/lupi/conversation.js`, objeto `TEXT`)
+- [ ] Perguntas e conclusões dos 8 fluxos (`data/lupi-flows.json`)
+- [ ] Nova seção **Entenda seus números** (texto de abertura e índice) e a linha "Para quem é a ContLup" em Serviços
+- [ ] Aviso dos assuntos em revisão ("Esse assunto ainda está em revisão pela equipe da ContLup…") e o texto neutro do fluxo "Primeiro atendimento › Regularizar"
+- [ ] Botões da seção "A Lupi explica": "Preciso de contador sendo MEI?" foi trocado por "Saldo em conta é lucro?" (texto que já estava publicado no site), porque a resposta sobre MEI está em revisão
+- [ ] Trecho da **política de privacidade** sobre o chat (histórico só na aba do navegador; nada é enviado a servidores)

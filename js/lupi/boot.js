@@ -39,6 +39,11 @@ if (launch && chat) {
   const warm = () => { loadApp().catch(() => {}); };
   ['pointerenter', 'focus', 'touchstart'].forEach(ev => launch.addEventListener(ev, warm, { once: true, passive: true }));
   launch.classList.add('is-ready');
+  // perguntas prontas espalhadas pela página: abrem o chat já com a pergunta
+  document.querySelectorAll('[data-lupi-ask]').forEach(b => b.addEventListener('click', async () => {
+    hideTeaser(true);
+    try { (await loadApp()).ask(b.dataset.lupiAsk, b); } catch { /* sem o chat, o botão não faz nada */ }
+  }));
 }
 
 /* ---- convite discreto ----

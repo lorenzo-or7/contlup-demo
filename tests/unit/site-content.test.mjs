@@ -58,7 +58,7 @@ test('[planos] nenhum preço, desconto ou condição comercial inventada', () =>
 test('[planos] acesso pela navegação: barra lateral e menu do celular, numeração em sequência', () => {
   for (const nav of [html.match(/<ol class="sb-nav">([\s\S]*?)<\/ol>/)[1], html.match(/<div class="mmenu"[\s\S]*?<ol>([\s\S]*?)<\/ol>/)[1]]) {
     const items = [...nav.matchAll(/href="#([a-z]+)"[^>]*><span class="n">(\d+)<\/span><span class="lbl">([^<]+)</g)].map(m => [m[1], m[2], m[3]]);
-    assert.deepEqual(items.map(x => x[1]), ['01', '02', '03', '04', '05', '06', '07', '08']);
+    assert.deepEqual(items.map(x => x[1]), ['01', '02', '03', '04', '05', '06']);
     assert.deepEqual(items[3], ['planos', '04', 'Planos']);
     for (const [id] of items) assert.match(html, new RegExp(`id="${id}"`), `âncora #${id}`);
   }
@@ -94,6 +94,21 @@ test('[whatsapp] links comerciais usam o novo número; só os dois "direto com a
   assert.equal(links.filter(l => l.number === COMMERCIAL).length, links.length - 2);
 });
 
+test('[whatsapp] mensagens comerciais falam com a ContLup; os 2 botões pessoais continuam iguais', () => {
+  const links = [...html.matchAll(/href="(https:\/\/wa\.me\/(\d+)\?text=[^"]*)"/g)].map(m => ({ number: m[2], text: new URL(decode(m[1])).searchParams.get('text') }));
+  for (const l of links.filter(x => x.number === COMMERCIAL)) {
+    assert.doesNotMatch(l.text, /Priscila/, `comercial: "${l.text}"`);
+    assert.match(l.text, /ContLup/, `comercial sem mencionar a ContLup: "${l.text}"`);
+  }
+  const personal = links.filter(x => x.number === PRISCILA).map(x => x.text);
+  assert.deepEqual(personal, Array(2).fill('Olá, Priscila! Vim pelo site da ContLup e gostaria de conversar com você.'));
+  const main = fs.readFileSync(path.join(ROOT, 'js/main.js'), 'utf8');
+  assert.match(main, /Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta\./);
+  assert.doesNotMatch(main, /Priscila/);
+  // mensagens prontas da Lupi também
+  for (const e of knowledge.intents) for (const a of e.actions) if (a.type === 'whatsapp') assert.doesNotMatch(a.message, /Priscila/, e.id);
+});
+
 test('[whatsapp] número comercial exibido no contato, rodapé, menu e dados estruturados; formulário usa o comercial', () => {
   assert.equal((html.match(/\(19\) 97131-0182/g) || []).length >= 3, true);
   assert.doesNotMatch(html, /\(19\) 99744-7919/, 'número anterior não aparece mais como contato exibido');
@@ -105,7 +120,7 @@ test('[whatsapp] número comercial exibido no contato, rodapé, menu e dados est
 });
 
 test('[Lupi] base de conhecimento com os planos iguais ao site e BPO sem detalhes inventados', () => {
-  const kb = Object.fromEntries(knowledge.entries.map(e => [e.id, e]));
+  const kb = Object.fromEntries(knowledge.intents.map(e => [e.id, e]));
   const ids = { 'Lup MEI': 'plano-lup-mei', 'Lup Start': 'plano-lup-start', 'Lup Plus': 'plano-lup-plus', 'Lup Prime': 'plano-lup-prime' };
   for (const [name, id] of Object.entries(ids)) {
     const e = kb[id];
@@ -113,7 +128,11 @@ test('[Lupi] base de conhecimento com os planos iguais ao site e BPO sem detalhe
     const bullets = e.answer.split('\n').filter(l => l.startsWith('- ')).map(l => l.slice(2));
     assert.deepEqual(bullets, PLANS[name].items, name);
     assert.doesNotMatch(e.answer, /R\$|\d+\s?%/);
-    assert.match(e.answer, /\(19\) 97131-0182/);
+    assert.ok(e.actions.some(a => a.type === 'whatsapp'), `${name}: ação de WhatsApp`);
+  }
+  for (const p of knowledge.plans) {
+    const own = p.features.map(f => f.text);
+    assert.deepEqual(own, PLANS[p.name].items, `${p.name}: dados estruturados iguais ao site`);
   }
   assert.match(kb['planos-diferencas'].answer, /trimestrais[\s\S]*mensais/);
   assert.match(kb['serv-bpo'].answer, /rotinas financeiras/);

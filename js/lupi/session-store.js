@@ -29,6 +29,7 @@ export function createSessionStore(storage = safeSessionStorage(), { now = () =>
         suspended: state.suspended ?? null,
         lastCompleted: state.lastCompleted ?? null,
         chips: state.chips ?? [],
+        ctx: state.ctx ?? null, // contexto mínimo (ids de intenção e plano), nunca o texto digitado
       };
       try { storage.setItem(STORAGE_KEY, JSON.stringify(data)); return true; }
       catch { return false; }

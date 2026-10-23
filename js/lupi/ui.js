@@ -10,6 +10,9 @@ import { SENSITIVE_LABELS } from './shared/privacy.js';
 const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isMobile = () => matchMedia('(max-width: 899px)').matches;
 const DEFAULT_PLACEHOLDER = 'Escreva sua dúvida…';
+// "digitando…" simulado: curto e previsível (primeira resposta e as seguintes); zero com movimento reduzido
+const typingMs = (first) => (reduce() ? 0 : (globalThis.__lupiTypingMs ?? (first ? 450 : 250)));
+const wait = (ms) => new Promise(r => setTimeout(r, ms));
 
 export function createUI({ root, conversation, ai, launch }) {
   const $ = (s) => root.querySelector(s);
@@ -25,6 +28,9 @@ export function createUI({ root, conversation, ai, launch }) {
   let pendingAnnounce = [];
   let announceTimer = 0;
   let typingEl = null;
+  let queue = [];
+  let draining = false;
+  let queueGen = 0;
 
   // ---------- abrir / fechar ----------
   function open(from) {
@@ -65,8 +71,11 @@ export function createUI({ root, conversation, ai, launch }) {
 
   // ---------- mensagens ----------
   function renderAll() {
+    queue = []; queueGen++; draining = false; hideTyping();
     el.log.textContent = '';
     for (const m of conversation.messages) el.log.appendChild(renderMessage(m));
+    const last = conversation.messages.findLast(m => m.role === 'bot');
+    if (last) queueAnnounce(last);
     renderChips();
     setExpression(conversation.expression || 'idle', { animate: false });
     updateStatus();
@@ -94,6 +103,10 @@ export function createUI({ root, conversation, ai, launch }) {
     if (m.kind === 'handoff') b.appendChild(renderHandoff(m));
     else {
       renderRich(doc, b, m.text);
+      if (m.caveat) {
+        const c = doc.createElement('p'); c.className = 'lc-caveat'; c.textContent = m.caveat;
+        b.appendChild(c);
+      }
       if (m.source === 'ai') {
         const tag = doc.createElement('span'); tag.className = 'lc-tag';
         tag.textContent = m.guarded ? 'Resposta automática de segurança' : 'Resposta gerada por IA · pode conter erros';
@@ -171,6 +184,54 @@ export function createUI({ root, conversation, ai, launch }) {
     scrollToMessage(node, m.role);
   }
 
+  // mensagens novas passam por uma fila: as da Lupi aparecem depois de um breve "digitando…"
+  function enqueue(m) {
+    queue.push(m);
+    if (!draining) drain();
+  }
+  async function drain() {
+    draining = true;
+    const gen = queueGen;
+    let first = true;
+    el.chips.hidden = true;
+    while (queue.length) {
+      const m = queue.shift();
+      const ms = m.role === 'bot' ? typingMs(first) : 0;
+      if (m.role === 'bot') first = false;
+      if (ms) {
+        showTyping();
+        await wait(ms);
+        hideTyping();
+        if (gen !== queueGen) return;
+      }
+      appendMessage(m);
+    }
+    draining = false;
+    renderChips();
+    setExpression(conversation.expression);
+  }
+  function showTyping() {
+    if (typingEl) return;
+    typingEl = doc.createElement('div');
+    typingEl.className = 'lc-msg lc-bot lc-typing';
+    typingEl.innerHTML = '<img class="lc-av" src="img/lupi/avatar.webp" alt="" width="32" height="32"><div class="lc-b"><span class="lc-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="sr">A Lupi está escrevendo</span></div>';
+    el.log.appendChild(typingEl);
+    el.log.setAttribute('aria-busy', 'true');
+    scrollToEnd(true);
+  }
+  function hideTyping() {
+    typingEl?.remove(); typingEl = null;
+    el.log.setAttribute('aria-busy', 'false');
+  }
+
+  function navigate(href) {
+    const target = href?.startsWith('#') && doc.getElementById(href.slice(1));
+    if (!target) return;
+    if (href === '#privacidade') target.open = true;
+    if (isMobile()) close();
+    target.scrollIntoView({ behavior: reduce() ? 'auto' : 'smooth', block: 'start' });
+  }
+
   function scrollToMessage(node, role) {
     requestAnimationFrame(() => {
       const behavior = reduce() ? 'auto' : 'smooth';
@@ -233,10 +294,11 @@ export function createUI({ root, conversation, ai, launch }) {
 
   // ---------- status / ocupado ----------
   function updateStatus() {
-    el.kicker.textContent = ai.configured ? 'Assistente virtual com IA' : 'Assistente virtual';
+    const configured = !!ai?.configured;
+    el.kicker.textContent = configured ? 'Assistente virtual com IA' : 'Assistente virtual';
     let state = 'basic', text = 'Respostas automáticas', title = 'Respostas prontas e atendimentos guiados';
-    if (ai.configured && ai.available) { state = 'ai'; text = 'IA ativa · pode errar'; title = 'Perguntas abertas são respondidas por inteligência artificial'; }
-    else if (ai.configured && !ai.available) { state = 'off'; text = 'IA indisponível agora'; title = 'Fluxos guiados e respostas prontas continuam funcionando'; }
+    if (configured && ai.available) { state = 'ai'; text = 'IA ativa · pode errar'; title = 'Perguntas abertas são respondidas por inteligência artificial'; }
+    else if (configured && !ai.available) { state = 'off'; text = 'IA indisponível agora'; title = 'Fluxos guiados e respostas prontas continuam funcionando'; }
     el.status.dataset.state = state;
     el.status.title = title;
     el.status.querySelector('span').textContent = text;
@@ -246,27 +308,18 @@ export function createUI({ root, conversation, ai, launch }) {
     root.classList.toggle('is-busy', busy);
     el.send.disabled = busy;
     el.chips.querySelectorAll('button').forEach(b => { b.disabled = busy; });
-    el.log.setAttribute('aria-busy', String(busy));
-    if (busy) {
-      setExpression('thinking');
-      typingEl = doc.createElement('div');
-      typingEl.className = 'lc-msg lc-bot lc-typing';
-      typingEl.innerHTML = '<img class="lc-av" src="img/lupi/avatar.webp" alt="" width="32" height="32"><div class="lc-b"><span class="lc-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="sr">A Lupi está pensando</span></div>';
-      el.log.appendChild(typingEl);
-      scrollToEnd(true);
-    } else {
-      typingEl?.remove(); typingEl = null;
-    }
+    if (busy) { setExpression('thinking'); showTyping(); }
+    else hideTyping();
   }
 
   // ---------- eventos ----------
   conversation.on((ev) => {
-    if (ev.type === 'message') appendMessage(ev.message);
+    if (ev.type === 'message') enqueue(ev.message);
     else if (ev.type === 'busy') setBusy(ev.busy);
-    else if (ev.type === 'reset') { el.log.textContent = ''; }
+    else if (ev.type === 'reset') { queue = []; queueGen++; draining = false; hideTyping(); el.log.textContent = ''; }
+    else if (ev.type === 'navigate') navigate(ev.href);
     else if (ev.type === 'change') {
-      renderChips();
-      setExpression(conversation.expression);
+      if (!draining) { renderChips(); setExpression(conversation.expression); }
       updateStatus();
     }
   });
@@ -274,7 +327,7 @@ export function createUI({ root, conversation, ai, launch }) {
   el.form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const v = el.input.value;
-    if (!v.trim() || conversation.busy) return;
+    if (!v.trim() || conversation.busy || draining) return;
     el.input.value = '';
     updateCount();
     await conversation.send(v);
@@ -300,7 +353,7 @@ export function createUI({ root, conversation, ai, launch }) {
     el.expand.title = el.expand.getAttribute('aria-label');
     scrollToEnd(false);
   });
-  el.human.addEventListener('click', () => conversation.act({ kind: 'handoff' }, 'Falar com a Priscila'));
+  el.human.addEventListener('click', () => conversation.act({ kind: 'handoff' }, 'Falar com a ContLup'));
 
   root.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { e.stopPropagation(); close(); return; }
@@ -309,8 +362,8 @@ export function createUI({ root, conversation, ai, launch }) {
   el.log.addEventListener('click', (e) => {
     const a = e.target.closest('a[href^="#"]');
     if (!a) return;
-    if (a.getAttribute('href') === '#privacidade') { const d = doc.getElementById('privacidade'); if (d) d.open = true; }
-    if (isMobile()) close();
+    e.preventDefault();
+    navigate(a.getAttribute('href'));
   });
 
   function trapFocus(e) {
@@ -329,5 +382,5 @@ export function createUI({ root, conversation, ai, launch }) {
     if (!modal) root.style.removeProperty('--lc-vh');
   });
 
-  return { open, close, renderAll, updateStatus, get isOpen() { return !root.hidden; } };
+  return { open, close, renderAll, updateStatus, get isOpen() { return !root.hidden; }, get isTyping() { return draining; } };
 }

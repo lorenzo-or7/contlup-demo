@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "_leia-me": "Fluxos guiados da Lupi. Funcionam sem IA. Cada fluxo tem: id, title, triggers (frases que iniciam o fluxo), intro, start (primeiro passo) e steps. Tipos de passo: choice (pergunta com opções; allowText permite resposta livre), info (mostra um conteúdo da base pelo kbRef e segue para next) e end (conclusão, com resumo para o WhatsApp). Opções podem ter next (próximo passo), startFlow (abre outro fluxo) ou action (handoff = falar com a Priscila). O texto de kbRef só aparece se a entrada estiver com status approved na base de conhecimento; caso contrário a Lupi mostra fallbackText. summary lista frases do resumo; uma frase só entra se todos os campos {assim} tiverem resposta; campos {?assim} são opcionais e somem quando vazios.",
+  "_leia-me": "Fluxos guiados da Lupi. Funcionam sem IA. Cada fluxo tem: id, title, triggers (frases que iniciam o fluxo), intro, start (primeiro passo) e steps. Tipos de passo: choice (pergunta com opções; allowText permite resposta livre; cada opção pode ter um code usado nas regras), info (mostra um conteúdo da base pelo kbRef e segue para next), recommend (indica planos pelas regras: a primeira regra cujos códigos batem vence; fallback se nenhuma bater) e end (conclusão, com resumo para o WhatsApp). Opções podem ter next (próximo passo), startFlow (abre outro fluxo) ou action (handoff = falar com a Priscila). O texto de kbRef só aparece se a entrada estiver com status approved na base de conhecimento; caso contrário a Lupi mostra fallbackText. summary lista frases do resumo; uma frase só entra se todos os campos {assim} tiverem resposta; campos {?assim} são opcionais e somem quando vazios. Passos info com kbRef de uma resposta ainda não aprovada usam o fallbackText (todo kbRef que não está aprovado precisa de fallbackText).",
   "flows": [
     {
       "id": "abrir_empresa",
       "title": "Abrir uma empresa",
       "triggers": ["abrir empresa", "abrir minha empresa", "abrir uma empresa", "quero abrir", "abertura de empresa", "abrir cnpj", "tirar cnpj", "formalizar meu negocio", "formalizar o negocio", "montar uma empresa"],
-      "introRef": "emp-abrir",
+      "introRef": "emp-abertura",
       "intro": "Vamos lá! Vou te fazer algumas perguntas rápidas para entender o seu momento. Você pode voltar, pular para outro assunto ou escrever a qualquer momento.",
       "start": "atividade",
       "steps": {
@@ -64,7 +64,7 @@
           "expression": "success",
           "message": "Obrigada por contar! 💜 De forma geral, os próximos passos são:\n- **Conversa inicial** com a Priscila para entender a atividade e os planos\n- **Análise** do tipo de empresa e do regime tributário mais adequados ao seu caso\n- **Abertura e registros**, que a ContLup cuida para você\n\nO tipo de empresa e o regime dependem de uma análise individual, então não dá para cravar por aqui. Se quiser, eu preparo um resumo para você mandar para a Priscila.",
           "summary": [
-            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Olá! Vim pelo site da ContLup e conversei com a Lupi.",
             "Gostaria de orientação sobre a abertura de uma empresa {?atividade}.",
             "{funcionando}.",
             "{formalizacao}.",
@@ -121,7 +121,7 @@
           "expression": "success",
           "message": "Perfeito! Na prática, depois que você decide, a ContLup organiza a transição com o escritório anterior, recebe os documentos e confere o que está em andamento, para nada ficar para trás.\n\nPor aqui você **não precisa enviar documentos nem dados da empresa**: isso é combinado diretamente com a Priscila. Quer que eu prepare um resumo para você mandar a ela?",
           "summary": [
-            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Olá! Vim pelo site da ContLup e conversei com a Lupi.",
             "Estou pensando em trocar de contador.",
             "{ativa}.",
             "O principal motivo é que {motivo}.",
@@ -165,13 +165,13 @@
         },
         "info_faturamento": {
           "type": "info",
-          "kbRef": "mei-faturamento",
+          "kbRef": "mei-limite",
           "fallbackText": "Questões de faturamento e limite do MEI dependem dos valores e das regras em vigor e da sua situação. Para não te passar nada desatualizado, o ideal é conferir com a Priscila antes de tomar qualquer decisão.",
           "next": "fim"
         },
         "info_notas": {
           "type": "info",
-          "kbRef": "mei-nota",
+          "kbRef": "mei-notas",
           "fallbackText": "A emissão de notas depende da atividade e de para quem você vende. Vale conversar antes, para emitir do jeito certo.",
           "next": "fim"
         },
@@ -183,7 +183,7 @@
         },
         "info_crescimento": {
           "type": "info",
-          "kbRef": "mei-crescimento",
+          "kbRef": "mei-desenquadramento",
           "fallbackText": "Mudar de porte envolve escolher o novo tipo de empresa e o regime tributário. Essa decisão precisa de uma análise do seu caso, e a ContLup apoia na formalização e no desenquadramento do MEI.",
           "next": "fim"
         },
@@ -192,7 +192,7 @@
           "expression": "success",
           "message": "Essas questões do MEI costumam depender do faturamento, da atividade e da situação atual do negócio, então uma conclusão definitiva precisa de análise profissional. Posso preparar um resumo para você conversar com a Priscila? 💜",
           "summary": [
-            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Olá! Vim pelo site da ContLup e conversei com a Lupi.",
             "{possui}.",
             "Gostaria de orientação sobre {tema}.",
             "Podemos conversar?"
@@ -239,9 +239,88 @@
             { "label": "Falar com a Priscila", "action": "handoff" }
           ],
           "summary": [
-            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Olá! Vim pelo site da ContLup e conversei com a Lupi.",
             "Gostaria de saber mais sobre {area}.",
             "Podemos conversar?"
+          ]
+        }
+      }
+    },
+    {
+      "id": "encontrar_plano",
+      "title": "Encontrar um plano",
+      "triggers": ["encontrar um plano", "qual plano combina comigo", "me ajuda a escolher um plano", "qual plano escolher"],
+      "intro": "Vou te fazer até três perguntas rápidas. No fim eu mostro os planos que podem combinar com você.",
+      "start": "tipo",
+      "steps": {
+        "tipo": {
+          "type": "choice",
+          "field": "tipo",
+          "prompt": "Hoje você é MEI ou tem outro tipo de empresa?",
+          "options": [
+            { "label": "Sou MEI", "code": "mei", "value": "Sou MEI", "next": "resultado" },
+            { "label": "Tenho empresa (ME, EPP ou outra)", "code": "empresa", "value": "Tenho uma empresa", "next": "regime" },
+            { "label": "Ainda não tenho empresa", "code": "nenhuma", "value": "Ainda não tenho empresa", "next": "resultado" }
+          ]
+        },
+        "regime": {
+          "type": "choice",
+          "field": "regime",
+          "prompt": "Você sabe em qual regime tributário a empresa está?",
+          "options": [
+            { "label": "Simples Nacional", "code": "simples", "value": "Simples Nacional", "next": "interesse" },
+            { "label": "Lucro Presumido", "code": "presumido", "value": "Lucro Presumido", "next": "interesse" },
+            { "label": "Lucro Real", "code": "real", "value": "Lucro Real", "next": "interesse" },
+            { "label": "Não sei", "code": "naosei", "value": "", "next": "interesse" }
+          ]
+        },
+        "interesse": {
+          "type": "choice",
+          "field": "interesse",
+          "prompt": "O que é mais importante para você agora?",
+          "options": [
+            { "label": "Rotina e obrigações em dia", "code": "rotina", "value": "rotina e obrigações em dia", "next": "resultado" },
+            { "label": "Relatórios e acompanhamento", "code": "acompanhamento", "value": "relatórios e acompanhamento", "next": "resultado" },
+            { "label": "Estratégia e suporte próximo", "code": "estrategia", "value": "estratégia e suporte próximo", "next": "resultado" },
+            { "label": "Ainda não sei", "code": "naosei", "value": "", "next": "resultado" }
+          ]
+        },
+        "resultado": {
+          "type": "recommend",
+          "field": "plano",
+          "text": "Pelo que você contou, estes planos podem combinar com você:",
+          "textOne": "Pelo que você contou, este plano pode combinar com você:",
+          "note": "Essa é uma **indicação preliminar**, feita só com base nas suas respostas. A escolha final é combinada com a ContLup, que confirma o que faz sentido para a sua empresa.",
+          "rules": [
+            { "when": { "tipo": "mei" }, "plans": ["lup-mei"], "text": "Para quem é MEI, o plano pensado para você é:" },
+            {
+              "when": { "tipo": "nenhuma" },
+              "plans": [],
+              "value": "a abertura de uma empresa",
+              "text": "Como a empresa ainda não existe, o plano depende do tipo de empresa e do regime escolhidos na abertura. A ContLup orienta nessa escolha e na abertura."
+            },
+            { "when": { "regime": "simples", "interesse": "rotina" }, "plans": ["lup-start"] },
+            { "when": { "regime": "simples", "interesse": ["acompanhamento", "estrategia"] }, "plans": ["lup-plus"] },
+            { "when": { "regime": "simples" }, "plans": ["lup-start", "lup-plus"] },
+            { "when": { "regime": "presumido", "interesse": "estrategia" }, "plans": ["lup-prime"] },
+            { "when": { "regime": "presumido", "interesse": ["rotina", "acompanhamento"] }, "plans": ["lup-plus"] },
+            { "when": { "regime": "presumido" }, "plans": ["lup-plus", "lup-prime"] },
+            { "when": { "regime": "real" }, "plans": ["lup-prime"], "text": "Para empresas do Lucro Real, o plano indicado é:" }
+          ],
+          "fallback": { "plans": ["lup-start", "lup-plus", "lup-prime"], "text": "Sem saber o regime, estes são os planos para empresas. O regime ajuda a definir o melhor caminho:" },
+          "next": "fim"
+        },
+        "fim": {
+          "type": "end",
+          "expression": "success",
+          "message": "Quer que eu prepare uma mensagem para o WhatsApp comercial? Você revisa antes de enviar.",
+          "endOptions": [
+            { "label": "Falar com a ContLup", "action": "handoff" },
+            { "label": "Refazer as perguntas", "restart": true },
+            { "label": "Ver todos os planos", "startFlow": "planos" }
+          ],
+          "summary": [
+            "Olá! Gostaria de saber mais sobre {plano}."
           ]
         }
       }
@@ -297,6 +376,48 @@
       }
     },
     {
+      "id": "primeiro_atendimento",
+      "title": "Primeiro atendimento",
+      "triggers": ["primeiro atendimento", "primeira vez", "quero comecar", "como comecar", "nao sei por onde comecar", "por onde comecar"],
+      "intro": "Vamos lá! Me conta o que você precisa agora:",
+      "start": "objetivo",
+      "steps": {
+        "objetivo": {
+          "type": "choice",
+          "field": "objetivo",
+          "prompt": "Qual é o seu objetivo?",
+          "options": [
+            { "label": "Abrir uma empresa", "code": "abrir", "value": "a abertura de uma empresa", "next": "info_abrir" },
+            { "label": "Trocar de contador", "code": "trocar", "value": "a troca de contador", "next": "info_trocar" },
+            { "label": "Regularizar a situação", "code": "regularizar", "value": "a regularização da minha empresa", "next": "info_regularizar" },
+            { "label": "Contratar serviços", "code": "contratar", "value": "os serviços da ContLup", "next": "info_contratar" }
+          ]
+        },
+        "info_abrir": { "type": "info", "kbRef": "emp-abertura", "fallbackText": "", "next": "fim" },
+        "info_trocar": { "type": "info", "kbRef": "emp-troca", "fallbackText": "", "next": "fim" },
+        "info_regularizar": {
+          "type": "info",
+          "kbRef": "emp-regularizacao",
+          "fallbackText": "Para regularizar, o primeiro passo é entender o que está pendente. Na conversa inicial, a equipe da ContLup levanta a situação com você e explica os próximos passos.",
+          "next": "fim"
+        },
+        "info_contratar": { "type": "info", "kbRef": "atd-contratacao", "fallbackText": "", "next": "fim" },
+        "fim": {
+          "type": "end",
+          "expression": "success",
+          "message": "O próximo passo é uma conversa inicial com a equipe. Eu preparo a mensagem para o WhatsApp comercial e você só envia se quiser.",
+          "endOptions": [
+            { "label": "Falar com a ContLup", "action": "handoff" },
+            { "label": "Encontrar um plano", "startFlow": "encontrar_plano" },
+            { "label": "Fazer outra pergunta", "action": "menu" }
+          ],
+          "summary": [
+            "Olá! Gostaria de conversar sobre {objetivo}."
+          ]
+        }
+      }
+    },
+    {
       "id": "proposta",
       "title": "Solicitar proposta",
       "triggers": ["solicitar proposta", "pedir proposta", "quero uma proposta", "fazer orcamento", "quero um orcamento", "pedir orcamento", "solicitar orcamento"],
@@ -346,7 +467,7 @@
           "message": "Prontinho! A proposta é montada depois da conversa inicial, com escopo e valor definidos para o seu caso, por isso eu não falo de preços ou prazos por aqui. Revise o resumo abaixo e, se estiver tudo certo, abra o WhatsApp para enviar.",
           "autoHandoff": true,
           "summary": [
-            "Olá, Priscila! Vim pelo site da ContLup e conversei com a Lupi.",
+            "Olá! Vim pelo site da ContLup e conversei com a Lupi.",
             "Gostaria de solicitar uma proposta para {tipo}.",
             "{porte}.",
             "Detalhe: {detalhe}.",
