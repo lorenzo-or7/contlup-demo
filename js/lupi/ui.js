@@ -1,9 +1,10 @@
 /* Lupi 2.0: interface do chat (DOM).
-   Recebe a Conversation e desenha mensagens, sugestões, expressões, status e o cartão do WhatsApp.
+   Recebe a Conversation e desenha mensagens, sugestões, status e o cartão do WhatsApp.
+   As poses e animações da personagem ficam na camada visual (visual.js, Lupi 3.0).
    Texto de visitante e da IA só entra via textContent / rich-text.js (nunca innerHTML). */
 
 import { renderRich, toPlainText } from './rich-text.js';
-import { expressionFor, EXPRESSIONS } from './expressions.js';
+import { createLupiVisual, visualStateFor, FIRST_POSES } from './visual.js';
 import { MAX_SUMMARY, buildWhatsAppLink } from './whatsapp.js';
 import { SENSITIVE_LABELS } from './shared/privacy.js';
 
@@ -24,7 +25,7 @@ export function createUI({ root, conversation, ai, launch }) {
     count: $('.js-lc-count'), title: $('#lc-title'), kicker: $('.lc-k'),
   };
   let opener = null;
-  let currentExpr = '';
+  const visual = createLupiVisual({ stage: el.stage, reduce });
   let pendingAnnounce = [];
   let announceTimer = 0;
   let typingEl = null;
@@ -45,7 +46,10 @@ export function createUI({ root, conversation, ai, launch }) {
     scrollToEnd(false);
     // no celular, focar o campo abre o teclado e esconde a conversa: focamos o título
     (modal ? el.title : el.input).focus({ preventScroll: true });
-    if (currentExpr === 'welcome') playOnce('is-waving');
+    // boas-vindas uma vez por abertura; as outras poses carregam quando o navegador estiver livre
+    visual.preload(FIRST_POSES);
+    visual.set('welcome');
+    visual.preloadRest();
   }
 
   function close() {
@@ -56,6 +60,7 @@ export function createUI({ root, conversation, ai, launch }) {
     doc.body.style.overflow = '';
     root.style.removeProperty('--lc-vh');
     launch?.setAttribute('aria-expanded', 'false');
+    visual.reset(); // nenhum estado fica preso depois de fechar
     const back = opener && opener.isConnected && opener.offsetParent !== null ? opener : launch;
     back?.focus({ preventScroll: true });
   }
@@ -77,7 +82,7 @@ export function createUI({ root, conversation, ai, launch }) {
     const last = conversation.messages.findLast(m => m.role === 'bot');
     if (last) queueAnnounce(last);
     renderChips();
-    setExpression(conversation.expression || 'idle', { animate: false });
+    visual.reset();
     updateStatus();
     scrollToEnd(false);
   }
@@ -178,6 +183,8 @@ export function createUI({ root, conversation, ai, launch }) {
     const node = renderMessage(m);
     el.log.appendChild(node);
     if (m.role === 'bot' || m.role === 'notice') queueAnnounce(m);
+    const vs = visualStateFor(m);
+    if (vs) visual.set(vs);
     if (m.role === 'bot' && m.kind === 'handoff') {
       requestAnimationFrame(() => node.querySelector('textarea')?.focus({ preventScroll: true }));
     }
@@ -208,9 +215,9 @@ export function createUI({ root, conversation, ai, launch }) {
     }
     draining = false;
     renderChips();
-    setExpression(conversation.expression);
   }
   function showTyping() {
+    visual.set('thinking');
     if (typingEl) return;
     typingEl = doc.createElement('div');
     typingEl.className = 'lc-msg lc-bot lc-typing';
@@ -227,7 +234,7 @@ export function createUI({ root, conversation, ai, launch }) {
   function navigate(href) {
     const target = href?.startsWith('#') && doc.getElementById(href.slice(1));
     if (!target) return;
-    if (href === '#privacidade') target.open = true;
+    if (href === '#privacidade') globalThis.dispatchEvent(new Event('contlup:privacy')); // o site abre o texto
     if (isMobile()) close();
     target.scrollIntoView({ behavior: reduce() ? 'auto' : 'smooth', block: 'start' });
   }
@@ -267,31 +274,6 @@ export function createUI({ root, conversation, ai, launch }) {
     el.input.placeholder = conversation.placeholder || DEFAULT_PLACEHOLDER;
   }
 
-  // ---------- expressões ----------
-  function setExpression(state, { animate = true } = {}) {
-    if (!EXPRESSIONS[state]) state = 'idle';
-    root.dataset.expr = state;
-    if (state === currentExpr) return;
-    currentExpr = state;
-    const e = expressionFor(state);
-    const swap = () => { el.pose.src = e.src; el.pose.width = e.w; el.pose.height = e.h; };
-    if (!animate || reduce()) { swap(); return; }
-    el.stage.classList.add('is-swapping');
-    setTimeout(() => {
-      swap();
-      el.stage.classList.remove('is-swapping');
-      if (state === 'welcome') playOnce('is-waving');
-      if (state === 'success') playOnce('is-cheering');
-    }, 160);
-  }
-  function playOnce(cls) {
-    if (reduce()) return;
-    el.stage.classList.remove(cls); void el.stage.offsetWidth; el.stage.classList.add(cls);
-    setTimeout(() => el.stage.classList.remove(cls), 1200);
-  }
-  // pré-carrega as expressões para a troca não piscar
-  Object.values(EXPRESSIONS).forEach(e => { const i = new Image(); i.src = e.src; });
-
   // ---------- status / ocupado ----------
   function updateStatus() {
     const configured = !!ai?.configured;
@@ -308,7 +290,7 @@ export function createUI({ root, conversation, ai, launch }) {
     root.classList.toggle('is-busy', busy);
     el.send.disabled = busy;
     el.chips.querySelectorAll('button').forEach(b => { b.disabled = busy; });
-    if (busy) { setExpression('thinking'); showTyping(); }
+    if (busy) showTyping();
     else hideTyping();
   }
 
@@ -316,10 +298,10 @@ export function createUI({ root, conversation, ai, launch }) {
   conversation.on((ev) => {
     if (ev.type === 'message') enqueue(ev.message);
     else if (ev.type === 'busy') setBusy(ev.busy);
-    else if (ev.type === 'reset') { queue = []; queueGen++; draining = false; hideTyping(); el.log.textContent = ''; }
+    else if (ev.type === 'reset') { queue = []; queueGen++; draining = false; hideTyping(); el.log.textContent = ''; visual.reset(); }
     else if (ev.type === 'navigate') navigate(ev.href);
     else if (ev.type === 'change') {
-      if (!draining) { renderChips(); setExpression(conversation.expression); }
+      if (!draining) renderChips();
       updateStatus();
     }
   });

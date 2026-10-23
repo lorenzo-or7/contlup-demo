@@ -1172,7 +1172,7 @@
         "sobre voces",
         "fala sobre o escritorio"
       ],
-      "answer": "A ContLup Studio Contábil é uma contabilidade de Pedreira/SP com atendimento **100% online**. A ideia é ir além das obrigações: organizar as informações, explicar o que os números mostram e acompanhar o negócio de perto, com atendimento próximo e personalizado.",
+      "answer": "A ContLup Studio Contábil é uma contabilidade com atendimento **100% online**, para empresas e MEIs. A ideia é ir além das obrigações: organizar as informações, explicar o que os números mostram e acompanhar o negócio de perto, com atendimento próximo e personalizado.",
       "actions": [
         {
           "type": "intent",
@@ -1379,7 +1379,7 @@
         "conhecer o escritorio"
       ],
       "group": "atendimento-local",
-      "answer": "A ContLup **não tem endereço físico** no momento: o atendimento é **100% online**, pelo WhatsApp e por e-mail. A ContLup é de Pedreira/SP. Para confirmar o atendimento para a sua cidade, fale com a equipe.",
+      "answer": "A ContLup **não tem endereço físico** no momento: o atendimento é **100% online**, pelo WhatsApp e por e-mail. Para confirmar o atendimento para a sua cidade, fale com a equipe.",
       "actions": [
         {
           "type": "intent",

@@ -94,7 +94,9 @@ Foram retirados do rodapé e do contato os campos "a inserir" (sem inventar dado
 - [ ] Registro no **CRC** da Priscila (não publicado)
 - [ ] **Dias e horários** de atendimento (a Lupi continua dizendo que não foram publicados)
 - [ ] **Atendimento por cidade/estado:** com o atendimento online, confirmar se a ContLup atende qualquer cidade do Brasil. Hoje a Lupi pede para o visitante confirmar com a equipe, e os dados estruturados da página não informam área atendida
-- [ ] **"Pedreira/SP" no site:** o título da página ("Contabilidade em Pedreira/SP"), o canto do topo e o rodapé ("De Pedreira/SP") continuam citando a cidade como origem da ContLup. Confirmar se deve continuar
+- [x] **Conteúdo visível sem "Pedreira/SP":** a Hero agora diz "Atendimento 100% online · Contabilidade próxima, onde você estiver", o menu do celular diz "100% online" e o rodapé não cita mais a cidade.
+- [x] **Pedreira/SP fora das referências comerciais:** título da página ("ContLup Studio Contábil | Contabilidade online para empresas e MEIs"), meta description, título de compartilhamento e as respostas da Lupi (`inst-contlup`, `inst-localizacao`) agora falam de contabilidade online. O campo cadastral `contact.city` do repertório foi mantido (não aparece no site).
+- [ ] **Descrição do repositório no GitHub** ("Demo de site para um escritório de contabilidade de Pedreira/SP…"): fica fora do código e não foi alterada. Sugestão: "Site da ContLup Studio Contábil: contabilidade 100% online, planos, BPO Financeiro e a assistente Lupi."
 - [ ] Alguma **condição comercial** que possa ser divulgada (a Lupi hoje nunca fala de valores, descontos, fidelidade ou prazos)
 
 ## 7. Textos para validar

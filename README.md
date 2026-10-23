@@ -47,6 +47,7 @@ Seções, na ordem: **Início → Serviços → Planos → Sobre a ContLup → E
 - 💳 Planos ContLup (Lup MEI, Start, Plus e Prime) com contato direto pelo WhatsApp comercial
 - 📈 Entenda seus números: números que fazem sentido (painel ilustrativo), problemas reais, assuntos do dia a dia e "A Lupi explica"
 - 🤖 **Lupi 2.0**, assistente virtual **sem IA**: entende perguntas por regras (sinônimos, erros leves de digitação, desambiguação), lembra o contexto da conversa ("E quanto custa?", "Esse plano inclui folha?"), tem 41 respostas aprovadas no ar, incluindo BPO Financeiro, atendimento online e CNPJ (outras 39 aguardam revisão profissional e ficam fora do ar), fluxos guiados (incluindo "Encontrar um plano") e prepara a mensagem para o WhatsApp comercial, que o visitante revisa antes de enviar
+- ✨ **Lupi 3.0**: 12 poses da personagem que mudam conforme a conversa (aceno, pensando, gráfico no BPO, checklist nos planos, "ok" a cada etapa, headset no WhatsApp…), com animações leves e respeito ao movimento reduzido
 - 📝 Formulário de pedido de proposta
 - 📲 Contatos com botão de copiar e WhatsApp
 

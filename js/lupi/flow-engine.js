@@ -140,7 +140,7 @@ export class FlowEngine {
       const lines = plans.map(p => `- **${p.name}**: ${p.tagline.toLowerCase()}. ${p.audienceText}`).join('\n');
       const text = [rule.text || (plans.length === 1 && step.textOne) || step.text, lines, step.note].filter(Boolean).join('\n\n');
       const out = emptyOutput();
-      out.messages.push({ text, expression: plans.length ? 'explaining' : 'thinking' });
+      out.messages.push({ text, expression: plans.length ? 'explaining' : 'thinking', visual: 'organize' });
       return merge(out, this.#enter(step.next, { revisit }));
     }
 

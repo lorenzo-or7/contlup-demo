@@ -135,7 +135,13 @@
     });
   }
   /* ---- privacy link opens the policy ---- */
-  $$('.js-priv').forEach(a=>a.addEventListener('click',()=>{const d=$('#privacidade'); if(d) d.open=true}));
+  /* ---- política de privacidade: um único botão no rodapé abre e fecha o texto; links para #privacidade também abrem ---- */
+  const priv=$('#privacidade'), pbtn=$('.js-priv-toggle');
+  function setPriv(open){ if(!priv) return; priv.hidden=!open; pbtn?.setAttribute('aria-expanded',String(open)) }
+  pbtn?.addEventListener('click',()=>{ const open=priv.hidden; setPriv(open); if(open) priv.focus({preventScroll:true}) });
+  document.addEventListener('click',e=>{ const a=e.target.closest('a[href="#privacidade"]'); if(!a) return;
+    e.preventDefault(); setPriv(true); priv.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); priv.focus({preventScroll:true}) });
+  addEventListener('contlup:privacy',()=>setPriv(true));
 
   /* ---- copy buttons ---- */
   $$('.copy').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.copy; const done=()=>{b.textContent='Copiado'; setTimeout(()=>b.textContent='Copiar',1600)};

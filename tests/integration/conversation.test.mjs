@@ -236,7 +236,7 @@ test('[institucional] respostas aprovadas', async () => {
   for (const [q, re] of [
     ['quem é a Priscila?', /mais de 20 anos de experiência/],
     ['qual o e-mail de contato?', /contato@contlup\.com\.br/],
-    ['onde fica o escritório?', /Pedreira\/SP/],
+    ['onde fica o escritório?', /não tem endereço físico/],
     ['vocês atendem MEI?', /atende MEI/],
     ['quais serviços vocês oferecem?', /BPO Financeiro/],
     ['qual o whatsapp comercial?', /\(19\) 97131-0182/],
