@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, knowledge } from '../support/helpers.mjs';
+import { ROOT, knowledge, fullIntents } from '../support/helpers.mjs';
 import { BPO, BPO_FORBIDDEN } from '../support/official.mjs';
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -56,13 +56,12 @@ test('[planos] nenhum preço, desconto ou condição comercial inventada', () =>
   assert.match(text, /valores são definidos em proposta/i);
 });
 
-test('[planos] acesso pela navegação: barra lateral e menu do celular, numeração em sequência', () => {
-  for (const nav of [html.match(/<ol class="sb-nav">([\s\S]*?)<\/ol>/)[1], html.match(/<div class="mmenu"[\s\S]*?<ol>([\s\S]*?)<\/ol>/)[1]]) {
-    const items = [...nav.matchAll(/href="#([a-z]+)"[^>]*><span class="n">(\d+)<\/span><span class="lbl">([^<]+)</g)].map(m => [m[1], m[2], m[3]]);
-    assert.deepEqual(items.map(x => x[1]), ['01', '02', '03', '04', '05', '06']);
-    assert.deepEqual(items[2], ['planos', '03', 'Planos']);
-    for (const [id] of items) assert.match(html, new RegExp(`id="${id}"`), `âncora #${id}`);
-  }
+test('[planos] acesso pela navegação: numeração em sequência e item de Planos', () => {
+  const nav = html.match(/<ol class="nav-list">([\s\S]*?)<\/ol>/)[1];
+  const items = [...nav.matchAll(/href="#([a-z]+)"[^>]*><span class="n"[^>]*>(\d+)<\/span><span class="lbl">([^<]+)</g)].map(m => [m[1], m[2], m[3]]);
+  assert.deepEqual(items.map(x => x[1]), ['01', '02', '03', '04', '05', '06']);
+  assert.deepEqual(items[2], ['planos', '03', 'Planos']);
+  for (const [id] of items) assert.match(html, new RegExp(`id="${id}"`), `âncora #${id}`);
   assert.match(html, /id="planos" data-sec="planos"/);
   assert.match(html, /data-target="planos"/);
 });
@@ -129,7 +128,7 @@ test('[whatsapp] mensagens comerciais falam com a ContLup; os 2 botões pessoais
   assert.match(main, /Olá! Vim pelo site da ContLup e gostaria de solicitar uma proposta\./);
   assert.doesNotMatch(main, /Priscila/);
   // mensagens prontas da Lupi também
-  for (const e of knowledge.intents) for (const a of e.actions) if (a.type === 'whatsapp') assert.doesNotMatch(a.message, /Priscila/, e.id);
+  for (const e of fullIntents) for (const a of e.actions) if (a.type === 'whatsapp') assert.doesNotMatch(a.message, /Priscila/, e.id);
 });
 
 test('[whatsapp] número comercial exibido no contato, rodapé, menu e dados estruturados; formulário usa o comercial', () => {

@@ -6,6 +6,10 @@ import { Conversation } from '../../js/lupi/conversation.js';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const knowledge = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/lupi-knowledge.json'), 'utf8'));
+/** Rascunhos completos das respostas em revisão (pasta _revisao/, fora do site publicado). */
+export const pendingDrafts = JSON.parse(fs.readFileSync(path.join(ROOT, '_revisao/lupi-respostas-pendentes.json'), 'utf8')).intents;
+/** Repertório como a equipe edita: aprovadas do arquivo público + rascunhos completos das pendentes. */
+export const fullIntents = knowledge.intents.map(e => (e.status === 'pending_review' ? pendingDrafts.find(d => d.id === e.id) || e : e));
 export const flows = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/lupi-flows.json'), 'utf8'));
 
 /** MOCK de cliente de IA: devolve respostas programadas e registra o que recebeu. */

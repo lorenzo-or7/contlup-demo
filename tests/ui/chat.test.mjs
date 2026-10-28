@@ -246,7 +246,7 @@ test('[acessibilidade] celular: foco preso dentro do chat (modal)', async () => 
 });
 
 test('[tema] tema claro: fundo claro e contraste de texto adequado', async () => {
-  const { page, ctx } = await openPage(env, { init: () => localStorage.setItem('cl-theme', 'light') });
+  const { page, ctx } = await openPage(env, { init: () => { localStorage.setItem('cl-consent', JSON.stringify({ v: 1, prefs: true, at: '2026-10-28T00:00:00.000Z' })); localStorage.setItem('cl-theme', 'light'); } });
   await openChat(page);
   const r = await page.evaluate(() => {
     const lum = (c) => { const k = c.startsWith('color(') ? 1 : 255; const [r, g, b] = c.replace(/^color\(srgb/, '').match(/[\d.]+/g).slice(0, 3).map(Number).map(v => { v /= k; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };

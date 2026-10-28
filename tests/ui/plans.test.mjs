@@ -81,7 +81,7 @@ for (const [w, h, cols, mobile] of [[1024, 768, 2, false], [820, 1180, 2, true],
 
 for (const theme of ['dark', 'light']) {
   test(`[tema] planos no tema ${theme === 'dark' ? 'escuro' : 'claro'}: contraste do texto (WCAG AA)`, async () => {
-    const { page, ctx } = await openPage(env, { init: theme === 'light' ? () => localStorage.setItem('cl-theme', 'light') : undefined });
+    const { page, ctx } = await openPage(env, { init: theme === 'light' ? () => { localStorage.setItem('cl-consent', JSON.stringify({ v: 1, prefs: true, at: '2026-10-28T00:00:00.000Z' })); localStorage.setItem('cl-theme', 'light'); } : undefined });
     await goToPlans(page);
     const ratios = await page.evaluate(() => {
       const parse = (c) => { const k = c.startsWith('color(') ? 1 : 255; const v = c.replace(/^color\(srgb/, '').match(/[\d.]+/g).map(Number); return { rgb: v.slice(0, 3).map(x => x / k), a: v[3] ?? 1 }; };
@@ -100,23 +100,23 @@ for (const theme of ['dark', 'light']) {
   });
 }
 
-test('[planos] item "Planos" da barra lateral leva à seção e fica ativo', async () => {
+test('[planos] item "Planos" da barra superior leva à seção e fica ativo', async () => {
   const { page, ctx } = await openPage(env);
-  await page.click('.sb-nav a[data-target="planos"]');
-  await page.waitForFunction(() => document.querySelector('.sb-nav a[data-target="planos"]').classList.contains('is-active'), null, { timeout: 5000 });
+  await page.click('.nav-list a[data-target="planos"]');
+  await page.waitForFunction(() => document.querySelector('.nav-list a[data-target="planos"]').classList.contains('is-active'), null, { timeout: 5000 });
   // espera a rolagem suave terminar
   await page.waitForFunction(() => new Promise(r => { const y = scrollY; setTimeout(() => r(scrollY === y), 250); }), null, { timeout: 5000 });
   const top = await page.evaluate(() => document.getElementById('planos').getBoundingClientRect().top);
-  assert.ok(Math.abs(top) < 80, `seção a ${top}px do topo`);
+  assert.ok(top > 60 && top < 110, `seção logo abaixo da barra superior (${top}px do topo)`);
   await ctx.close();
 });
 
 test('[planos] celular: item "Planos" do menu leva à seção', async () => {
   const { page, ctx } = await openPage(env, { viewport: { width: 390, height: 844 }, isMobile: true });
-  await page.tap('.mbar-btn');
-  await page.tap('#mmenu a[href="#planos"]');
+  await page.tap('.js-burger');
+  await page.tap('#nav-menu a[href="#planos"]');
   await page.waitForTimeout(1200);
-  assert.equal(await page.isHidden('#mmenu'), true);
+  assert.equal(await page.getAttribute('.js-burger', 'aria-expanded'), 'false');
   const top = await page.evaluate(() => document.getElementById('planos').getBoundingClientRect().top);
   assert.ok(top < 120 && top > -40, `seção a ${top}px do topo`);
   await ctx.close();

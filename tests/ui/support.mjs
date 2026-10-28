@@ -21,8 +21,10 @@ export async function startEnv() {
  * Abre a página. Opções:
  *  api: undefined (modo básico) ou { health, chat } com funções que devolvem {status, body} ou 'abort'  (MOCK)
  *  viewport, colorScheme, reducedMotion, init (script antes da página)
+ *  consent: escolha já feita no aviso de privacidade (padrão: visitante que já recusou os opcionais, para o aviso
+ *           não ficar por cima do que o teste examina); null = primeira visita, com o aviso aberto
  */
-export async function openPage(env, { api, viewport = { width: 1440, height: 900 }, isMobile = false, colorScheme = 'dark', reducedMotion = 'no-preference', init, path = '/' } = {}) {
+export async function openPage(env, { api, viewport = { width: 1440, height: 900 }, isMobile = false, colorScheme = 'dark', reducedMotion = 'no-preference', init, path = '/', consent = { prefs: false } } = {}) {
   const ctx = await env.browser.newContext({ viewport, isMobile, hasTouch: isMobile, colorScheme, reducedMotion });
   const page = await ctx.newPage();
   const errors = [];
@@ -34,11 +36,13 @@ export async function openPage(env, { api, viewport = { width: 1440, height: 900
     window.__opened = [];
     window.open = (url) => { window.__opened.push(String(url)); return null; };
   });
+  if (consent) await page.addInitScript((c) => { try { if (!localStorage.getItem('cl-consent')) localStorage.setItem('cl-consent', JSON.stringify({ v: 1, at: '2026-10-28T00:00:00.000Z', ...c })); } catch { /* armazenamento bloqueado pelo teste */ } }, consent);
   if (init) await page.addInitScript(init);
   if (api) {
     await page.route(env.base + '/', async route => {
       const res = await route.fetch();
-      const html = (await res.text()).replace('<meta name="lupi-api" content="">', `<meta name="lupi-api" content="${MOCK_API}">`);
+      const html = (await res.text()).replace('<meta name="lupi-api" content="">', `<meta name="lupi-api" content="${MOCK_API}">`)
+        .replace("connect-src 'self'", `connect-src 'self' ${MOCK_API}`); // como o site deve ficar quando a IA for ligada
       await route.fulfill({ response: res, body: html });
     });
     const handle = (fn) => async route => {

@@ -1,5 +1,18 @@
 # Relatório de testes
 
+## Atualização profissional (28/10/2026): navegação, privacidade, celular, segurança e SEO
+
+Resultado: `npm test` 443 de 443 · `npm run test:ui` 148 de 148 (Chromium) · `npm run test:live` 10 pulados (IA desligada).
+
+- **Testes novos:**
+  - `tests/unit/professional-update.test.mjs`: texto do Sobre, ordem dos cards, aviso de privacidade, política fiel ao armazenamento real, nenhum recurso de terceiros, respostas pendentes fora de todo arquivo publicado, CSP, formulário, SEO e caminhos relativos.
+  - `tests/ui/nav-consent.test.mjs`: barra superior (1440 e 1024), menu suspenso no celular (fechar pelo botão, Esc, toque fora e escolha; rolagem travada e restaurada), cabeçalho que some e volta, aviso de privacidade (aceitar, recusar, personalizar, teclado, armazenamento bloqueado, movimento reduzido, Star Border e seu fallback) e convivência com a Lupi.
+  - `tests/ui/responsive.test.mjs`: 320, 360, 375, 390, 430, 768 e 1024 px nos dois temas, celular deitado, zoom de 200%, alvos de toque e foco pelo teclado.
+- **Conferido também:** o site gerado pelo Jekyll 3.10 (o mesmo do GitHub Pages) não contém `_revisao/`, `docs/`, `tests/`, `worker/` nem `.htaccess`, e não contém o texto de nenhuma resposta pendente. `npm audit` sem vulnerabilidades (raiz e `worker/`, depois de atualizar o `wrangler`).
+- **Não testado:** WebKit/Safari e Firefox (não estão instalados neste ambiente), aparelhos físicos, teclado virtual real (simulado pelo foco no campo) e leitores de tela reais (verificados atributos e anúncios, não a fala).
+
+---
+
 ## Revisão final da Lupi 3.0 (23/10/2026): acentos da Hero, Pedreira/SP e imagens antigas
 
 Resultado: `npm test` 432 de 432 · `npm run test:ui` 121 de 121 · `npm run test:live` 10 pulados (IA desligada).

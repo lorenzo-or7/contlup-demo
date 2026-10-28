@@ -13,7 +13,15 @@ não aparecem para ninguém**. Quando o visitante pergunta sobre um desses assun
 equipe e oferece o WhatsApp comercial. Também não aparecem em sugestões, em "Dúvidas gerais", nos fluxos (que usam um texto neutro)
 nem nas perguntas de acompanhamento.
 
-**Para publicar uma resposta depois da revisão:** troque `"status"` para `"approved"`, preencha `review.approvedBy` (nome e data) e
+**Onde ficam os textos (desde 28/10/2026):** os rascunhos completos estão em `_revisao/lupi-respostas-pendentes.json`. Essa pasta
+não é publicada pelo GitHub Pages (pastas com `_` ficam de fora) e não deve ser enviada para a hospedagem. O arquivo público
+`data/lupi-knowledge.json` guarda só o resumo de cada uma (id, categoria e palavras-chave), para a Lupi reconhecer o assunto: o texto,
+o título e os botões delas não chegam ao navegador do visitante. **Atenção:** o repositório no GitHub é público, então os rascunhos
+continuam legíveis no próprio GitHub (e no histórico de versões). Para que não fiquem visíveis a ninguém, o repositório precisa ser
+privado ou os rascunhos precisam sair dele.
+
+**Para publicar uma resposta depois da revisão:** copie o objeto completo de `_revisao/lupi-respostas-pendentes.json` para
+`data/lupi-knowledge.json` (no lugar do resumo com o mesmo id), troque `"status"` para `"approved"`, preencha `review.approvedBy` (nome e data) e
 `review.professionalReview` (`"revisado"`), e rode `npm test`. O teste `tests/integration/pending-context.test.mjs` tem a lista exata
 das aprovadas e precisa ser atualizado junto (isso evita publicar algo sem querer).
 
@@ -107,3 +115,16 @@ Foram retirados do rodapé e do contato os campos "a inserir" (sem inventar dado
 - [ ] Aviso dos assuntos em revisão ("Esse assunto ainda está em revisão pela equipe da ContLup…") e o texto neutro do fluxo "Primeiro atendimento › Regularizar"
 - [ ] Botões da seção "A Lupi explica": "Preciso de contador sendo MEI?" foi trocado por "Saldo em conta é lucro?" (texto que já estava publicado no site), porque a resposta sobre MEI está em revisão
 - [ ] Trecho da **política de privacidade** sobre o chat (histórico só na aba do navegador; nada é enviado a servidores)
+
+## 8. Atualização de 28/10/2026 (navegação, privacidade e celular): decisões e conferências
+
+- [ ] **Telefone:** o texto do Sobre agora diz "por WhatsApp, telefone e e-mail" (pedido). Para combinar com ele, o número comercial
+  ganhou um botão **"Ligar"** no Contato (`tel:+5519971310182`). Confirmar que esse número também atende ligações.
+- [ ] **Textos que ainda falam só em WhatsApp e e-mail** (não foram mudados, porque o pedido era só o Sobre): a linha "Atendimento ·
+  100% online, pelo WhatsApp e por e-mail" no Contato, a descrição da página para o Google e as respostas da Lupi sobre atendimento.
+  Decidir se incluem o telefone.
+- [ ] **Aviso de privacidade:** textos do cartão ("Sem cookies de rastreamento por aqui…", categorias Essenciais e Preferências) e a
+  política de privacidade reescrita no rodapé, que agora descreve exatamente o que o site guarda no navegador.
+- [ ] **Respostas em revisão:** o texto delas saiu do site publicado (fica em `_revisao/`), mas o repositório no GitHub é público.
+  Para que não fique visível a ninguém, tornar o repositório privado (o GitHub Pages em repositório privado exige plano pago) ou
+  guardar os rascunhos fora do repositório.

@@ -1,13 +1,15 @@
 // Bloqueio das respostas em revisão, manutenção das aprovadas e acompanhamento por contexto (sem IA).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { newConversation, knowledge, flows, memoryStorage, lastBot, chipLabels } from '../support/helpers.mjs';
+import { newConversation, knowledge, pendingDrafts, flows, memoryStorage, lastBot, chipLabels } from '../support/helpers.mjs';
 import { createSessionStore } from '../../js/lupi/session-store.js';
 import { TEXT } from '../../js/lupi/conversation.js';
 import { buildSystemPrompt } from '../../worker/src/prompt.js';
 
 const approved = knowledge.intents.filter(e => e.status === 'approved');
-const pending = knowledge.intents.filter(e => e.status === 'pending_review');
+const pendingPublic = knowledge.intents.filter(e => e.status === 'pending_review');
+// o texto das pendentes não vai para o site: os testes procuram por ele usando os rascunhos de _revisao/
+const pending = pendingDrafts;
 const statusOf = new Map(knowledge.intents.map(e => [e.id, e.status]));
 const snippet = (e) => e.answer.slice(0, 60);
 
@@ -40,6 +42,15 @@ test('[status] 39 respostas contábeis novas em pending_review, com o conteúdo 
     assert.ok(e.examples.length && e.keywords.length, `${e.id}: exemplos e palavras-chave preservados`);
     assert.equal(e.review.approvedBy, null, `${e.id}: sem aprovador enquanto pendente`);
     assert.equal(e.review.professionalReview, 'pendente');
+  }
+});
+
+test('[status] o arquivo público só tem o resumo das pendentes (sem texto, título nem ações)', () => {
+  assert.deepEqual(pendingPublic.map(e => e.id), pending.map(e => e.id), 'mesmos ids, mesma ordem');
+  for (const e of pendingPublic) {
+    assert.deepEqual(Object.keys(e).filter(k => !['id', 'category', 'group', 'priority', 'keywords', 'exclude', 'examples', 'status'].includes(k)), [], `${e.id}: só campos de reconhecimento`);
+    const d = pending.find(x => x.id === e.id);
+    for (const k of ['category', 'keywords', 'examples']) assert.deepEqual(e[k], d[k], `${e.id}: ${k} igual ao rascunho`);
   }
 });
 

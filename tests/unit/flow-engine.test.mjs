@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { FlowEngine, matchOption, renderSummary } from '../../js/lupi/flow-engine.js';
-import { knowledge, flows } from '../support/helpers.mjs';
+import { knowledge, pendingDrafts, flows } from '../support/helpers.mjs';
 
 const approved = new Map(knowledge.intents.filter(e => e.status === 'approved').map(e => [e.id, e]));
 const plans = new Map(knowledge.plans.map(p => [p.id, p]));
@@ -40,7 +40,7 @@ test('[fluxos] C — MEI: resposta em revisão nunca aparece no fluxo; entra o t
   e.choose(0);
   const out = e.choose(0); // faturamento -> info (mei-limite, em revisão)
   const texts = out.messages.map(m => m.text).join('\n');
-  const pending = knowledge.intents.find(x => x.id === 'mei-limite');
+  const pending = pendingDrafts.find(x => x.id === 'mei-limite');
   assert.equal(pending.status, 'pending_review');
   assert.ok(!texts.includes(pending.answer.slice(0, 50)), 'texto pendente não aparece');
   const step = flows.flows.find(f => f.id === 'mei').steps.info_faturamento;

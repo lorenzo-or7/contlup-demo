@@ -10,7 +10,8 @@ after(async () => { await env?.close(); });
 const ORDER = ['inicio', 'servicos', 'planos', 'contlup', 'priscila', 'jeito', 'numeros', 'historia', 'situacoes', 'lupi-explica', 'contato', 'fale-conosco'];
 const WIDTHS = [320, 375, 768, 1024, 1440];
 const COLUMNS = { 320: 1, 375: 1, 768: 2, 1024: 2, 1440: 4 };
-const lightTheme = () => localStorage.setItem('cl-theme', 'light');
+// tema lembrado só com as Preferências permitidas no aviso de privacidade
+const lightTheme = () => { localStorage.setItem('cl-consent', JSON.stringify({ v: 1, prefs: true, at: '2026-10-28T00:00:00.000Z' })); localStorage.setItem('cl-theme', 'light'); };
 
 // contraste WCAG entre o texto e o primeiro fundo sólido dos ancestrais
 const CONTRAST = () => {
@@ -72,22 +73,22 @@ for (const width of WIDTHS) {
       for (let i = 1; i < r.plans.length; i++) if (r.plans[i].top === r.plans[i - 1].top) assert.ok(r.plans[i].left >= r.plans[i - 1].right, 'cards lado a lado não se sobrepõem');
       const low = await page.evaluate(CONTRAST);
       assert.deepEqual(low, [], 'textos com contraste abaixo do mínimo WCAG AA');
-      if (mobile) assert.equal(await page.isVisible('.mbar'), true);
-      else assert.equal(await page.isVisible('.sb-nav'), true);
+      assert.equal(await page.isVisible('.nav'), true);
+      assert.equal(await page.isVisible('.js-burger'), width < 1024, 'hambúrguer só abaixo de 1024 px');
       assert.deepEqual(errors, []);
       await ctx.close();
     });
   }
 }
 
-test('[navegação] desktop: cada item da barra lateral leva à seção, abaixo do topo, e fica ativo', async () => {
+test('[navegação] desktop: cada item da barra superior leva à seção, logo abaixo da barra, e fica ativo', async () => {
   const { page, ctx } = await openPage(env, { reducedMotion: 'reduce' });
   for (const id of ['servicos', 'planos', 'contlup', 'numeros', 'contato', 'inicio']) {
-    await page.click(`.sb-nav a[href="#${id}"]`);
-    await page.waitForFunction((i) => document.querySelector(`.sb-nav a[href="#${i}"]`).getAttribute('aria-current') === 'true', id, { timeout: 4000 });
+    await page.click(`.nav-list a[href="#${id}"]`);
+    await page.waitForFunction((i) => document.querySelector(`.nav-list a[href="#${i}"]`).getAttribute('aria-current') === 'true', id, { timeout: 4000 });
     const top = await page.evaluate((i) => document.getElementById(i).getBoundingClientRect().top, id);
-    assert.ok(Math.abs(top) <= 80, `#${id} no topo (${top}px)`);
-    assert.equal(await page.locator('.sb-nav a[aria-current="true"]').count(), 1, 'só um item ativo');
+    assert.ok(top > -2 && top <= 110, `#${id} logo abaixo da barra (${top}px)`);
+    assert.equal(await page.locator('.nav-list a[aria-current="true"]').count(), 1, 'só um item ativo');
   }
   await ctx.close();
 });
@@ -96,7 +97,7 @@ test('[navegação] desktop: rolar até subseções mantém o item do grupo ativ
   const { page, ctx } = await openPage(env, { reducedMotion: 'reduce' });
   for (const [sub, group] of [['priscila', 'contlup'], ['jeito', 'contlup'], ['historia', 'numeros'], ['situacoes', 'numeros'], ['lupi-explica', 'numeros'], ['fale-conosco', 'contato']]) {
     await page.evaluate((i) => document.getElementById(i).scrollIntoView({ block: 'start' }), sub);
-    await page.waitForFunction((g) => document.querySelector(`.sb-nav a[href="#${g}"]`).getAttribute('aria-current') === 'true', group, { timeout: 4000 });
+    await page.waitForFunction((g) => document.querySelector(`.nav-list a[href="#${g}"]`).getAttribute('aria-current') === 'true', group, { timeout: 4000 });
   }
   await ctx.close();
 });
@@ -105,21 +106,25 @@ for (const width of [320, 375]) {
   test(`[navegação] celular ${width}px: menu leva a cada seção sem ficar escondida atrás da barra fixa`, async () => {
     const { page, ctx, errors } = await openPage(env, { viewport: { width, height: 740 }, isMobile: true, reducedMotion: 'reduce' });
     for (const id of ['servicos', 'planos', 'contlup', 'numeros', 'contato']) {
-      await page.tap('.mbar-btn');
-      assert.equal(await page.isVisible('#mmenu'), true);
-      await page.tap(`#mmenu a[href="#${id}"]`);
-      assert.equal(await page.isHidden('#mmenu'), true, 'menu fecha ao escolher');
+      await page.tap('.js-burger');
+      assert.equal(await page.getAttribute('.js-burger', 'aria-expanded'), 'true');
+      await page.tap(`#nav-menu a[href="#${id}"]`);
+      assert.equal(await page.getAttribute('.js-burger', 'aria-expanded'), 'false', 'menu fecha ao escolher');
       await page.waitForFunction((i) => Math.abs(document.getElementById(i).getBoundingClientRect().top) < 120, id, { timeout: 4000 });
-      await page.waitForFunction((i) => document.querySelector(`#mmenu a[href="#${i}"]`).getAttribute('aria-current') === 'true', id, { timeout: 2000 }).catch(() => {});
+      // o cabeçalho some ao descer; rolar um pouco para cima o traz de volta (como faria quem quer o menu de novo)
+      await page.waitForFunction(() => document.querySelector('.nav').classList.contains('is-hidden'));
+      await page.evaluate(() => scrollBy(0, -40));
+      await page.waitForFunction(() => !document.querySelector('.nav').classList.contains('is-hidden'));
+      await page.waitForFunction((i) => document.querySelector(`#nav-menu a[href="#${i}"]`).getAttribute('aria-current') === 'true', id, { timeout: 2000 }).catch(() => {});
       const r = await page.evaluate((i) => {
-        const bar = document.querySelector('.mbar').getBoundingClientRect().bottom;
+        const bar = document.querySelector('.nav').getBoundingClientRect().bottom;
         const head = document.querySelector(`#${i} h2, #${i} .eyebrow`).getBoundingClientRect().top;
-        return { bar, head, active: document.querySelector(`#mmenu a[href="#${i}"]`).getAttribute('aria-current') };
+        return { bar, head, active: document.querySelector(`#nav-menu a[href="#${i}"]`).getAttribute('aria-current') };
       }, id);
       assert.ok(r.head >= r.bar - 1, `#${id}: título em ${r.head}px, barra até ${r.bar}px`);
       assert.equal(r.active, 'true', `#${id} ativo no menu do celular`);
     }
-    assert.equal(await page.evaluate(() => document.body.style.overflow), '', 'rolagem liberada depois de fechar o menu');
+    assert.equal(await page.evaluate(() => document.body.style.position + document.body.style.overflow), '', 'rolagem liberada depois de fechar o menu');
     assert.deepEqual(errors, []);
     await ctx.close();
   });

@@ -1,0 +1,19 @@
+# GitHub Pages (Jekyll): arquivos do repositório que NÃO vão para o site publicado.
+# O index.html não tem cabeçalho do Jekyll e é publicado exatamente como está.
+# Pastas e arquivos que começam com "_" ou "." (como _revisao/) ficam de fora automaticamente.
+# O Jekyll publica o .htaccess por padrão; a lista vazia abaixo desliga isso (o .htaccess é só para hospedagem Apache).
+include: []
+exclude:
+  - docs
+  - tests
+  - eval
+  - worker
+  - node_modules
+  - package.json
+  - package-lock.json
+  - README.md
+  - banner.svg
+  - footer.svg
+  - preview.webp
+  - img/priscila-recorte.webp
+  - img/lupi/estados

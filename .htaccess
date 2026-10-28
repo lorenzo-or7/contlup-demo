@@ -1,0 +1,52 @@
+# Modelo para hospedagem Apache (ex.: HostGator). NÃO tem efeito no GitHub Pages (arquivos com "." não são publicados lá).
+# Antes de ativar no servidor: confirme que o domínio já abre em HTTPS com certificado válido.
+# Cada bloco usa <IfModule>: se o módulo não existir no plano, o bloco é ignorado em vez de derrubar o site.
+
+Options -Indexes
+
+# 1. Sempre HTTPS
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # 2. Pastas e arquivos de trabalho que não fazem parte do site (o ideal é nem enviá-los ao servidor)
+  RewriteRule ^(_revisao|docs|tests|eval|worker|node_modules)(/|$) - [F,L]
+  RewriteRule ^(package(-lock)?\.json|README\.md|_config\.yml|\.env.*|\.git.*)$ - [F,L]
+</IfModule>
+
+# 3. Cabeçalhos de segurança (complementam a política de conteúdo que já está no index.html)
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "DENY"
+  Header always set Content-Security-Policy "frame-ancestors 'none'; object-src 'none'; base-uri 'self'"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+  # HSTS: ative só depois de confirmar que todo o domínio (e subdomínios, se incluir) funciona em HTTPS.
+  # Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
+
+# 4. Cache: fontes e imagens mudam pouco; HTML, CSS, JS e o repertório da Lupi são revalidados a cada visita
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 0 seconds"
+  ExpiresByType text/javascript "access plus 0 seconds"
+  ExpiresByType application/javascript "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/webp .webp
+  AddType text/javascript .js .mjs
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml text/xml application/xml
+</IfModule>

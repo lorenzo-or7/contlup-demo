@@ -1,0 +1,7 @@
+# Só vale na raiz de um domínio (ex.: hospedagem própria). No GitHub Pages de projeto (/contlup-demo/) os buscadores
+# leem o robots.txt de lorenzo-or7.github.io, não este. Ao mudar de domínio, atualize o endereço do sitemap.
+User-agent: *
+Allow: /
+Disallow: /_revisao/
+
+Sitemap: https://lorenzo-or7.github.io/contlup-demo/sitemap.xml
