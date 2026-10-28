@@ -6,7 +6,7 @@
 // o teste exige o aviso e confere, em TODAS as entradas, que nenhum texto pendente aparece.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { newConversation, knowledge, flows, lastBot } from '../support/helpers.mjs';
+import { newConversation, knowledge, fullIntents, flows, lastBot } from '../support/helpers.mjs';
 import { buildIndex, detect } from '../../js/lupi/nlu.js';
 import { TEXT } from '../../js/lupi/conversation.js';
 import { BPO_FORBIDDEN } from '../support/official.mjs';
@@ -201,7 +201,7 @@ export const CASES = [
 const flowIds = new Set(flows.flows.map(f => f.id));
 const statusOf = new Map(knowledge.intents.map(e => [e.id, e.status]));
 // trechos de todas as respostas pendentes: nenhum pode aparecer em nenhuma resposta
-const HELD_TEXTS = knowledge.intents.filter(e => e.status !== 'approved').map(e => [e.id, e.answer.slice(0, 60)]);
+const HELD_TEXTS = fullIntents.filter(e => e.status !== 'approved').map(e => [e.id, e.answer.slice(0, 60)]);
 
 async function run(c) {
   if (c.setup) for (const s of c.setup) await conv.send(s);

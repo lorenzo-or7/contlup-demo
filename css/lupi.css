@@ -29,7 +29,7 @@ body.lc-on .lc-launch{opacity:0;pointer-events:none;transform:translateY(8px) sc
 .lc{position:fixed;z-index:70;right:28px;bottom:28px;width:400px;height:min(680px,calc(100dvh - 56px));display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:var(--surface);border:1px solid var(--line-strong);box-shadow:0 30px 80px -30px rgba(0,0,0,.75),0 0 0 1px rgba(115,87,240,.08);opacity:0;transform:translateY(16px) scale(.98);transform-origin:100% 100%;transition:opacity .35s var(--ease),transform .35s var(--ease),width .4s var(--ease),height .4s var(--ease)}
 .lc[hidden]{display:none}
 .lc.is-open{opacity:1;transform:none}
-.lc.is-wide{width:min(760px,calc(100vw - var(--sb) - 80px));height:calc(100dvh - 56px)}
+.lc.is-wide{width:min(760px,calc(100vw - 80px));height:calc(100dvh - 56px)}
 
 /* cabeçalho */
 .lc-head{position:relative;flex:none;height:140px;padding:20px 22px;overflow:hidden;color:#fff;background:radial-gradient(120% 140% at 85% 100%,rgba(198,182,255,.45),transparent 60%),linear-gradient(135deg,var(--violet-deep),var(--violet))}

@@ -8,7 +8,8 @@ let env;
 before(async () => { env = await startEnv(); });
 after(async () => { await env?.close(); });
 
-const lightTheme = () => localStorage.setItem('cl-theme', 'light');
+// tema lembrado só com as Preferências permitidas no aviso de privacidade
+const lightTheme = () => { localStorage.setItem('cl-consent', JSON.stringify({ v: 1, prefs: true, at: '2026-10-28T00:00:00.000Z' })); localStorage.setItem('cl-theme', 'light'); };
 const OPEN = '.js-bpo-open';
 
 async function openPanel(page) {
@@ -112,7 +113,7 @@ test('[BPO] fecha pelo botão e pelo clique fora; fundo não recebe cliques com 
   // o que está "por baixo" do escurecido é o próprio painel (::backdrop), não a página
   const hit = await page.evaluate(() => document.elementFromPoint(300, 450)?.id);
   assert.equal(hit, 'bpo-painel');
-  assert.equal(await page.evaluate(() => { const a = document.querySelector('.sb-nav a'); a.focus(); return document.activeElement === a; }), false, 'página de fundo inerte');
+  assert.equal(await page.evaluate(() => { const a = document.querySelector('.nav-list a'); a.focus(); return document.activeElement === a; }), false, 'página de fundo inerte');
   await page.click('.js-bpo-close');
   await page.waitForFunction(() => !document.getElementById('bpo-painel').open);
   assert.match((await state(page)).active, /js-bpo-open/);

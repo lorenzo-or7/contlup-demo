@@ -13,10 +13,10 @@ const text = strip(html);
 
 const ORDER = ['inicio', 'servicos', 'planos', 'contlup', 'priscila', 'jeito', 'numeros', 'historia', 'situacoes', 'lupi-explica', 'contato', 'fale-conosco'];
 const GROUP = { inicio: 'inicio', contlup: 'contlup', priscila: 'contlup', jeito: 'contlup', servicos: 'servicos', planos: 'planos', numeros: 'numeros', historia: 'numeros', situacoes: 'numeros', 'lupi-explica': 'numeros', contato: 'contato', 'fale-conosco': 'contato' };
-const NAV = [['inicio', 'Início'], ['servicos', 'Serviços'], ['planos', 'Planos'], ['contlup', 'Sobre'], ['numeros', 'Seus números'], ['contato', 'Contato']];
+const NAV = [['inicio', 'Início'], ['servicos', 'Serviços'], ['planos', 'Planos'], ['contlup', 'Sobre a ContLup'], ['numeros', 'Entenda seus números'], ['contato', 'Contato']];
 
 test('[estrutura] seções na ordem pedida: Início, Serviços, Planos, Sobre (com a Priscila), Entenda seus números, Contato', () => {
-  const ids = [...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m => m[1]).filter(id => id !== 'lupi-chat');
+  const ids = [...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m => m[1]).filter(id => !['lupi-chat', 'aviso-privacidade'].includes(id));
   assert.deepEqual(ids, ORDER);
   const footer = html.indexOf('<footer');
   assert.ok(footer > html.indexOf('id="fale-conosco"'), 'rodapé por último');
@@ -30,15 +30,15 @@ test('[estrutura] cada seção pertence ao item certo da navegação (data-sec)'
   }
 });
 
-test('[navegação] barra lateral e menu do celular: 6 itens, mesmos destinos, âncoras existentes', () => {
-  const side = html.match(/<ol class="sb-nav">([\s\S]*?)<\/ol>/)[1];
-  const mobile = html.match(/<div class="mmenu"[\s\S]*?<ol>([\s\S]*?)<\/ol>/)[1];
-  for (const nav of [side, mobile]) {
-    const items = [...nav.matchAll(/href="#([a-z-]+)"[^>]*><span class="n">(\d+)<\/span><span class="lbl">([^<]+)</g)].map(m => [m[1], m[3]]);
-    assert.deepEqual(items, NAV);
-  }
-  const targets = [...side.matchAll(/data-target="([a-z-]+)"/g)].map(m => m[1]);
-  assert.deepEqual(targets, NAV.map(n => n[0]), 'estado ativo usa os mesmos ids');
+test('[navegação] uma única navegação (barra superior no desktop, menu suspenso no celular): 6 itens, âncoras existentes', () => {
+  assert.doesNotMatch(html, /class="sidebar|class="sb-|class="mbar|class="mmenu|js-pin/, 'sem resíduos da barra lateral e do menu antigo');
+  assert.equal((html.match(/<nav class="nav-menu"/g) || []).length, 1);
+  const nav = html.match(/<ol class="nav-list">([\s\S]*?)<\/ol>/)[1];
+  const items = [...nav.matchAll(/href="#([a-z-]+)" data-target="\1"><span class="n" aria-hidden="true">(\d+)<\/span><span class="lbl">([^<]+)</g)].map(m => [m[1], m[3]]);
+  assert.deepEqual(items, NAV);
+  assert.match(html, /<button class="nav-burger js-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu">/);
+  assert.match(html, /<button class="nav-theme js-theme" type="button" aria-label="Tema claro" aria-pressed="false"/);
+  assert.match(html, /<a class="skip" href="#conteudo">Pular para o conteúdo<\/a>/);
 });
 
 test('[navegação] todo link interno aponta para um id que existe e não há ids duplicados', () => {
@@ -88,8 +88,9 @@ test('[FAQ] seção pública de dúvidas removida e conteúdo levado para a Lupi
 
 test('[conteúdo] nada se perdeu em relação à versão publicada (exceto o que foi movido de propósito)', (t) => {
   let old;
-  try { old = execFileSync('git', ['show', 'origin/main:index.html'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); }
-  catch { t.skip('origin/main indisponível'); return; }
+  // versão publicada antes do rodapé novo (merge do PR 7); comparar com origin/main deixou de servir depois do merge
+  try { old = execFileSync('git', ['show', 'e866974:index.html'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); }
+  catch { t.skip('histórico do git indisponível'); return; }
   const blocks = [...old.matchAll(/<(h[1-4]|li|summary|p)\b[^>]*>([\s\S]*?)<\/\1>/g)].map(m => strip(m[2])).filter(s => s.length > 3);
   // movido para a Lupi, renomeado ou removido por ser marcador de conteúdo a preencher
   const intentional = [
@@ -104,6 +105,10 @@ test('[conteúdo] nada se perdeu em relação à versão publicada (exceto o que
     // rodapé reorganizado (coluna Serviços virou Navegação) e Hero sem referência geográfica
     /^Contabilidade 100% online$/, /^Pedreira\/SP Atendimento personalizado$/, /De Pedreira\/SP\.$/,
     /^Abrir empresa ou trocar de contador$/, /^E-mail · contato@contlup\.com\.br$/,
+    // 28/10/2026: texto do Sobre pedido pela ContLup, menu de tela cheia trocado pelo menu suspenso (Instagram e e-mail
+    // continuam no Contato e no rodapé), telefone junto do WhatsApp comercial e política de privacidade reescrita
+    /^O atendimento é 100% online , pelo WhatsApp e por e-mail\.$/, /^WhatsApp comercial \(19\) 97131-0182 Copiar$/,
+    /^WhatsApp · \(19\) 97131-0182$/, /^Instagram · @contlupstudiocontabil$/, /^Este site não usa cookies de rastreamento e não armazena dados pessoais\./,
   ];
   const lost = blocks.filter(b => !text.includes(b) && !intentional.some(re => re.test(b)));
   assert.deepEqual(lost, []);
@@ -127,12 +132,12 @@ const col = (cls) => footerHtml.match(new RegExp(`<(?:div|nav) class="foot-col $
 const links = (h) => [...h.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)].map(m => [m[1].replace(/&amp;/g, '&'), strip(m[2])]);
 
 test('[rodapé] nível 1: quatro colunas (institucional, navegação, contato, links úteis)', () => {
-  const heads = [...footerHtml.matchAll(/<h4>([^<]+)<\/h4>/g)].map(m => m[1]);
+  const heads = [...footerHtml.matchAll(/<h2 class="foot-h">([^<]+)<\/h2>/g)].map(m => m[1]);
   assert.deepEqual(heads, ['Navegação', 'Contato', 'Links úteis']);
   const brand = col('foot-brand');
-  assert.match(brand, /<img src="img\/logo\.png" alt="ContLup Studio Contábil"/);
+  assert.match(brand, /<img src="img\/logo\.webp" alt="ContLup Studio Contábil"/);
   assert.match(strip(brand), /Atendimento 100% online/);
-  assert.deepEqual(links(col('foot-nav')), [['#inicio', 'Início'], ['#servicos', 'Serviços'], ['#planos', 'Planos'], ['#contlup', 'Sobre'], ['#numeros', 'Seus números'], ['#contato', 'Contato']]);
+  assert.deepEqual(links(col('foot-nav')), [['#inicio', 'Início'], ['#servicos', 'Serviços'], ['#planos', 'Planos'], ['#contlup', 'Sobre a ContLup'], ['#numeros', 'Entenda seus números'], ['#contato', 'Contato']]);
   const contact = links(col('foot-contact'));
   assert.equal(contact.length, 3);
   assert.match(contact[0][0], /^https:\/\/wa\.me\/5519971310182\?text=/);
@@ -145,14 +150,15 @@ test('[rodapé] links úteis oficiais preservados exatamente como na versão pub
   assert.deepEqual(now.map(l => l[1]), ['Receita Federal', 'Simples Nacional', 'Portal do Empreendedor (MEI)', 'eSocial']);
   for (const [href] of now) assert.match(href, /^https:\/\/(www\.gov\.br|www8\.receita\.fazenda\.gov\.br)\//);
   let old;
-  try { old = execFileSync('git', ['show', 'origin/main:index.html'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); }
-  catch { t.skip('origin/main indisponível'); return; }
+  // versão publicada antes do rodapé novo (merge do PR 7); comparar com origin/main deixou de servir depois do merge
+  try { old = execFileSync('git', ['show', 'e866974:index.html'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); }
+  catch { t.skip('histórico do git indisponível'); return; }
   const oldUseful = links(old.match(/<h4>Links úteis<\/h4><ul>([\s\S]*?)<\/ul>/)[1]);
   assert.deepEqual(now, oldUseful);
 });
 
 test('[rodapé] nível 2: faixa legal com empresa, CNPJ, responsável técnica, privacidade (uma vez) e direitos', () => {
-  const legal = footerHtml.match(/<div class="legal">([\s\S]*?)<\/div>/)[1];
+  const legal = footerHtml.match(/<div class="legal">([\s\S]*?)<\/div>\s*<div class="privacy"/)[1];
   const t2 = strip(legal);
   assert.match(t2, /ContLup Studio Contábil/);
   assert.match(t2, /CNPJ 68\.970\.978\/0001-10/);
@@ -161,9 +167,10 @@ test('[rodapé] nível 2: faixa legal com empresa, CNPJ, responsável técnica, 
   assert.equal((footer.match(/68\.970\.978\/0001-10/g) || []).length, 1, 'CNPJ uma vez');
   assert.equal((footer.match(/Política de privacidade/gi) || []).length, 1, 'acionador da política aparece uma vez');
   assert.match(legal, /<button class="legal-priv js-priv-toggle" type="button" aria-expanded="false" aria-controls="privacidade">Política de privacidade<\/button>/);
+  assert.match(legal, /<button class="legal-priv js-ck-open" type="button" aria-controls="aviso-privacidade">Preferências de privacidade<\/button>/, 'link permanente para mudar a escolha');
   assert.doesNotMatch(footerHtml, /<details|<summary/);
   // o texto completo continua no site, fechado até alguém pedir
-  assert.match(footerHtml, /<div class="privacy" id="privacidade" role="region" aria-label="Política de privacidade" tabindex="-1" hidden>\s*<p>Este site não usa cookies de rastreamento/);
+  assert.match(footerHtml, /<div class="privacy" id="privacidade" role="region" aria-label="Política de privacidade" tabindex="-1" hidden>\s*<p>Este site não usa cookies de publicidade, de análise ou de rastreamento/);
   assert.match(footerHtml, /Lei Geral de Proteção de Dados \(Lei nº 13\.709\/2018\)/);
 });
 
@@ -184,8 +191,8 @@ test('[Hero] microtexto do topo: atendimento 100% online, sem cidade', () => {
   assert.match(html, /<p class="loc"><b>Atendimento 100% online<\/b><br>Contabilidade próxima,<br>onde você estiver<\/p>/);
   const hero = strip(html.slice(html.indexOf('id="inicio"'), html.indexOf('<!-- ================= 2. SERVIÇOS')));
   assert.doesNotMatch(hero, /Pedreira|Atendimento personalizado/);
-  const mmenu = strip(html.slice(html.indexOf('<div class="mmenu"'), html.indexOf('<!-- ================= 1. INÍCIO')));
-  assert.doesNotMatch(mmenu, /Pedreira/i, 'menu do celular sem a cidade');
+  const nav = strip(html.slice(html.indexOf('<header class="nav'), html.indexOf('<!-- ================= 1. INÍCIO')));
+  assert.doesNotMatch(nav, /Pedreira/i, 'navegação sem a cidade');
 });
 
 test('[Pedreira/SP] nenhuma menção comercial à cidade: conteúdo, título, descrição, compartilhamento e dados estruturados', () => {

@@ -1,7 +1,7 @@
 {
   "version": 3,
   "updatedAt": "2026-10-23",
-  "_leia-me": "Repertório da Lupi (sem IA). Cada intenção tem: id (estável, não mude), category, title, examples (perguntas de exemplo; também são usadas nos testes automáticos), keywords (palavras e expressões que ativam a resposta), exclude (expressões que impedem a intenção, para desambiguar), answer (texto mostrado), actions (botões: intent, flow, whatsapp, link), group (intenções do mesmo assunto não são tratadas como ambíguas entre si), flow, priority (ganha de correspondências fracas), forMei (intenção alternativa para \"e para MEI?\"), status (draft, pending_review, approved, outdated; só approved aparece) e review (legalSensitive = sujeito a mudança legal; professionalReview = pendente ou revisado; approvedBy; source; updatedAt). Para desativar um conteúdo, troque status para outdated. Intenções pending_review nunca são mostradas: se a pergunta for sobre elas, a Lupi só avisa que o assunto está em revisão e oferece o contato. Para publicar uma, troque status para approved e preencha review.approvedBy. Sinônimos ficam em synonyms; os benefícios dos planos em plans. contextGroups e followUps definem as perguntas de acompanhamento (\"e se eu atrasar?\" logo depois do DAS): cada regra vale para um grupo de assuntos, com as expressões que a ativam (match) e os destinos (targets); mais de um destino = a Lupi pergunta qual.",
+  "_leia-me": "Repertório da Lupi (sem IA). Cada intenção tem: id (estável, não mude), category, title, examples (perguntas de exemplo; também são usadas nos testes automáticos), keywords (palavras e expressões que ativam a resposta), exclude (expressões que impedem a intenção, para desambiguar), answer (texto mostrado), actions (botões: intent, flow, whatsapp, link), group (intenções do mesmo assunto não são tratadas como ambíguas entre si), flow, priority (ganha de correspondências fracas), forMei (intenção alternativa para \"e para MEI?\"), status (draft, pending_review, approved, outdated; só approved aparece) e review (legalSensitive = sujeito a mudança legal; professionalReview = pendente ou revisado; approvedBy; source; updatedAt). Para desativar um conteúdo, troque status para outdated. Intenções pending_review nunca são mostradas: se a pergunta for sobre elas, a Lupi só avisa que o assunto está em revisão e oferece o contato. Para publicar uma, troque status para approved e preencha review.approvedBy. Sinônimos ficam em synonyms; os benefícios dos planos em plans. contextGroups e followUps definem as perguntas de acompanhamento (\"e se eu atrasar?\" logo depois do DAS): cada regra vale para um grupo de assuntos, com as expressões que a ativam (match) e os destinos (targets); mais de um destino = a Lupi pergunta qual. Intenções em pending_review aparecem aqui só como resumo (id, categoria e palavras-chave, sem texto de resposta): os rascunhos completos ficam em _revisao/lupi-respostas-pendentes.json, que não é publicado.",
   "contact": {
     "company": "ContLup Studio Contábil",
     "responsible": "Priscila Petean",
@@ -1853,13 +1853,7 @@
     {
       "id": "aconselhamento",
       "category": "contlup",
-      "title": "Orientação para o seu caso",
-      "examples": [
-        "Qual regime devo escolher para a minha empresa?",
-        "quanto vou pagar de imposto?",
-        "no meu caso vale a pena abrir empresa?",
-        "como pago menos imposto?"
-      ],
+      "priority": true,
       "keywords": [
         "qual regime devo",
         "qual regime eu devo",
@@ -1885,29 +1879,13 @@
         "me diga se",
         "analisa minha"
       ],
-      "priority": true,
-      "answer": "Essa é uma decisão que depende dos dados da sua empresa (atividade, faturamento, despesas, folha e planos), então eu não consigo dar uma orientação individual por aqui sem correr o risco de errar.\n\nO que eu posso fazer é explicar os conceitos gerais e te colocar em contato com a equipe da ContLup, que analisa o seu caso com segurança.",
-      "actions": [
-        {
-          "type": "whatsapp",
-          "label": "Falar com a ContLup",
-          "message": "Olá! Vim pelo site da ContLup e gostaria de uma orientação para o meu caso."
-        },
-        {
-          "type": "intent",
-          "id": "reg-diferencas",
-          "label": "Entender os regimes"
-        }
+      "examples": [
+        "Qual regime devo escolher para a minha empresa?",
+        "quanto vou pagar de imposto?",
+        "no meu caso vale a pena abrir empresa?",
+        "como pago menos imposto?"
       ],
-      "expression": "thinking",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "serv-areas",
@@ -2746,12 +2724,6 @@
     {
       "id": "mei-o-que-e",
       "category": "mei",
-      "title": "O que é MEI",
-      "examples": [
-        "O que é MEI?",
-        "o que significa MEI",
-        "o que é microempreendedor individual"
-      ],
       "keywords": [
         "o que e mei",
         "o que significa mei",
@@ -2760,44 +2732,16 @@
         "mei e o que",
         "como funciona o mei"
       ],
-      "answer": "MEI é a sigla de **Microempreendedor Individual**: um jeito simplificado de formalizar um pequeno negócio, com CNPJ, emissão de notas e uma guia mensal de tributos em valor fixo (o DAS).\n\nExistem regras sobre atividades permitidas, faturamento e contratação, que podem mudar com o tempo. Por isso, antes de decidir, vale conferir se o seu caso se encaixa.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-abrir",
-          "label": "Como abrir um MEI"
-        },
-        {
-          "type": "intent",
-          "id": "mei-das",
-          "label": "O que é o DAS"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-mei",
-          "label": "Plano Lup MEI"
-        }
+      "examples": [
+        "O que é MEI?",
+        "o que significa MEI",
+        "o que é microempreendedor individual"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-abrir",
       "category": "mei",
-      "title": "Como abrir um MEI",
-      "examples": [
-        "Como abrir um MEI?",
-        "quero virar MEI",
-        "como faço para ser MEI",
-        "como formalizar meu MEI"
-      ],
       "keywords": [
         "abrir mei",
         "abrir um mei",
@@ -2826,44 +2770,17 @@
         "fechar",
         "cancelar"
       ],
-      "answer": "A formalização do MEI é feita **online, pelos canais oficiais do governo** (Portal do Empreendedor, no gov.br), e o cadastro em si é gratuito.\n\nAntes de abrir, vale conferir se a sua atividade é permitida para MEI e se o modelo combina com os seus planos de faturamento. A ContLup orienta nessa decisão e na regularização, e o plano **Lup MEI** inclui essa orientação.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-o-que-e",
-          "label": "O que é MEI"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-mei",
-          "label": "Plano Lup MEI"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero abrir meu MEI",
-          "message": "Olá! Gostaria de orientação para abrir meu MEI."
-        }
+      "examples": [
+        "Como abrir um MEI?",
+        "quero virar MEI",
+        "como faço para ser MEI",
+        "como formalizar meu MEI"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-das",
       "category": "mei",
-      "title": "DAS do MEI",
-      "examples": [
-        "Como pago o DAS?",
-        "o que é o DAS do MEI?",
-        "onde emito a guia do MEI",
-        "DAS"
-      ],
       "keywords": [
         "das",
         "pagar das",
@@ -2891,43 +2808,17 @@
       "exclude": [
         "dasn simei"
       ],
-      "answer": "O **DAS** é a guia mensal do MEI, que reúne em um único pagamento os tributos e a contribuição previdenciária do microempreendedor. O valor é fixo e definido pelas regras do MEI, e a guia é emitida pelos canais oficiais.\n\nEle é devido todo mês, mesmo nos meses sem faturamento. O plano **Lup MEI** inclui a emissão e o controle do DAS.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-pendencias",
-          "label": "DAS atrasado"
-        },
-        {
-          "type": "intent",
-          "id": "mei-dasn",
-          "label": "Declaração anual"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-mei",
-          "label": "Plano Lup MEI"
-        }
+      "examples": [
+        "Como pago o DAS?",
+        "o que é o DAS do MEI?",
+        "onde emito a guia do MEI",
+        "DAS"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-dasn",
       "category": "mei",
-      "title": "Declaração anual do MEI (DASN-SIMEI)",
-      "examples": [
-        "Como faço a declaração anual do MEI?",
-        "o que é DASN-SIMEI?",
-        "preciso declarar meu MEI?"
-      ],
       "keywords": [
         "dasn",
         "dasn simei",
@@ -2940,38 +2831,17 @@
         "declaracao de faturamento",
         "entregar a declaracao do mei"
       ],
-      "answer": "A **DASN-SIMEI** é a declaração anual do MEI: nela o microempreendedor informa o faturamento do ano anterior. Ela é obrigatória, inclusive para quem não faturou, e tem prazo definido pelas regras vigentes.\n\nO plano **Lup MEI** inclui a declaração anual.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-das",
-          "label": "O que é o DAS"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-mei",
-          "label": "Plano Lup MEI"
-        }
+      "examples": [
+        "Como faço a declaração anual do MEI?",
+        "o que é DASN-SIMEI?",
+        "preciso declarar meu MEI?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-notas",
       "category": "mei",
-      "title": "Nota fiscal no MEI",
-      "examples": [
-        "MEI precisa emitir nota fiscal?",
-        "como o MEI emite nota?",
-        "nota fiscal do MEI"
-      ],
+      "group": "notas",
       "keywords": [
         "mei emitir nota fiscal",
         "mei precisa emitir nota fiscal",
@@ -2982,39 +2852,16 @@
         "nota fiscal para mei",
         "mei nota fiscal"
       ],
-      "group": "notas",
-      "answer": "De forma geral, o MEI precisa emitir nota fiscal quando vende ou presta serviço para **outras empresas (CNPJ)**. Para pessoa física, as regras costumam ser diferentes. A forma de emitir depende da atividade (comércio ou serviço) e dos sistemas em vigor.\n\nComo as regras mudam e dependem da atividade, vale confirmar o seu caso. O plano **Lup MEI** inclui orientações sobre notas fiscais.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "duv-emitir-nota",
-          "label": "Quando emitir nota (geral)"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-mei",
-          "label": "Plano Lup MEI"
-        }
+      "examples": [
+        "MEI precisa emitir nota fiscal?",
+        "como o MEI emite nota?",
+        "nota fiscal do MEI"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-pendencias",
       "category": "mei",
-      "title": "Pendências e DAS atrasado no MEI",
-      "examples": [
-        "Estou com DAS atrasado, e agora?",
-        "como sei se meu MEI tem pendências?",
-        "MEI com débitos"
-      ],
       "keywords": [
         "das atrasado",
         "das em atraso",
@@ -3037,38 +2884,16 @@
         "atrasar das",
         "atrasei o das do mei"
       ],
-      "answer": "DAS em atraso gera **multa e juros** e pode deixar o MEI com pendências, o que atrapalha, por exemplo, a emissão de certidões. Em geral, é possível regularizar pagando os valores em aberto ou, em alguns casos, parcelando, conforme as regras vigentes.\n\nCada situação tem detalhes próprios. A ContLup acompanha pendências e obrigações no plano **Lup MEI**.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-regularizacao",
-          "label": "Como regularizar"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero regularizar meu MEI",
-          "message": "Olá! Gostaria de ajuda para regularizar meu MEI."
-        }
+      "examples": [
+        "Estou com DAS atrasado, e agora?",
+        "como sei se meu MEI tem pendências?",
+        "MEI com débitos"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-regularizacao",
       "category": "mei",
-      "title": "Regularizar o MEI",
-      "examples": [
-        "Como regularizar meu MEI?",
-        "meu MEI está irregular",
-        "regularização do MEI"
-      ],
       "keywords": [
         "regularizar mei",
         "regularizar o mei",
@@ -3079,38 +2904,16 @@
         "colocar o mei em dia",
         "deixar o mei em dia"
       ],
-      "answer": "Regularizar o MEI normalmente envolve três frentes: **pagar os DAS em aberto** (à vista ou parcelado, quando permitido), **entregar as declarações anuais pendentes** e conferir se o cadastro está correto.\n\nA ordem e o que vale para você dependem da situação do CNPJ. A ContLup orienta na regularização, e isso faz parte do plano **Lup MEI**.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-pendencias",
-          "label": "DAS atrasado"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero regularizar meu MEI",
-          "message": "Olá! Gostaria de ajuda para regularizar meu MEI."
-        }
+      "examples": [
+        "Como regularizar meu MEI?",
+        "meu MEI está irregular",
+        "regularização do MEI"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-baixa",
       "category": "mei",
-      "title": "Dar baixa no MEI",
-      "examples": [
-        "Como dar baixa no MEI?",
-        "quero fechar meu MEI",
-        "como cancelar o MEI"
-      ],
       "keywords": [
         "baixa no mei",
         "baixa do mei",
@@ -3138,38 +2941,16 @@
       "exclude": [
         "abrir"
       ],
-      "answer": "A baixa do MEI é feita pelos **canais oficiais** e, em geral, envolve também entregar a declaração de encerramento.\n\nUm ponto importante: dar baixa **não apaga débitos**. Os valores em aberto continuam existindo e passam a ficar vinculados ao titular. Por isso, vale conferir as pendências antes. A ContLup apoia na baixa e no encerramento.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-pendencias",
-          "label": "Pendências"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero dar baixa no MEI",
-          "message": "Olá! Gostaria de ajuda para dar baixa no meu MEI."
-        }
+      "examples": [
+        "Como dar baixa no MEI?",
+        "quero fechar meu MEI",
+        "como cancelar o MEI"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-empregado",
       "category": "mei",
-      "title": "MEI pode contratar empregado?",
-      "examples": [
-        "MEI pode ter funcionário?",
-        "posso contratar alguém sendo MEI?",
-        "MEI pode registrar empregado?"
-      ],
       "keywords": [
         "mei pode ter funcionario",
         "mei pode contratar",
@@ -3182,38 +2963,16 @@
         "mei com funcionario",
         "mei ter empregado"
       ],
-      "answer": "Pelas regras gerais do MEI, é permitido ter **um empregado**, com limite de remuneração definido nas regras vigentes. Contratar envolve registro, encargos e obrigações trabalhistas.\n\nComo os limites e as condições podem mudar, confirme antes de contratar. A ContLup pode orientar nesse passo.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-encargos",
-          "label": "Encargos trabalhistas"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero contratar sendo MEI",
-          "message": "Olá! Sou MEI e gostaria de orientação para contratar um funcionário."
-        }
+      "examples": [
+        "MEI pode ter funcionário?",
+        "posso contratar alguém sendo MEI?",
+        "MEI pode registrar empregado?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-desenquadramento",
       "category": "mei",
-      "title": "Desenquadramento do MEI",
-      "examples": [
-        "O que é desenquadramento do MEI?",
-        "quando preciso sair do MEI?",
-        "como deixar de ser MEI"
-      ],
       "keywords": [
         "desenquadramento",
         "desenquadrar",
@@ -3231,43 +2990,16 @@
         "ultrapassei o limite",
         "faturei mais que o limite"
       ],
-      "answer": "Desenquadramento é a saída do MEI para outro tipo de empresa. Pode acontecer por opção ou por obrigação, por exemplo ao ultrapassar o limite de faturamento, ao exercer uma atividade não permitida ou ao mudar a estrutura do negócio.\n\nOs efeitos (impostos, data de início, obrigações) dependem do motivo e do momento, então esse passo pede análise profissional. A ContLup apoia na formalização e no desenquadramento do MEI.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-limite",
-          "label": "Limite de faturamento"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-start",
-          "label": "Plano Lup Start"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero sair do MEI",
-          "message": "Olá! Sou MEI e gostaria de orientação sobre o desenquadramento."
-        }
+      "examples": [
+        "O que é desenquadramento do MEI?",
+        "quando preciso sair do MEI?",
+        "como deixar de ser MEI"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-limite",
       "category": "mei",
-      "title": "Limite de faturamento do MEI",
-      "examples": [
-        "Qual o limite de faturamento do MEI?",
-        "passei do limite do MEI",
-        "estourei o faturamento do MEI"
-      ],
       "keywords": [
         "limite do mei",
         "limite de faturamento",
@@ -3280,38 +3012,16 @@
         "quanto o mei pode faturar",
         "teto do mei"
       ],
-      "answer": "O MEI tem um **limite anual de faturamento** definido em lei. Ultrapassar esse limite traz consequências que variam conforme o quanto foi excedido e pode levar ao desenquadramento.\n\nComo o valor do limite e as regras podem mudar, eu prefiro não informar números por aqui. Confira a sua situação com a ContLup antes de tomar qualquer decisão.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-desenquadramento",
-          "label": "Desenquadramento"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Falar sobre o limite do MEI",
-          "message": "Olá! Sou MEI e gostaria de orientação sobre o limite de faturamento."
-        }
+      "examples": [
+        "Qual o limite de faturamento do MEI?",
+        "passei do limite do MEI",
+        "estourei o faturamento do MEI"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-obrigacoes",
       "category": "mei",
-      "title": "Obrigações do MEI",
-      "examples": [
-        "Quais são as obrigações do MEI?",
-        "o que o MEI precisa fazer todo mês?",
-        "obrigações mensais do MEI"
-      ],
       "keywords": [
         "obrigacoes do mei",
         "obrigacao do mei",
@@ -3321,33 +3031,12 @@
         "obrigacoes mensais do mei",
         "deveres do mei"
       ],
-      "answer": "De forma geral, a rotina do MEI tem três pontos: **pagar o DAS** todo mês, **entregar a declaração anual** (DASN-SIMEI) e **emitir nota fiscal** quando a venda ou o serviço exigir. Também vale manter o cadastro atualizado e guardar as notas de compra.\n\nOs detalhes dependem da atividade e das regras vigentes. O plano **Lup MEI** acompanha essas obrigações.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "mei-das",
-          "label": "DAS"
-        },
-        {
-          "type": "intent",
-          "id": "mei-dasn",
-          "label": "Declaração anual"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-mei",
-          "label": "Plano Lup MEI"
-        }
+      "examples": [
+        "Quais são as obrigações do MEI?",
+        "o que o MEI precisa fazer todo mês?",
+        "obrigações mensais do MEI"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "mei-atende",
@@ -3457,12 +3146,6 @@
     {
       "id": "emp-alteracao",
       "category": "empresas",
-      "title": "Alteração cadastral ou contratual",
-      "examples": [
-        "Como mudar o endereço da empresa?",
-        "quero incluir um sócio",
-        "preciso alterar o contrato social"
-      ],
       "keywords": [
         "alteracao cadastral",
         "alterar cadastro",
@@ -3481,38 +3164,16 @@
         "mudar a razao social",
         "alterar capital social"
       ],
-      "answer": "Mudanças como endereço, atividade, sócios, nome ou capital social são feitas por uma **alteração contratual** e atualizadas nos órgãos e cadastros da empresa. Algumas mudanças também afetam impostos, licenças ou inscrições.\n\nA área **Societária** da ContLup cuida das alterações contratuais.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "serv-societario",
-          "label": "Serviço societário"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero fazer uma alteração",
-          "message": "Olá! Gostaria de ajuda com uma alteração na minha empresa."
-        }
+      "examples": [
+        "Como mudar o endereço da empresa?",
+        "quero incluir um sócio",
+        "preciso alterar o contrato social"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "emp-encerramento",
       "category": "empresas",
-      "title": "Encerrar uma empresa",
-      "examples": [
-        "Como fechar minha empresa?",
-        "quero encerrar o CNPJ",
-        "como dar baixa na empresa"
-      ],
       "keywords": [
         "fechar empresa",
         "fechar a empresa",
@@ -3532,29 +3193,12 @@
       "exclude": [
         "mei"
       ],
-      "forMei": "mei-baixa",
-      "answer": "Encerrar uma empresa envolve dar **baixa nos registros**, entregar as declarações de encerramento e regularizar as pendências fiscais, trabalhistas e financeiras que existirem.\n\nCada caso tem detalhes próprios. A área **Societária** da ContLup apoia na baixa e no encerramento.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "serv-societario",
-          "label": "Serviço societário"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero encerrar a empresa",
-          "message": "Olá! Gostaria de ajuda para encerrar minha empresa."
-        }
+      "examples": [
+        "Como fechar minha empresa?",
+        "quero encerrar o CNPJ",
+        "como dar baixa na empresa"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "emp-troca",
@@ -3606,12 +3250,6 @@
     {
       "id": "emp-documentacao",
       "category": "empresas",
-      "title": "Documentação inicial",
-      "examples": [
-        "Quais documentos preciso para abrir empresa?",
-        "que documentos a ContLup pede?",
-        "documentação inicial"
-      ],
       "keywords": [
         "quais documentos",
         "que documentos",
@@ -3622,38 +3260,16 @@
         "documentos necessarios",
         "lista de documentos"
       ],
-      "answer": "De forma geral, a abertura pede **documentos pessoais dos sócios**, comprovante de endereço e informações sobre a atividade, o capital e o local da empresa. Para trocar de contador, entram também documentos e registros da empresa que já existe.\n\nA lista exata depende do tipo de empresa e da cidade, e é combinada diretamente com a equipe da ContLup. Não envie documentos por aqui.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "emp-abertura",
-          "label": "Abrir uma empresa"
-        },
-        {
-          "type": "intent",
-          "id": "emp-troca",
-          "label": "Trocar de contador"
-        }
+      "examples": [
+        "Quais documentos preciso para abrir empresa?",
+        "que documentos a ContLup pede?",
+        "documentação inicial"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "emp-contabilidade-mensal",
       "category": "empresas",
-      "title": "Contabilidade mensal",
-      "examples": [
-        "O que é contabilidade mensal?",
-        "o que o contador faz todo mês?",
-        "rotina contábil mensal"
-      ],
       "keywords": [
         "contabilidade mensal",
         "o que o contador faz",
@@ -3663,38 +3279,16 @@
         "servico mensal",
         "todo mes o contador"
       ],
-      "answer": "A contabilidade mensal é a rotina que mantém a empresa em dia: **registrar** as movimentações, **apurar impostos e emitir guias**, cuidar da **folha** quando há funcionários, entregar as **obrigações** do período e produzir **relatórios** que mostram como o negócio está.\n\nNa ContLup, isso aparece nos planos **Lup Start**, **Lup Plus** e **Lup Prime**, cada um com um nível de acompanhamento.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "emp-obrigacoes",
-          "label": "Obrigações fiscais e contábeis"
-        },
-        {
-          "type": "intent",
-          "id": "planos-diferencas",
-          "label": "Comparar os planos"
-        }
+      "examples": [
+        "O que é contabilidade mensal?",
+        "o que o contador faz todo mês?",
+        "rotina contábil mensal"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "emp-obrigacoes",
       "category": "empresas",
-      "title": "Obrigações fiscais e contábeis",
-      "examples": [
-        "Quais são as obrigações de uma empresa?",
-        "o que são obrigações acessórias?",
-        "que declarações a empresa entrega?"
-      ],
       "keywords": [
         "obrigacoes fiscais",
         "obrigacoes contabeis",
@@ -3705,38 +3299,16 @@
         "quais declaracoes",
         "obrigacoes de uma empresa"
       ],
-      "answer": "Toda empresa tem dois tipos de obrigação: a **principal**, que é pagar os tributos, e as **acessórias**, que são declarações e informações enviadas aos órgãos, mensais ou anuais, mesmo quando não há imposto a pagar.\n\nQuais se aplicam depende do regime tributário, da atividade e de haver ou não funcionários, e a lista muda com a legislação. Manter tudo em dia é parte da rotina contábil mensal.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "emp-contabilidade-mensal",
-          "label": "Contabilidade mensal"
-        },
-        {
-          "type": "intent",
-          "id": "duv-atraso-impostos",
-          "label": "Se atrasar impostos"
-        }
+      "examples": [
+        "Quais são as obrigações de uma empresa?",
+        "o que são obrigações acessórias?",
+        "que declarações a empresa entrega?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "emp-regularizacao",
       "category": "empresas",
-      "title": "Regularizar a empresa",
-      "examples": [
-        "Minha empresa está com pendências, o que faço?",
-        "como regularizar minha empresa?",
-        "empresa com débitos"
-      ],
       "keywords": [
         "regularizar empresa",
         "regularizar a empresa",
@@ -3750,39 +3322,16 @@
         "regularizar situacao",
         "colocar a empresa em dia"
       ],
-      "forMei": "mei-regularizacao",
-      "answer": "Regularizar a empresa costuma envolver **levantar as pendências** (tributos, declarações e cadastro), **priorizar** o que gera mais risco e **acertar** os valores, à vista ou por parcelamento quando permitido.\n\nComo cada caso é diferente, o primeiro passo é um diagnóstico. A ContLup pode te ajudar nisso.",
-      "actions": [
-        {
-          "type": "whatsapp",
-          "label": "Quero regularizar a empresa",
-          "message": "Olá! Gostaria de ajuda para regularizar a situação da minha empresa."
-        },
-        {
-          "type": "intent",
-          "id": "duv-atraso-impostos",
-          "label": "Se atrasar impostos"
-        }
+      "examples": [
+        "Minha empresa está com pendências, o que faço?",
+        "como regularizar minha empresa?",
+        "empresa com débitos"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "reg-simples",
       "category": "regimes",
-      "title": "Simples Nacional",
-      "examples": [
-        "O que é o Simples Nacional?",
-        "como funciona o Simples?",
-        "minha empresa pode ser do Simples?"
-      ],
       "keywords": [
         "simples nacional",
         "o que e o simples",
@@ -3790,75 +3339,31 @@
         "empresa do simples",
         "regime simples"
       ],
-      "answer": "O **Simples Nacional** é um regime tributário simplificado para micro e pequenas empresas: vários tributos são pagos em uma guia única, com cálculo sobre o faturamento e alíquotas que variam conforme a atividade e a faixa de receita.\n\nNem toda empresa pode optar: há limites de faturamento e restrições de atividade, definidos em lei. Na ContLup, o **Lup Start** e o **Lup Plus** atendem empresas do Simples.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "reg-diferencas",
-          "label": "Comparar os regimes"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-start",
-          "label": "Plano Lup Start"
-        }
+      "examples": [
+        "O que é o Simples Nacional?",
+        "como funciona o Simples?",
+        "minha empresa pode ser do Simples?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "reg-presumido",
       "category": "regimes",
-      "title": "Lucro Presumido",
-      "examples": [
-        "O que é Lucro Presumido?",
-        "como funciona o lucro presumido?"
-      ],
       "keywords": [
         "lucro presumido",
         "presumido",
         "o que e lucro presumido",
         "como funciona o lucro presumido"
       ],
-      "answer": "No **Lucro Presumido**, alguns tributos são calculados sobre um lucro estimado a partir do faturamento, com percentuais definidos em lei conforme a atividade, e não sobre o lucro efetivamente apurado.\n\nPode ser vantajoso quando a margem real da empresa é maior que a presumida, mas isso só uma análise mostra. Na ContLup, o **Lup Plus** e o **Lup Prime** atendem empresas do Lucro Presumido.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "reg-diferencas",
-          "label": "Comparar os regimes"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-plus",
-          "label": "Plano Lup Plus"
-        }
+      "examples": [
+        "O que é Lucro Presumido?",
+        "como funciona o lucro presumido?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "reg-real",
       "category": "regimes",
-      "title": "Lucro Real",
-      "examples": [
-        "O que é Lucro Real?",
-        "como funciona o lucro real?",
-        "quem é obrigado ao lucro real"
-      ],
       "keywords": [
         "lucro real",
         "o que e lucro real",
@@ -3866,38 +3371,16 @@
         "obrigado ao lucro real",
         "obrigada ao lucro real"
       ],
-      "answer": "No **Lucro Real**, os tributos sobre o lucro são calculados a partir do **lucro efetivamente apurado** pela contabilidade (receitas menos custos e despesas, com os ajustes previstos em lei). Exige um controle contábil mais detalhado.\n\nAlgumas empresas são obrigadas a esse regime por faturamento ou atividade, e outras podem escolher. Na ContLup, o **Lup Prime** atende empresas do Lucro Real.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "reg-diferencas",
-          "label": "Comparar os regimes"
-        },
-        {
-          "type": "intent",
-          "id": "plano-lup-prime",
-          "label": "Plano Lup Prime"
-        }
+      "examples": [
+        "O que é Lucro Real?",
+        "como funciona o lucro real?",
+        "quem é obrigado ao lucro real"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "reg-diferencas",
       "category": "regimes",
-      "title": "Diferença entre os regimes",
-      "examples": [
-        "Qual a diferença entre Simples, Presumido e Real?",
-        "quais são os regimes tributários?",
-        "regime tributário"
-      ],
       "keywords": [
         "regime tributario",
         "regimes tributarios",
@@ -3914,38 +3397,16 @@
         "comparar regimes",
         "tipos de regime"
       ],
-      "answer": "Em linhas gerais:\n- **Simples Nacional**: guia única e cálculo simplificado sobre o faturamento, para micro e pequenas empresas dentro dos limites da lei.\n- **Lucro Presumido**: tributos sobre o lucro calculados sobre uma margem presumida do faturamento.\n- **Lucro Real**: tributos sobre o lucro calculados pelo lucro efetivamente apurado, com controle contábil mais detalhado.\n\nQual compensa depende da atividade, do faturamento, da margem e da folha. Essa escolha pede análise do seu caso.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "reg-orientacao",
-          "label": "Como escolher o regime"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero ajuda com o regime",
-          "message": "Olá! Gostaria de orientação sobre o regime tributário da minha empresa."
-        }
+      "examples": [
+        "Qual a diferença entre Simples, Presumido e Real?",
+        "quais são os regimes tributários?",
+        "regime tributário"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "reg-orientacao",
       "category": "regimes",
-      "title": "Quando procurar orientação sobre o regime",
-      "examples": [
-        "Como escolher o regime tributário?",
-        "quando devo rever meu regime?",
-        "quando procurar um contador sobre regime"
-      ],
       "keywords": [
         "escolher o regime",
         "escolha do regime",
@@ -3958,38 +3419,17 @@
         "orientacao sobre regime",
         "qual regime e melhor"
       ],
-      "answer": "Vale procurar orientação profissional **antes de abrir a empresa**, **quando o faturamento muda bastante**, **quando a atividade ou a folha mudam** e na **virada do ano**, que é quando costuma ser possível trocar de regime.\n\nA escolha e a revisão do regime tributário fazem parte da área Fiscal da ContLup.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "aconselhamento",
-          "label": "Orientação para o meu caso"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero revisar meu regime",
-          "message": "Olá! Gostaria de orientação para escolher ou revisar o regime tributário."
-        }
+      "examples": [
+        "Como escolher o regime tributário?",
+        "quando devo rever meu regime?",
+        "quando procurar um contador sobre regime"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-nota-fiscal",
       "category": "rotinas",
-      "title": "O que é nota fiscal",
-      "examples": [
-        "O que é nota fiscal?",
-        "para que serve a nota fiscal",
-        "diferença entre nota de produto e de serviço"
-      ],
+      "group": "notas",
       "keywords": [
         "o que e nota fiscal",
         "o que e uma nota fiscal",
@@ -4000,40 +3440,16 @@
         "nfse",
         "tipos de nota fiscal"
       ],
-      "group": "notas",
-      "forMei": "mei-notas",
-      "answer": "A **nota fiscal** é o documento que registra oficialmente uma venda ou prestação de serviço. Ela comprova a operação para quem compra e serve de base para os impostos de quem vende.\n\nExistem modelos diferentes para **produtos** e para **serviços**, e cada empresa emite conforme a atividade e as regras da cidade e do estado.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "duv-emitir-nota",
-          "label": "Quando emitir nota"
-        },
-        {
-          "type": "intent",
-          "id": "mei-notas",
-          "label": "Nota fiscal no MEI"
-        }
+      "examples": [
+        "O que é nota fiscal?",
+        "para que serve a nota fiscal",
+        "diferença entre nota de produto e de serviço"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-faturamento-lucro",
       "category": "rotinas",
-      "title": "Faturamento e lucro",
-      "examples": [
-        "Qual a diferença entre faturamento e lucro?",
-        "faturamento é lucro?",
-        "o que é lucro?"
-      ],
       "keywords": [
         "faturamento e lucro",
         "diferenca entre faturamento e lucro",
@@ -4046,38 +3462,16 @@
         "faturamento e a mesma coisa que lucro",
         "mesma coisa que lucro"
       ],
-      "answer": "**Faturamento** é tudo o que a empresa vendeu no período. **Lucro** é o que sobra depois de tirar custos, despesas e impostos.\n\nUma empresa pode faturar muito e ter pouco lucro (ou prejuízo) se os custos estiverem altos. Por isso acompanhar os dois é essencial.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-receita-despesa",
-          "label": "Receita e despesa"
-        },
-        {
-          "type": "intent",
-          "id": "rot-dre",
-          "label": "O que é DRE"
-        }
+      "examples": [
+        "Qual a diferença entre faturamento e lucro?",
+        "faturamento é lucro?",
+        "o que é lucro?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-receita-despesa",
       "category": "rotinas",
-      "title": "Receita, custo e despesa",
-      "examples": [
-        "Qual a diferença entre receita e despesa?",
-        "custo e despesa são a mesma coisa?",
-        "o que é despesa fixa?"
-      ],
       "keywords": [
         "receita e despesa",
         "diferenca entre receita e despesa",
@@ -4092,38 +3486,16 @@
         "custo fixo",
         "custo variavel"
       ],
-      "answer": "**Receita** é o dinheiro que entra pelas vendas e serviços. **Despesa** é o gasto para manter a empresa funcionando (aluguel, internet, marketing). **Custo** é o gasto ligado diretamente ao que você produz ou vende (matéria-prima, mercadoria).\n\nSeparar custos e despesas, fixos e variáveis, ajuda a calcular a margem e o preço certo.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-precificacao",
-          "label": "Precificação"
-        },
-        {
-          "type": "intent",
-          "id": "rot-faturamento-lucro",
-          "label": "Faturamento e lucro"
-        }
+      "examples": [
+        "Qual a diferença entre receita e despesa?",
+        "custo e despesa são a mesma coisa?",
+        "o que é despesa fixa?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-fluxo-caixa",
       "category": "rotinas",
-      "title": "Fluxo de caixa",
-      "examples": [
-        "O que é fluxo de caixa?",
-        "como faço o controle de caixa?",
-        "como controlar o caixa da empresa"
-      ],
       "keywords": [
         "fluxo de caixa",
         "o que e fluxo de caixa",
@@ -4132,38 +3504,16 @@
         "como fazer fluxo de caixa",
         "fluxo do caixa"
       ],
-      "answer": "**Fluxo de caixa** é o registro de tudo o que entra e sai de dinheiro da empresa ao longo do tempo, incluindo o que **ainda vai** entrar e sair. Ele mostra com antecedência se vai faltar ou sobrar dinheiro, o que ajuda a planejar pagamentos e investimentos.\n\nUm controle simples, atualizado com frequência e separado das contas pessoais, já faz muita diferença.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-sobra-caixa",
-          "label": "Por que o dinheiro não sobra"
-        },
-        {
-          "type": "intent",
-          "id": "serv-bpo",
-          "label": "BPO Financeiro"
-        }
+      "examples": [
+        "O que é fluxo de caixa?",
+        "como faço o controle de caixa?",
+        "como controlar o caixa da empresa"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-pro-labore",
       "category": "rotinas",
-      "title": "Pró-labore",
-      "examples": [
-        "O que é pró-labore?",
-        "pró-labore é salário?",
-        "como o sócio recebe da empresa?"
-      ],
       "keywords": [
         "pro labore",
         "o que e pro labore",
@@ -4173,38 +3523,16 @@
         "como o socio recebe",
         "remuneracao do socio"
       ],
-      "answer": "**Pró-labore** é a remuneração do sócio pelo trabalho que ele faz na empresa. É diferente da **distribuição de lucros**, que é a parte do resultado repassada aos sócios.\n\nO pró-labore tem encargos próprios e o valor deve ser definido com orientação contábil.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-encargos",
-          "label": "Encargos"
-        },
-        {
-          "type": "intent",
-          "id": "serv-trabalhista",
-          "label": "Serviço trabalhista"
-        }
+      "examples": [
+        "O que é pró-labore?",
+        "pró-labore é salário?",
+        "como o sócio recebe da empresa?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-folha",
       "category": "rotinas",
-      "title": "Folha de pagamento",
-      "examples": [
-        "O que é folha de pagamento?",
-        "como funciona a folha?",
-        "o que entra na folha de pagamento"
-      ],
       "keywords": [
         "folha de pagamento",
         "o que e folha de pagamento",
@@ -4213,38 +3541,16 @@
         "o que entra na folha",
         "calculo da folha"
       ],
-      "answer": "A **folha de pagamento** é o cálculo mensal do que a empresa paga a quem trabalha nela: salários, horas extras, adicionais, férias e 13º, além dos descontos e dos **encargos** devidos.\n\nEla também gera obrigações e informações para os sistemas do governo. Na ContLup, a folha faz parte da área **Trabalhista** e dos planos **Lup Start**, **Lup Plus** e **Lup Prime**.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-encargos",
-          "label": "Encargos trabalhistas"
-        },
-        {
-          "type": "intent",
-          "id": "serv-trabalhista",
-          "label": "Serviço trabalhista"
-        }
+      "examples": [
+        "O que é folha de pagamento?",
+        "como funciona a folha?",
+        "o que entra na folha de pagamento"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-encargos",
       "category": "rotinas",
-      "title": "Encargos trabalhistas",
-      "examples": [
-        "O que são encargos trabalhistas?",
-        "quanto custa um funcionário além do salário?",
-        "o que é FGTS e INSS"
-      ],
       "keywords": [
         "encargos",
         "encargos trabalhistas",
@@ -4258,37 +3564,16 @@
         "encargos do funcionario",
         "encargos de funcionario"
       ],
-      "answer": "**Encargos trabalhistas** são os valores que a empresa paga além do salário, como contribuições previdenciárias, FGTS e provisões de férias e 13º. O custo total de um funcionário costuma ser bem maior que o salário registrado.\n\nOs percentuais dependem do regime tributário e das regras vigentes, então eu não informo valores por aqui. A ContLup calcula isso no seu caso.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-folha",
-          "label": "Folha de pagamento"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero saber o custo de contratar",
-          "message": "Olá! Gostaria de entender o custo de contratar um funcionário."
-        }
+      "examples": [
+        "O que são encargos trabalhistas?",
+        "quanto custa um funcionário além do salário?",
+        "o que é FGTS e INSS"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-balancete",
       "category": "rotinas",
-      "title": "Balancete",
-      "examples": [
-        "O que é balancete?",
-        "para que serve o balancete?"
-      ],
       "keywords": [
         "balancete",
         "o que e balancete",
@@ -4296,37 +3581,15 @@
         "balancete mensal",
         "balancete trimestral"
       ],
-      "answer": "O **balancete** é um resumo dos saldos das contas da empresa em um período. Ele mostra se os registros estão fechando e dá uma visão rápida de como estão receitas, despesas, dívidas e bens.\n\nNa ContLup, o **Lup Plus** traz balancete **trimestral** e o **Lup Prime**, **mensal**.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-balanco",
-          "label": "Balanço Patrimonial"
-        },
-        {
-          "type": "intent",
-          "id": "rot-dre",
-          "label": "DRE"
-        }
+      "examples": [
+        "O que é balancete?",
+        "para que serve o balancete?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-balanco",
       "category": "rotinas",
-      "title": "Balanço Patrimonial",
-      "examples": [
-        "O que é Balanço Patrimonial?",
-        "para que serve o balanço?"
-      ],
       "keywords": [
         "balanco patrimonial",
         "o que e balanco",
@@ -4335,38 +3598,15 @@
         "balanco anual",
         "balanco"
       ],
-      "answer": "O **Balanço Patrimonial** é uma fotografia da empresa em uma data: o que ela **tem** (bens e direitos), o que ela **deve** (obrigações) e o que pertence aos sócios (**patrimônio líquido**).\n\nEle é usado em decisões, pedidos de crédito e análises de saúde financeira. O **Lup Plus** e o **Lup Prime** incluem o Balanço Patrimonial anual.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-dre",
-          "label": "DRE"
-        },
-        {
-          "type": "intent",
-          "id": "rot-balancete",
-          "label": "Balancete"
-        }
+      "examples": [
+        "O que é Balanço Patrimonial?",
+        "para que serve o balanço?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-dre",
       "category": "rotinas",
-      "title": "DRE",
-      "examples": [
-        "O que é DRE?",
-        "para que serve a DRE?",
-        "o que é demonstração do resultado"
-      ],
       "keywords": [
         "dre",
         "o que e dre",
@@ -4375,28 +3615,12 @@
         "demonstracao do resultado",
         "demonstracao de resultado"
       ],
-      "answer": "A **DRE** (Demonstração do Resultado do Exercício) mostra, em um período, quanto a empresa faturou, quanto gastou e se teve **lucro ou prejuízo**. É uma das principais ferramentas para entender o resultado do negócio.\n\nNa ContLup, o **Lup Plus** traz DRE **trimestral** e o **Lup Prime**, **mensal**.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-balanco",
-          "label": "Balanço Patrimonial"
-        },
-        {
-          "type": "intent",
-          "id": "rot-faturamento-lucro",
-          "label": "Faturamento e lucro"
-        }
+      "examples": [
+        "O que é DRE?",
+        "para que serve a DRE?",
+        "o que é demonstração do resultado"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "rot-saldo-lucro",
@@ -4564,12 +3788,6 @@
     {
       "id": "duv-contador-mei",
       "category": "duvidas",
-      "title": "Preciso de contador sendo MEI?",
-      "examples": [
-        "Preciso de contador sendo MEI?",
-        "MEI é obrigado a ter contador?",
-        "vale a pena MEI ter contabilidade?"
-      ],
       "keywords": [
         "preciso de contador sendo mei",
         "mei precisa de contador",
@@ -4579,37 +3797,16 @@
         "mei ter contador",
         "mei tem que ter contador"
       ],
-      "answer": "Em geral, **o MEI não é obrigado a ter contador**: a rotina foi pensada para ser simples. Mesmo assim, muita gente procura ajuda para não perder prazos (DAS e declaração anual), emitir notas do jeito certo, resolver pendências e saber a hora de crescer.\n\nÉ para isso que existe o plano **Lup MEI**.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "plano-lup-mei",
-          "label": "Plano Lup MEI"
-        },
-        {
-          "type": "intent",
-          "id": "mei-das",
-          "label": "DAS do MEI"
-        }
+      "examples": [
+        "Preciso de contador sendo MEI?",
+        "MEI é obrigado a ter contador?",
+        "vale a pena MEI ter contabilidade?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "duv-clt-empresa",
       "category": "duvidas",
-      "title": "Ter empresa e trabalhar com carteira assinada",
-      "examples": [
-        "Posso ter empresa e trabalhar com carteira assinada?",
-        "posso ser MEI e CLT ao mesmo tempo?"
-      ],
       "keywords": [
         "carteira assinada",
         "clt e mei",
@@ -4622,33 +3819,15 @@
         "registrado e ter empresa",
         "ser clt e ter empresa"
       ],
-      "answer": "Na maioria dos casos é possível ter uma empresa (inclusive MEI) e trabalhar com carteira assinada. Há exceções, como algumas carreiras do serviço público e situações previstas em contrato, e ter uma empresa aberta pode influenciar benefícios como o seguro-desemprego.\n\nComo isso depende do seu vínculo e das regras vigentes, vale avaliar o caso antes.",
-      "actions": [
-        {
-          "type": "whatsapp",
-          "label": "Quero avaliar meu caso",
-          "message": "Olá! Gostaria de orientação sobre ter empresa e trabalhar com carteira assinada."
-        }
+      "examples": [
+        "Posso ter empresa e trabalhar com carteira assinada?",
+        "posso ser MEI e CLT ao mesmo tempo?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "duv-atraso-impostos",
       "category": "duvidas",
-      "title": "O que acontece se atrasar impostos",
-      "examples": [
-        "O que acontece se eu atrasar os impostos?",
-        "atrasei um imposto, e agora?",
-        "paguei a guia atrasada"
-      ],
       "keywords": [
         "atrasar imposto",
         "atrasar os impostos",
@@ -4662,29 +3841,12 @@
         "nao paguei o imposto",
         "multa por atraso"
       ],
-      "forMei": "mei-pendencias",
-      "answer": "Atrasar impostos gera **multa e juros** e pode deixar a empresa com pendências, o que atrapalha a emissão de certidões, a participação em licitações e o acesso a crédito. Em alguns casos, as pendências podem levar a outras consequências, como cobrança e restrições.\n\nO caminho costuma ser regularizar o quanto antes, à vista ou por parcelamento quando permitido.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "emp-regularizacao",
-          "label": "Regularizar a empresa"
-        },
-        {
-          "type": "intent",
-          "id": "mei-pendencias",
-          "label": "DAS atrasado no MEI"
-        }
+      "examples": [
+        "O que acontece se eu atrasar os impostos?",
+        "atrasei um imposto, e agora?",
+        "paguei a guia atrasada"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": true,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "duv-emitir-nota",
@@ -4737,11 +3899,7 @@
     {
       "id": "duv-mudar-contador",
       "category": "duvidas",
-      "title": "Posso mudar de contador?",
-      "examples": [
-        "Posso mudar de contador a qualquer momento?",
-        "é possível trocar de contador no meio do ano?"
-      ],
+      "group": "troca",
       "keywords": [
         "posso mudar de contador",
         "posso trocar de contador",
@@ -4757,39 +3915,15 @@
         "mudar de contabilidade",
         "trocar de contabilidade"
       ],
-      "group": "troca",
-      "answer": "Sim, é possível trocar de contador. O importante é fazer uma **transição organizada**: o escritório anterior entrega os documentos e registros, e o novo confere o que está em andamento para nenhuma obrigação ficar para trás.\n\nNa ContLup, essa transição é organizada junto com o escritório anterior.",
-      "actions": [
-        {
-          "type": "flow",
-          "id": "troca_contador",
-          "label": "Começar a troca"
-        },
-        {
-          "type": "whatsapp",
-          "label": "Quero trocar de contador",
-          "message": "Olá! Gostaria de conversar sobre a troca de contador."
-        }
+      "examples": [
+        "Posso mudar de contador a qualquer momento?",
+        "é possível trocar de contador no meio do ano?"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     },
     {
       "id": "duv-organizar-financas",
       "category": "duvidas",
-      "title": "Como organizar as finanças da empresa",
-      "examples": [
-        "Como organizar as finanças da empresa?",
-        "devo separar a conta pessoal da empresa?",
-        "por onde começo a organizar o financeiro"
-      ],
       "keywords": [
         "organizar as financas",
         "organizar financas",
@@ -4803,28 +3937,12 @@
         "conta pj",
         "controle financeiro"
       ],
-      "answer": "Alguns passos simples já mudam muito:\n- **Separe** a conta pessoal da conta da empresa.\n- **Registre** todas as entradas e saídas, inclusive as pequenas.\n- **Acompanhe o fluxo de caixa** semanalmente.\n- **Defina um pró-labore** em vez de fazer retiradas soltas.\n- **Guarde** notas e comprovantes de forma organizada.\n\nA ContLup também tem o **BPO Financeiro**, de apoio às rotinas financeiras.",
-      "actions": [
-        {
-          "type": "intent",
-          "id": "rot-fluxo-caixa",
-          "label": "Fluxo de caixa"
-        },
-        {
-          "type": "intent",
-          "id": "serv-bpo",
-          "label": "BPO Financeiro"
-        }
+      "examples": [
+        "Como organizar as finanças da empresa?",
+        "devo separar a conta pessoal da empresa?",
+        "por onde começo a organizar o financeiro"
       ],
-      "expression": "explaining",
-      "status": "pending_review",
-      "review": {
-        "legalSensitive": false,
-        "professionalReview": "pendente",
-        "approvedBy": null,
-        "source": "Repertório da Lupi 2.0 (texto conceitual)",
-        "updatedAt": "2026-10-23"
-      }
+      "status": "pending_review"
     }
   ]
 }

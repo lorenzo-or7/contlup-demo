@@ -50,8 +50,11 @@ if (launch && chat) {
    Regras: no máximo uma vez por sessão; só depois de o visitante interagir (rolar a página) e
    de algum tempo no site; nunca com o chat aberto, com um campo em foco ou com o formulário/contato visível. */
 const TEASER_KEY = 'lupi:v2:teaser';
-function seen() { try { return sessionStorage.getItem(TEASER_KEY) === '1'; } catch { return false; } }
-function markSeen() { try { sessionStorage.setItem(TEASER_KEY, '1'); } catch { /* ok sem armazenamento */ } }
+// lembrar o convite na aba é uma "Preferência" do aviso de privacidade (js/consent.js); sem permissão, vale só nesta página
+let seenHere = false;
+function prefsAllowed() { try { const c = JSON.parse(localStorage.getItem('cl-consent') || 'null'); return !!(c && c.v === 1 && c.prefs); } catch { return false; } }
+function seen() { if (seenHere) return true; try { return prefsAllowed() && sessionStorage.getItem(TEASER_KEY) === '1'; } catch { return false; } }
+function markSeen() { seenHere = true; if (!prefsAllowed()) return; try { sessionStorage.setItem(TEASER_KEY, '1'); } catch { /* ok sem armazenamento */ } }
 function hideTeaser(remember) {
   if (!teaser) return;
   teaser.hidden = true;
@@ -72,8 +75,8 @@ if (teaser && !seen()) {
     criticalEls.forEach(el => io.observe(el));
   }
   const ready = () => !shown && !seen() && chat?.hidden && scrolled > innerHeight * (globalThis.__lupiTeaserScroll ?? 0.8) && performance.now() - start > (globalThis.__lupiTeaserDelay ?? 12000)
-    && !critical && !document.body.classList.contains('lc-on') && !(document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))
-    && (document.getElementById('mmenu')?.hidden ?? true);
+    && !critical && !document.body.classList.contains('lc-on') && !document.body.classList.contains('ck-on') && !(document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))
+    && !document.querySelector('.js-nav.is-open');
   const tryShow = () => {
     if (!ready()) return;
     shown = true;

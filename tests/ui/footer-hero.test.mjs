@@ -7,7 +7,8 @@ let env;
 before(async () => { env = await startEnv(); });
 after(async () => { await env?.close(); });
 
-const lightTheme = () => localStorage.setItem('cl-theme', 'light');
+// tema lembrado só com as Preferências permitidas no aviso de privacidade
+const lightTheme = () => { localStorage.setItem('cl-consent', JSON.stringify({ v: 1, prefs: true, at: '2026-10-28T00:00:00.000Z' })); localStorage.setItem('cl-theme', 'light'); };
 const COLS = { 320: 'mobile', 375: 'mobile', 768: 2, 1024: 4, 1440: 4 };
 
 const layout = (page) => page.evaluate(() => {
@@ -152,7 +153,7 @@ for (const width of [320, 375, 768, 1024, 1440]) {
       // 2) pixels: sem a foto e o fundo, a zona do acento acima de "U" e de "O" tem tinta do título
       // o mouse começa em (0,0), em cima da barra lateral, que abre por hover e cobre o início do título
       await page.mouse.move(width / 2, 790);
-      await page.addStyleTag({ content: '.sidebar,.mbar,.hero-photo,.hero-bg,.hero-ring,.hero-px,.hero-top,.hero-foot{visibility:hidden!important}' });
+      await page.addStyleTag({ content: '.nav,.hero-photo,.hero-bg,.hero-ring,.hero-px,.hero-top,.hero-foot{visibility:hidden!important}' });
       for (const [word, idx] of [['Números', 1], ['Decisões', 5]]) {
         const zone = await page.evaluate(([wd, i]) => {
           const w = [...document.querySelectorAll('.hero-title .w')].find(x => x.textContent.trim() === wd);

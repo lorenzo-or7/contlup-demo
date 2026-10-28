@@ -3,95 +3,103 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Segurança: só recursos do próprio site. Se a IA da Lupi for ligada (meta lupi-api), inclua o endereço dela em connect-src. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>ContLup Studio Contábil | Contabilidade online para empresas e MEIs</title>
 <meta name="description" content="Contabilidade 100% online, com atendimento próximo pelo WhatsApp e por e-mail. Contábil, fiscal e tributário, trabalhista, societário e BPO Financeiro para MEIs, pequenas empresas e negócios em crescimento. Responsável: Priscila Petean, contadora com mais de 20 anos de experiência.">
+<!-- Endereço oficial atual. Ao mudar de domínio (ex.: hospedagem própria), atualize canonical, og:url, og:image, o JSON-LD, robots.txt e sitemap.xml. -->
+<link rel="canonical" href="https://lorenzo-or7.github.io/contlup-demo/">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="ContLup Studio Contábil">
 <meta property="og:title" content="ContLup Studio Contábil · Contabilidade online para empresas e MEIs">
 <meta property="og:description" content="Contabilidade próxima e estratégica. Números claros, decisões melhores.">
+<meta property="og:url" content="https://lorenzo-or7.github.io/contlup-demo/">
+<meta property="og:image" content="https://lorenzo-or7.github.io/contlup-demo/img/og-contlup.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Números claros. Decisões melhores. Ilustração da Priscila Petean, da ContLup Studio Contábil">
 <meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#070C1C">
 <!-- Endereço do backend da Lupi (Cloudflare Worker). Vazio = modo básico, sem IA. Nunca coloque chaves aqui. -->
 <meta name="lupi-api" content="">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"AccountingService","name":"ContLup Studio Contábil","email":"contato@contlup.com.br","telephone":"+55 19 97131-0182","taxID":"68.970.978/0001-10","founder":{"@type":"Person","name":"Priscila Petean","jobTitle":"Contadora"},"sameAs":["https://www.instagram.com/contlupstudiocontabil/"],"knowsAbout":["Contabilidade","Fiscal e Tributário","Departamento Pessoal","Societário","BPO Financeiro","MEI"]}
+{"@context":"https://schema.org","@type":"Organization","@id":"https://lorenzo-or7.github.io/contlup-demo/#contlup","name":"ContLup Studio Contábil","url":"https://lorenzo-or7.github.io/contlup-demo/","logo":"https://lorenzo-or7.github.io/contlup-demo/img/logo.png","image":"https://lorenzo-or7.github.io/contlup-demo/img/og-contlup.jpg","description":"Contabilidade 100% online para MEIs, pequenas empresas e negócios em crescimento: contábil, fiscal e tributário, trabalhista, societário e BPO Financeiro.","email":"contato@contlup.com.br","telephone":"+55 19 97131-0182","taxID":"68.970.978/0001-10","contactPoint":{"@type":"ContactPoint","contactType":"sales","telephone":"+55 19 97131-0182","email":"contato@contlup.com.br","availableLanguage":"pt-BR"},"founder":{"@type":"Person","name":"Priscila Petean","jobTitle":"Contadora"},"sameAs":["https://www.instagram.com/contlupstudiocontabil/"],"knowsAbout":["Contabilidade","Fiscal e Tributário","Departamento Pessoal","Societário","BPO Financeiro","MEI"]}
 </script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/lupi.css">
-<link rel="icon" href="img/monograma.webp">
+<link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="img/monograma.webp" type="image/webp">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 </head>
 <body>
-<!-- ================= SIDEBAR (desktop) ================= -->
-<aside class="sidebar" aria-label="Navegação principal">
-  <a class="sb-logo" href="#inicio" aria-label="ContLup Studio Contábil, voltar ao início">
-    <img src="img/monograma.webp" alt="" width="44" height="44">
-    <span class="sb-word">CONTLUP<small>STUDIO CONTÁBIL</small></span>
-  </a>
-  <div class="sb-nav-wrap">
-    <ol class="sb-nav">
-      <li><a href="#inicio" data-target="inicio"><span class="n">01</span><span class="lbl">Início</span></a></li>
-      <li><a href="#servicos" data-target="servicos"><span class="n">02</span><span class="lbl">Serviços</span></a></li>
-      <li><a href="#planos" data-target="planos"><span class="n">03</span><span class="lbl">Planos</span></a></li>
-      <li><a href="#contlup" data-target="contlup"><span class="n">04</span><span class="lbl">Sobre</span></a></li>
-      <li><a href="#numeros" data-target="numeros"><span class="n">05</span><span class="lbl">Seus números</span></a></li>
-      <li><a href="#contato" data-target="contato"><span class="n">06</span><span class="lbl">Contato</span></a></li>
-    </ol>
-    <span class="sb-ind" aria-hidden="true"></span>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<!-- ================= PRIVACIDADE: aviso de consentimento (js/consent.js). No começo do documento para quem navega pelo teclado ou leitor de tela ================= -->
+<section class="ck js-ck" id="aviso-privacidade" aria-labelledby="ck-t" aria-describedby="ck-d" data-lc-trap hidden>
+  <figure class="ck-art" aria-hidden="true">
+    <img src="img/lupi/cookie-1x.webp" srcset="img/lupi/cookie-1x.webp 1x, img/lupi/cookie.webp 2x" alt="" width="160" height="143" decoding="async">
+  </figure>
+  <div class="ck-body">
+    <p class="ck-k">Privacidade</p>
+    <p class="ck-t" id="ck-t">Sem cookies de rastreamento por aqui.</p>
+    <p class="ck-d" id="ck-d">Este site não usa cookies de publicidade nem de análise. Ele guarda no seu navegador só o necessário para funcionar e, se você permitir, o tema escolhido para a próxima visita.</p>
+    <div class="ck-prefs" id="ck-prefs" hidden>
+      <div class="ck-cat">
+        <div class="ck-cat-txt"><b id="ck-ess">Essenciais</b><span>Guardam esta escolha e a conversa com a Lupi enquanto a aba estiver aberta.</span></div>
+        <span class="ck-always" aria-describedby="ck-ess">Sempre ativos</span>
+      </div>
+      <div class="ck-cat">
+        <label class="ck-cat-txt" for="ck-pref"><b>Preferências</b><span>Lembram o tema claro ou escuro entre visitas e evitam repetir o convite da Lupi.</span></label>
+        <input class="ck-switch" type="checkbox" id="ck-pref" role="switch">
+      </div>
+      <p class="ck-more">Não usamos cookies de análise, publicidade ou redes sociais. <a href="#privacidade">Política de privacidade</a></p>
+    </div>
+    <div class="ck-actions">
+      <button class="ck-btn ck-accept star-border js-ck-accept" type="button">Aceitar opcionais</button>
+      <button class="ck-btn ck-reject js-ck-reject" type="button">Recusar opcionais</button>
+      <button class="ck-btn ck-save js-ck-save" type="button" hidden>Salvar preferências</button>
+      <button class="ck-link js-ck-custom" type="button" aria-expanded="false" aria-controls="ck-prefs">Personalizar preferências</button>
+    </div>
   </div>
-  <div class="sb-bottom">
-    <a class="sb-btn wa" href="https://wa.me/5519971310182?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener" aria-label="Conversar pelo WhatsApp: (19) 97131-0182">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5l1.1-3.6A8 8 0 1 1 8.4 18.7z"/><path d="M9.2 8.6c.3 2.4 2.2 4.6 4.6 5.4l1-1.1 1.8.7-.3 1.6c-3.6.4-7.6-3.4-7.4-7.2l1.6-.4.8 1.7z"/></svg>
-      <span>WhatsApp</span>
+  <button class="ck-pill js-ck-pill" type="button" hidden><img src="img/lupi/cookie-1x.webp" alt="" width="40" height="36"><span><b>Privacidade</b><small>Escolha pendente · abrir</small></span></button>
+  <p class="sr js-ck-status" role="status"></p>
+</section>
+<!-- ================= NAVEGAÇÃO: barra superior (desktop) e cabeçalho compacto com menu suspenso (celular e tablet) ================= -->
+<header class="nav js-nav">
+  <div class="nav-in">
+    <a class="nav-logo" href="#inicio" aria-label="ContLup Studio Contábil, voltar ao início">
+      <img src="img/monograma.webp" alt="" width="40" height="40">
+      <span class="nav-word" aria-hidden="true">CONTLUP<small>STUDIO CONTÁBIL</small></span>
     </a>
-    <a class="sb-btn ml" href="mailto:contato@contlup.com.br" aria-label="Enviar e-mail para contato@contlup.com.br">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="3"/><path d="M4.5 7.5l7.5 6 7.5-6"/></svg>
-      <span>E-mail</span>
-    </a>
-    <a class="sb-btn ig" href="https://www.instagram.com/contlupstudiocontabil/" target="_blank" rel="noopener" aria-label="Instagram da ContLup: @contlupstudiocontabil">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg>
-      <span>Instagram</span>
-    </a>
-    <button class="sb-btn theme js-theme" type="button" aria-label="Tema claro" aria-pressed="false" title="Alternar tema">
-      <span class="ring-t" aria-hidden="true"></span>
-      <span class="raz-lbl"><b class="js-theme-lbl">Tema escuro</b><small>Alternar tema</small></span>
-    </button>
-    <button class="sb-btn pin js-pin" type="button" aria-pressed="false" aria-label="Fixar menu aberto" title="Fixar menu aberto">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6l-1 6 3 3H7l3-3z"/><path d="M12 13v7"/></svg>
-      <span class="raz-lbl"><b class="js-pin-lbl">Fixar menu</b><small>Manter aberto</small></span>
-    </button>
+    <nav class="nav-menu" id="nav-menu" aria-label="Navegação principal">
+      <ol class="nav-list">
+        <li><a href="#inicio" data-target="inicio"><span class="n" aria-hidden="true">01</span><span class="lbl">Início</span></a></li>
+        <li><a href="#servicos" data-target="servicos"><span class="n" aria-hidden="true">02</span><span class="lbl">Serviços</span></a></li>
+        <li><a href="#planos" data-target="planos"><span class="n" aria-hidden="true">03</span><span class="lbl">Planos</span></a></li>
+        <li><a href="#contlup" data-target="contlup"><span class="n" aria-hidden="true">04</span><span class="lbl">Sobre a ContLup</span></a></li>
+        <li><a href="#numeros" data-target="numeros"><span class="n" aria-hidden="true">05</span><span class="lbl">Entenda seus números</span></a></li>
+        <li><a href="#contato" data-target="contato"><span class="n" aria-hidden="true">06</span><span class="lbl">Contato</span></a></li>
+      </ol>
+      <a class="btn btn-primary nav-menu-wa" href="https://wa.me/5519971310182?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5l1.1-3.6A8 8 0 1 1 8.4 18.7z"/><path d="M9.2 8.6c.3 2.4 2.2 4.6 4.6 5.4l1-1.1 1.8.7-.3 1.6c-3.6.4-7.6-3.4-7.4-7.2l1.6-.4.8 1.7z"/></svg>Falar pelo WhatsApp</a>
+    </nav>
+    <div class="nav-tools">
+      <a class="nav-wa" href="https://wa.me/5519971310182?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener" aria-label="Conversar pelo WhatsApp: (19) 97131-0182"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5l1.1-3.6A8 8 0 1 1 8.4 18.7z"/><path d="M9.2 8.6c.3 2.4 2.2 4.6 4.6 5.4l1-1.1 1.8.7-.3 1.6c-3.6.4-7.6-3.4-7.4-7.2l1.6-.4.8 1.7z"/></svg><span>WhatsApp</span></a>
+      <button class="nav-theme js-theme" type="button" aria-label="Tema claro" aria-pressed="false" title="Alternar tema claro e escuro"><span class="ring-t" aria-hidden="true"></span></button>
+      <button class="nav-burger js-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu"><i aria-hidden="true"></i></button>
+    </div>
   </div>
-</aside>
-
-<!-- ================= MOBILE BAR ================= -->
-<header class="mbar">
-  <a class="mbar-logo" href="#inicio" aria-label="ContLup, início"><img src="img/monograma.webp" alt="" width="36" height="36"><b>CONTLUP</b></a>
-  <button class="mbar-btn" type="button" aria-expanded="false" aria-controls="mmenu"><span class="js-mlbl">Menu</span><i aria-hidden="true"></i></button>
 </header>
-<div class="mmenu" id="mmenu" hidden>
-  <nav aria-label="Menu">
-    <ol>
-      <li><a href="#inicio"><span class="n">01</span><span class="lbl">Início</span></a></li>
-      <li><a href="#servicos"><span class="n">02</span><span class="lbl">Serviços</span></a></li>
-      <li><a href="#planos"><span class="n">03</span><span class="lbl">Planos</span></a></li>
-      <li><a href="#contlup"><span class="n">04</span><span class="lbl">Sobre</span></a></li>
-      <li><a href="#numeros"><span class="n">05</span><span class="lbl">Seus números</span></a></li>
-      <li><a href="#contato"><span class="n">06</span><span class="lbl">Contato</span></a></li>
-    </ol>
-  </nav>
-  <div class="mmenu-foot">
-    <a class="btn btn-primary" href="https://wa.me/5519971310182?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener">Falar pelo WhatsApp · (19) 97131-0182</a>
-    <a class="btn btn-ghost" href="https://www.instagram.com/contlupstudiocontabil/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg>Instagram · @contlupstudiocontabil</a>
-    <a class="btn btn-ghost" href="mailto:contato@contlup.com.br"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="3"/><path d="M4.5 7.5l7.5 6 7.5-6"/></svg>contato@contlup.com.br</a>
-    <div class="row"><span>100% ONLINE</span><button class="theme-m js-theme" type="button" aria-label="Tema claro" aria-pressed="false"><span class="ring-t" aria-hidden="true"></span><span class="js-theme-lbl">Tema escuro</span></button></div>
-  </div>
-</div>
+<div class="nav-scrim js-nav-scrim" hidden></div>
 <a class="fab" href="https://wa.me/5519971310182?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener" aria-label="Conversar pelo WhatsApp: (19) 97131-0182">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5l1.1-3.6A8 8 0 1 1 8.4 18.7z"/><path d="M9.2 8.6c.3 2.4 2.2 4.6 4.6 5.4l1-1.1 1.8.7-.3 1.6c-3.6.4-7.6-3.4-7.4-7.2l1.6-.4.8 1.7z"/></svg>
 </a>
 
-<main>
+<main id="conteudo" tabindex="-1">
 <!-- ================= 1. INÍCIO ================= -->
 <!-- Início · hero -->
 <section class="hero" id="inicio" data-sec="inicio" aria-label="Apresentação">
@@ -231,10 +239,10 @@
     <h3 class="seg-h rv">Do MEI à empresa em crescimento.</h3>
     <ul class="seg rv">
     <li><b>MEI</b><span>Rotina simples, mas com obrigações que não podem passar.</span></li>
+    <li><b>Quem está começando</b><span>Empreendedores que querem formalizar o negócio do jeito certo.</span></li>
     <li><b>Pequenas empresas</b><span>ME e EPP que precisam de organização e acompanhamento.</span></li>
     <li><b>Empresas em crescimento</b><span>Negócios que precisam de números claros para o próximo passo.</span></li>
     <li><b>Negócios B2B</b><span>Empresas que vendem para outras empresas e lidam com notas e contratos.</span></li>
-    <li><b>Quem está começando</b><span>Empreendedores que querem formalizar o negócio do jeito certo.</span></li>
   </ul>
   </div>
 </section>
@@ -303,7 +311,7 @@
     <div class="about-copy rv">
       <p>À frente da ContLup está <strong>Priscila Petean</strong>, contadora com mais de 20 anos de experiência.</p>
       <p>A ContLup nasceu para ir além das obrigações e aproximar a contabilidade das decisões que fazem parte da rotina de uma empresa. Organizamos as informações, explicamos o que elas mostram e acompanhamos o negócio de perto.</p>
-      <p>O atendimento é <strong>100% online</strong>, pelo WhatsApp e por e-mail.</p>
+      <p>O atendimento é <strong>100% online</strong>, por WhatsApp, telefone e e-mail.</p>
       <div class="flowline" aria-label="Da obrigação à decisão"><b>Obrigações</b><i></i><b>Informação</b><i></i><b>Decisão</b></div>
     </div>
   </div>
@@ -541,8 +549,8 @@
         <p class="cta-sub">Clareza para decidir. Apoio para crescer.</p>
         <p class="online-pill"><i aria-hidden="true"></i>Atendimento 100% online</p>
         <ul class="contact">
-          <li><small>WhatsApp comercial</small><a href="https://wa.me/5519971310182?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20conversar%20sobre%20a%20contabilidade%20da%20minha%20empresa." target="_blank" rel="noopener">(19) 97131-0182</a><button class="copy" type="button" data-copy="(19) 97131-0182">Copiar</button></li>
-          <li><small>E-mail</small><a href="mailto:contato@contlup.com.br">contato@contlup.com.br</a><button class="copy" type="button" data-copy="contato@contlup.com.br">Copiar</button></li>
+          <li><small>WhatsApp comercial e telefone</small><a href="https://wa.me/5519971310182?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20conversar%20sobre%20a%20contabilidade%20da%20minha%20empresa." target="_blank" rel="noopener" aria-label="WhatsApp comercial (19) 97131-0182">(19) 97131-0182</a><span class="contact-acts"><a class="copy call" href="tel:+5519971310182" aria-label="Ligar para (19) 97131-0182">Ligar</a><button class="copy" type="button" data-copy="(19) 97131-0182" aria-label="Copiar o número (19) 97131-0182">Copiar</button></span></li>
+          <li><small>E-mail</small><a href="mailto:contato@contlup.com.br">contato@contlup.com.br</a><button class="copy" type="button" data-copy="contato@contlup.com.br" aria-label="Copiar o e-mail contato@contlup.com.br">Copiar</button></li>
           <li><small>Instagram</small><a href="https://www.instagram.com/contlupstudiocontabil/" target="_blank" rel="noopener">@contlupstudiocontabil</a></li>
           <li><small>Atendimento</small><span class="v">100% online, pelo WhatsApp e por e-mail</span></li>
         </ul>
@@ -550,10 +558,10 @@
       <form class="lead-form" id="proposta" novalidate aria-labelledby="form-h">
         <h3 id="form-h">Solicite uma proposta</h3>
         <p class="form-sub">Preencha e a mensagem segue pronta para o WhatsApp da ContLup.</p>
-        <div class="fld"><label for="f-nome">Seu nome *</label><input id="f-nome" name="nome" autocomplete="name" required><span class="err" id="e-nome" hidden>Informe seu nome.</span></div>
+        <div class="fld"><label for="f-nome">Seu nome *</label><input id="f-nome" name="nome" autocomplete="name" maxlength="80" required><span class="err" id="e-nome" hidden>Informe seu nome.</span></div>
         <div class="fld-row">
-          <div class="fld"><label for="f-empresa">Empresa</label><input id="f-empresa" name="empresa" autocomplete="organization" placeholder="Opcional"></div>
-          <div class="fld"><label for="f-tel">Telefone *</label><input id="f-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(19) 90000-0000" required><span class="err" id="e-tel" hidden>Informe um telefone com DDD.</span></div>
+          <div class="fld"><label for="f-empresa">Empresa</label><input id="f-empresa" name="empresa" autocomplete="organization" maxlength="100" placeholder="Opcional"></div>
+          <div class="fld"><label for="f-tel">Telefone *</label><input id="f-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(19) 90000-0000" maxlength="20" required><span class="err" id="e-tel" hidden>Informe um telefone com DDD.</span></div>
         </div>
         <div class="fld"><label for="f-assunto">Assunto</label>
           <select id="f-assunto" name="assunto">
@@ -563,9 +571,9 @@
             <option>Sou MEI</option>
             <option>Outro assunto</option>
           </select></div>
-        <div class="fld"><label for="f-msg">Mensagem</label><textarea id="f-msg" name="msg" rows="3" placeholder="Conte um pouco sobre o seu negócio (opcional)"></textarea></div>
+        <div class="fld"><label for="f-msg">Mensagem</label><textarea id="f-msg" name="msg" rows="3" maxlength="600" placeholder="Conte um pouco sobre o seu negócio (opcional)"></textarea></div>
         <button class="btn btn-primary btn-form" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5l1.1-3.6A8 8 0 1 1 8.4 18.7z"/><path d="M9.2 8.6c.3 2.4 2.2 4.6 4.6 5.4l1-1.1 1.8.7-.3 1.6c-3.6.4-7.6-3.4-7.4-7.2l1.6-.4.8 1.7z"/></svg>Enviar pelo WhatsApp</button>
-        <p class="form-ok" id="form-ok" hidden>Mensagem pronta. Se o WhatsApp não abriu, <a id="form-link" href="https://wa.me/5519971310182" target="_blank" rel="noopener">toque aqui para enviar</a>.</p>
+        <p class="form-ok" id="form-ok" role="status" hidden>Mensagem pronta. Se o WhatsApp não abriu, <a id="form-link" href="https://wa.me/5519971310182" target="_blank" rel="noopener">toque aqui para enviar</a>.</p>
         <p class="form-note">Seus dados não ficam armazenados no site. Eles seguem apenas na mensagem que você envia.</p>
       </form>
     </div>
@@ -579,23 +587,23 @@
     <!-- Nível 1: conteúdo principal -->
     <div class="foot">
       <div class="foot-col foot-brand">
-        <img src="img/logo.png" alt="ContLup Studio Contábil" width="520" height="409" loading="lazy">
+        <img src="img/logo.webp" alt="ContLup Studio Contábil" width="300" height="236" loading="lazy" decoding="async">
         <p>Contabilidade próxima e estratégica para empresas, empreendedores e MEIs, com números claros para decidir melhor.</p>
         <p class="foot-online"><i aria-hidden="true"></i>Atendimento 100% online</p>
       </div>
       <nav class="foot-col foot-nav" aria-label="Navegação do rodapé">
-        <h4>Navegação</h4>
+        <h2 class="foot-h">Navegação</h2>
         <ul>
           <li><a href="#inicio">Início</a></li>
           <li><a href="#servicos">Serviços</a></li>
           <li><a href="#planos">Planos</a></li>
-          <li><a href="#contlup">Sobre</a></li>
-          <li><a href="#numeros">Seus números</a></li>
+          <li><a href="#contlup">Sobre a ContLup</a></li>
+          <li><a href="#numeros">Entenda seus números</a></li>
           <li><a href="#contato">Contato</a></li>
         </ul>
       </nav>
       <div class="foot-col foot-contact">
-        <h4>Contato</h4>
+        <h2 class="foot-h">Contato</h2>
         <ul>
           <li><a href="https://wa.me/5519971310182?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20ContLup%20e%20gostaria%20de%20conversar%20sobre%20a%20contabilidade%20da%20minha%20empresa." target="_blank" rel="noopener"><small>WhatsApp</small>(19) 97131-0182</a></li>
           <li><a href="mailto:contato@contlup.com.br"><small>E-mail</small>contato@contlup.com.br</a></li>
@@ -603,7 +611,7 @@
         </ul>
       </div>
       <div class="foot-col foot-links">
-        <h4>Links úteis</h4>
+        <h2 class="foot-h">Links úteis</h2>
         <ul><li><a href="https://www.gov.br/receitafederal/pt-br" target="_blank" rel="noopener">Receita Federal</a></li><li><a href="https://www8.receita.fazenda.gov.br/SimplesNacional/" target="_blank" rel="noopener">Simples Nacional</a></li><li><a href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor" target="_blank" rel="noopener">Portal do Empreendedor (MEI)</a></li><li><a href="https://www.gov.br/esocial/pt-br" target="_blank" rel="noopener">eSocial</a></li></ul>
       </div>
     </div>
@@ -612,11 +620,17 @@
     <div class="legal">
       <p class="legal-org"><b>ContLup Studio Contábil</b><span class="cnpj">CNPJ 68.970.978/0001-10</span></p>
       <p class="legal-resp">Responsável técnica: <b>Priscila Petean</b> · Contadora</p>
-      <button class="legal-priv js-priv-toggle" type="button" aria-expanded="false" aria-controls="privacidade">Política de privacidade</button>
+      <p class="legal-priv-wrap"><button class="legal-priv js-priv-toggle" type="button" aria-expanded="false" aria-controls="privacidade">Política de privacidade</button><button class="legal-priv js-ck-open" type="button" aria-controls="aviso-privacidade">Preferências de privacidade</button></p>
       <p class="legal-rights">© 2026 · Todos os direitos reservados</p>
     </div>
     <div class="privacy" id="privacidade" role="region" aria-label="Política de privacidade" tabindex="-1" hidden>
-      <p>Este site não usa cookies de rastreamento e não armazena dados pessoais. As informações que você preenche no formulário de proposta são usadas apenas para montar a mensagem enviada pelo WhatsApp e não ficam gravadas aqui. O chat da Lupi guarda a conversa apenas nesta aba do seu navegador (ela some ao fechar a aba ou ao reiniciar o chat). Os dados recebidos pela ContLup são tratados conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), somente para responder ao seu contato e prestar os serviços contratados. Para pedir acesso, correção ou exclusão dos seus dados, escreva para <a href="mailto:contato@contlup.com.br">contato@contlup.com.br</a>.</p>
+      <p>Este site não usa cookies de publicidade, de análise ou de rastreamento, nem ferramentas de terceiros que acompanhem a sua navegação. Fontes, imagens e scripts são servidos pelo próprio site. Ele usa apenas o armazenamento do seu navegador, que fica no seu aparelho e não é enviado à ContLup:</p>
+      <ul>
+        <li><b>Essencial:</b> a sua escolha no aviso de privacidade (guardada até você mudar) e a conversa com a Lupi enquanto a aba estiver aberta (some ao fechar a aba ou ao reiniciar o chat).</li>
+        <li><b>Preferências, só se você permitir:</b> o tema claro ou escuro escolhido, para a próxima visita, e o controle para o convite da Lupi não se repetir. Sem permissão, o tema vale só enquanto a página estiver aberta.</li>
+      </ul>
+      <p>Você pode mudar a escolha quando quiser em “Preferências de privacidade”, aqui no rodapé. As informações que você preenche no formulário de proposta são usadas apenas para montar a mensagem enviada pelo WhatsApp e não ficam gravadas aqui. Os links de WhatsApp, Instagram e e-mail abrem serviços externos, com as políticas de privacidade deles.</p>
+      <p>Os dados recebidos pela ContLup são tratados conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), somente para responder ao seu contato e prestar os serviços contratados. Para pedir acesso, correção ou exclusão dos seus dados, escreva para <a href="mailto:contato@contlup.com.br">contato@contlup.com.br</a>.</p>
     </div>
 
     <!-- Nível 3: assinatura do desenvolvedor -->
@@ -722,6 +736,7 @@
 </section>
 
 <script src="js/main.js" defer></script>
+<script type="module" src="js/consent.js"></script>
 <script type="module" src="js/lupi/boot.js"></script>
 </body>
 </html>

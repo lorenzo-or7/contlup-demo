@@ -1,13 +1,13 @@
 // Testes unitários: estrutura do repertório da Lupi (lupi-knowledge.json, versão 3) e regras de revisão.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { knowledge, flows } from '../support/helpers.mjs';
+import { knowledge, fullIntents, flows } from '../support/helpers.mjs';
 import { buildSystemPrompt } from '../../worker/src/prompt.js';
 import { BPO, BPO_FORBIDDEN, CNPJ, stripOfficial } from '../support/official.mjs';
 
 const CATEGORIES = ['contlup', 'servicos', 'planos', 'mei', 'empresas', 'regimes', 'rotinas', 'duvidas'];
 const STATUSES = new Set(['draft', 'pending_review', 'approved', 'outdated']);
-const intents = knowledge.intents;
+const intents = fullIntents; // pendentes com o rascunho completo (_revisao/)
 const ids = new Set(intents.map(e => e.id));
 const flowIds = new Set(flows.flows.map(f => f.id));
 

@@ -338,8 +338,14 @@ export function createUI({ root, conversation, ai, launch }) {
   el.human.addEventListener('click', () => conversation.act({ kind: 'handoff' }, 'Falar com a ContLup'));
 
   root.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { e.stopPropagation(); close(); return; }
-    if (e.key === 'Tab' && root.getAttribute('aria-modal') === 'true') trapFocus(e);
+    if (e.key === 'Escape') { e.stopPropagation(); close(); }
+  });
+  // no celular o chat é modal: o Tab circula pelo chat e pelo que estiver marcado com data-lc-trap
+  // (o aviso de privacidade, que pode ficar aberto junto)
+  doc.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab' || root.hidden || root.getAttribute('aria-modal') !== 'true') return;
+    const a = doc.activeElement;
+    if (root.contains(a) || a?.closest?.('[data-lc-trap]')) trapFocus(e);
   });
   el.log.addEventListener('click', (e) => {
     const a = e.target.closest('a[href^="#"]');
@@ -349,11 +355,14 @@ export function createUI({ root, conversation, ai, launch }) {
   });
 
   function trapFocus(e) {
-    const f = [...root.querySelectorAll('button:not([disabled]), textarea, input, a[href], [tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
+    const sel = 'button:not([disabled]), textarea, input, a[href], [tabindex]:not([tabindex="-1"])';
+    const extra = [...doc.querySelectorAll('[data-lc-trap]')].flatMap(x => [...x.querySelectorAll(sel)]);
+    const f = [...extra, ...root.querySelectorAll(sel)].filter(x => x.offsetParent !== null || x.getClientRects().length);
     if (!f.length) return;
-    const first = f[0], last = f.at(-1);
-    if (e.shiftKey && doc.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && doc.activeElement === last) { e.preventDefault(); first.focus(); }
+    // o aviso fica fora do chat no DOM: o próximo item é escolhido na lista, não pela ordem da página
+    e.preventDefault();
+    const i = f.indexOf(doc.activeElement);
+    f[i === -1 ? 0 : (i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
   }
 
   addEventListener('resize', () => {
