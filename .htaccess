@@ -2,7 +2,11 @@
 # Antes de ativar no servidor: confirme que o domínio já abre em HTTPS com certificado válido.
 # Cada bloco usa <IfModule>: se o módulo não existir no plano, o bloco é ignorado em vez de derrubar o site.
 
+# Sem listagem de pastas. Se o site der "erro 500" logo depois do envio, o plano não permite esta linha: apague-a.
 Options -Indexes
+
+# Página de erro própria (autossuficiente: funciona em qualquer endereço). Supõe o site na raiz do domínio.
+ErrorDocument 404 /404.html
 
 # 1. Sempre HTTPS
 <IfModule mod_rewrite.c>

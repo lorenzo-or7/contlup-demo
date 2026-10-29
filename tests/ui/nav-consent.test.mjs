@@ -78,6 +78,8 @@ test('[nav] celular: fecha pelo hambúrguer, Esc, toque fora e escolha de seçã
   assert.equal(await page.evaluate(() => scrollY), y0);
   await open(); await page.mouse.click(180, 700); await closed('toque fora');
   assert.equal(await page.evaluate(() => scrollY), y0);
+  await page.waitForTimeout(300);
+  assert.equal(await page.evaluate(() => document.querySelector('.nav').classList.contains('is-hidden')), false, 'cabeçalho continua visível depois de fechar o menu');
   await open(); await page.tap('#nav-menu a[href="#contato"]'); await closed('seção');
   await page.waitForFunction(() => Math.abs(document.getElementById('contato').getBoundingClientRect().top) < 140);
   await ctx.close();

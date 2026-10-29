@@ -23,13 +23,19 @@ e os arquivos de desenvolvimento. O `.htaccess` também não vai para o GitHub P
 
 ## Hospedagem própria (HostGator ou outra com Apache) — quando for migrar
 
-1. Envie só o site: `index.html`, `robots.txt`, `sitemap.xml`, `.htaccess` e as pastas `css/`, `js/`, `img/`, `fonts/`, `data/`.
+1. Envie só o site: `index.html`, `404.html`, `robots.txt`, `sitemap.xml`, `.htaccess` e as pastas `css/`, `js/`, `img/`, `fonts/`, `data/`
+   (para a raiz do domínio, normalmente `public_html/`).
    **Não envie** `_revisao/`, `docs/`, `tests/`, `eval/`, `worker/`, `node_modules/` nem `package*.json`.
 2. Ative o certificado HTTPS do domínio no painel da hospedagem antes de usar o `.htaccess` (ele redireciona tudo para HTTPS).
-3. Troque o endereço `https://lorenzo-or7.github.io/contlup-demo/` pelo domínio novo em: `index.html` (canonical, og:url,
-   og:image e dados estruturados), `robots.txt` e `sitemap.xml`.
+3. Troque o endereço `https://lorenzo-or7.github.io/contlup-demo/` pelo domínio novo (7 vezes em `index.html`: canonical,
+   og:url, og:image e dados estruturados; 1 vez em `404.html`, `robots.txt` e `sitemap.xml`). O teste
+   `tests/unit/launch-readiness.test.mjs` lista esses lugares: depois da troca, ajuste o endereço esperado nele.
 4. HSTS fica comentado no `.htaccess`: ligue só depois de confirmar que o domínio inteiro funciona em HTTPS.
 5. Se a IA da Lupi for ligada um dia (`<meta name="lupi-api">`), inclua o endereço dela em `connect-src` na política de
    segurança do `index.html`.
+6. Se o site der "erro 500" logo depois do envio, apague a linha `Options -Indexes` do `.htaccess` (alguns planos não a permitem).
+7. Depois da migração, desative o GitHub Pages (Settings → Pages) para a página de demonstração não competir com o site
+   oficial nos buscadores (conteúdo duplicado).
 
-O site é estático: não precisa de PHP, banco de dados nem servidor Node em produção.
+O site é estático: não precisa de PHP, banco de dados nem servidor Node em produção. O formulário de proposta não envia
+nada a um servidor: ele monta a mensagem e abre o WhatsApp comercial, onde o visitante confirma o envio.

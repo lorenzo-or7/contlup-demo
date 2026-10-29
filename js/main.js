@@ -156,7 +156,7 @@
   function lockScroll(on){
     const b=document.body;
     if(on){ lockY=scrollY; b.style.position='fixed'; b.style.top=(-lockY)+'px'; b.style.left='0'; b.style.right='0'; b.style.width='100%' }
-    else if(b.style.position==='fixed'){ b.style.position=''; b.style.top=''; b.style.left=''; b.style.right=''; b.style.width=''; scrollTo({top:lockY,left:0,behavior:'instant'}) }
+    else if(b.style.position==='fixed'){ b.style.position=''; b.style.top=''; b.style.left=''; b.style.right=''; b.style.width=''; scrollTo({top:lockY,left:0,behavior:'instant'}); lastY=scrollY; acc=0 } // a volta à posição não conta como rolar para baixo
   }
   function setMenu(open,{focus=true}={}){
     if(open===menuOpen) return;
@@ -241,7 +241,7 @@
     // Tab dá a volta dentro do painel (sem isso o foco sai para a barra do navegador)
     bpo.addEventListener('keydown',e=>{
       if(e.key!=='Tab') return;
-      const f=$$('button,a[href]',bpo).filter(x=>x.offsetParent!==null); if(!f.length) return;
+      const f=$$('button,a[href],[tabindex="0"]',bpo).filter(x=>x.offsetParent!==null); // a área do texto rola pelo teclado if(!f.length) return;
       const first=f[0], last=f[f.length-1];
       if(e.shiftKey&&(document.activeElement===first||!bpo.contains(document.activeElement))){e.preventDefault(); last.focus()}
       else if(!e.shiftKey&&document.activeElement===last){e.preventDefault(); first.focus()}

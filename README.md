@@ -84,6 +84,7 @@ A Lupi funciona sem IA e sem servidor. O backend com IA em `worker/` está desli
 - Relatório de testes: [`docs/RELATORIO-TESTES.md`](docs/RELATORIO-TESTES.md)
 - Pendências para revisão da Priscila: [`docs/PENDENCIAS-PRISCILA.md`](docs/PENDENCIAS-PRISCILA.md) (os rascunhos das respostas em revisão ficam em `_revisao/`, fora do site publicado)
 - Revisar e publicar (GitHub Pages e hospedagem própria): [`docs/PUBLICACAO.md`](docs/PUBLICACAO.md)
+- Auditoria pré-lançamento (29/10/2026): [`docs/AUDITORIA-PRE-LANCAMENTO.md`](docs/AUDITORIA-PRE-LANCAMENTO.md)
 
 ```bash
 npm install && npm test && npm run test:ui

@@ -33,6 +33,8 @@
 </script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/lupi.css">
+<!-- Sem JavaScript: o menu do celular vira uma lista visível e somem os botões que dependem de script (Lupi e painel do BPO) -->
+<noscript><style>.lc-launch,.js-bpo-open,.nav-burger,.areas-hint{display:none!important}@media (max-width:1023px){.nav{position:static}.nav-in{height:auto;flex-wrap:wrap;padding-block:10px}.nav-menu{position:static;visibility:visible;opacity:1;transform:none;max-height:none;width:100%;padding:0 0 6px;border:0;box-shadow:none;background:none}.nav-menu-wa{display:none}.hero{padding-top:24px}}</style></noscript>
 <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="img/monograma.webp" type="image/webp">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -425,7 +427,7 @@
           </div>
           <div class="k res" style="--i:1">
             <div class="k-l">Resultado</div>
-            <div class="k-v"><small style="color:rgba(255,255,255,.7)">R$</small>34.500</div>
+            <div class="k-v"><small style="color:rgba(255,255,255,.9)">R$</small>34.500</div>
             <div class="ring">
               <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="7"/><circle cx="32" cy="32" r="26" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" pathLength="100" stroke-dasharray="39.9 100" transform="rotate(-90 32 32)"/></svg>
               <div><b>39,9%</b><span>de margem</span></div>
@@ -649,7 +651,7 @@
       <p class="eyebrow">Serviço 05 · Novo</p>
       <button class="bpo-x js-bpo-close" type="button" aria-label="Fechar o painel do BPO Financeiro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </header>
-    <div class="bpo-body" tabindex="-1">
+    <div class="bpo-body" tabindex="0" role="region" aria-labelledby="bpo-t">
       <h2 class="display bpo-t" id="bpo-t">BPO Financeiro</h2>
       <p class="bpo-lead" id="bpo-lead">Sua empresa organizada, suas finanças sob controle!</p>
       <p class="bpo-intro">O BPO Financeiro é a terceirização das rotinas financeiras da empresa. A ContLup organiza e acompanha as atividades financeiras do dia a dia, proporcionando mais controle, previsibilidade e tempo para o empresário focar no crescimento do negócio.</p>
